@@ -1,14 +1,16 @@
-const CACHE_NAME = "petergym-v2";
+const CACHE_NAME = "fz-gym-v4";
 const APP_SHELL = [
   "/",
   "/index.html",
   "/manifest.webmanifest",
+  "/brand/fz-gym-logo.png",
   "/icons/icon-192x192.png",
   "/icons/icon-512x512.png",
   "/icons/icon-maskable-192x192.png",
   "/icons/icon-maskable-512x512.png",
   "/apple-touch-icon.png",
   "/favicon.ico",
+  "/favicon-512x512.png",
 ];
 
 self.addEventListener("install", (event) => {

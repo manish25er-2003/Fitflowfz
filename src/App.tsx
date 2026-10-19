@@ -325,50 +325,18 @@ function BrandLogo({
   mode?: "full" | "mark" | "white";
   className?: string;
 }) {
-  if (mode === "mark") {
-    return (
-      <div
-        aria-label="Peter-GYM app logo"
-        className={`relative flex items-center justify-center overflow-hidden rounded-[20px] border border-violet-400/50 bg-[#090A0F] shadow-[0_0_0_1px_rgba(139,92,246,0.22),0_0_22px_rgba(139,92,246,0.45)] ${className}`}
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(139,92,246,0.7),transparent_28%),radial-gradient(circle_at_70%_100%,rgba(52,211,153,0.5),transparent_34%),linear-gradient(135deg,#090A0F_0%,#141827_35%,#090A0F_100%)]" />
-        <div className="absolute inset-[7px] rounded-[16px] border border-violet-400/40 bg-[#0F131A]/80" />
-        <span
-          className="relative font-black tracking-[-0.18em] text-white"
-          style={{
-            fontSize: "clamp(1.15rem, 1vw + 0.8rem, 2.3rem)",
-            lineHeight: 1,
-          }}
-        >
-          P
-        </span>
-      </div>
-    );
-  }
-
   return (
-    <div
-      aria-label="Peter-GYM brand name"
-      className={`inline-flex items-center justify-center ${className}`}
-    >
-      <span
-        className={`font-black tracking-[-0.08em] ${
-          mode === "white" ? "text-white" : "text-white"
-        }`}
-        style={{
-          fontSize: "clamp(1rem, 0.9vw + 0.8rem, 1.9rem)",
-          lineHeight: 1,
-        }}
-      >
-        Peter-GYM
-      </span>
-    </div>
+    <img
+      src="/brand/fz-gym-logo.png"
+      alt={mode === "full" ? "FZ Gym logo" : "FZ Gym"}
+      className={`object-contain ${className}`}
+    />
   );
 }
 
 function ProfileAvatar({
   className = "",
-  alt = "Peter-GYM profile",
+  alt = "FZ Gym profile",
 }: {
   className?: string;
   alt?: string;
@@ -418,27 +386,27 @@ function SplashIntroPage() {
   }, [advance, destination, navigate]);
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center p-4 sm:p-6 bg-[#08090e] overflow-hidden text-white select-none">
+    <div className="relative min-h-screen w-full flex items-center justify-center p-4 sm:p-6 bg-[#20252B] overflow-hidden text-white select-none">
       {/* Background ambient lighting */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,_rgba(139,92,246,0.18),transparent_55%),radial-gradient(circle_at_50%_85%,_rgba(124,58,237,0.12),transparent_50%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,_rgba(229,57,70,0.18),transparent_55%),radial-gradient(circle_at_50%_85%,_rgba(229,57,70,0.12),transparent_50%)]" />
 
       {/* Portrait card */}
-      <div className="animate-splash-card relative z-10 w-full max-w-[340px] sm:max-w-[380px] rounded-[28px] sm:rounded-[32px] border border-violet-500/25 bg-[#0c0d15]/95 p-5 sm:p-7 shadow-[0_20px_60px_-15px_rgba(139,92,246,0.35),0_0_0_1px_rgba(139,92,246,0.12)] backdrop-blur-xl flex flex-col items-center text-center">
+      <div className="animate-splash-card relative z-10 w-full max-w-[340px] sm:max-w-[380px] rounded-[28px] sm:rounded-[32px] border border-gym-accent/25 bg-[#252B32]/95 p-5 sm:p-7 shadow-[0_20px_60px_-15px_rgba(229,57,70,0.35),0_0_0_1px_rgba(229,57,70,0.12)] backdrop-blur-xl flex flex-col items-center text-center">
         {/* Subtle top inner gradient sheen */}
-        <div className="pointer-events-none absolute inset-0 rounded-[28px] sm:rounded-[32px] bg-[radial-gradient(ellipse_at_top,_rgba(139,92,246,0.16),transparent_65%)]" />
+        <div className="pointer-events-none absolute inset-0 rounded-[28px] sm:rounded-[32px] bg-[radial-gradient(ellipse_at_top,_rgba(229,57,70,0.16),transparent_65%)]" />
 
         {/* Minimal branding badge */}
-        <div className="relative z-10 mb-4 inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 shadow-sm">
+        <div className="relative z-10 mb-4 inline-flex items-center gap-2 rounded-full border border-gym-accent/30 bg-gym-accent/10 px-3 py-1 shadow-sm">
           <BrandLogo mode="mark" className="h-4 w-4" />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-violet-300">
-            Fitflow
+          <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gym-accent">
+            FZ Gym
           </span>
         </div>
 
         {/* Profile image container */}
         <div className="relative z-10 mb-3 flex items-center justify-center">
-          <div className="animate-avatar-glow relative h-28 w-28 sm:h-36 sm:w-36 rounded-full p-[3px] bg-gradient-to-tr from-violet-600 via-purple-500 to-indigo-500 shadow-xl">
-            <div className="h-full w-full rounded-full overflow-hidden bg-slate-950">
+          <div className="animate-avatar-glow relative h-28 w-28 sm:h-36 sm:w-36 rounded-full p-[3px] bg-gradient-to-tr from-gym-accent via-gym-accent to-gym-secondary shadow-xl">
+            <div className="h-full w-full rounded-full overflow-hidden bg-gym-panel">
               <img
                 src={avatarSrc}
                 alt="Er. Manish Kumar Yadav"
@@ -455,8 +423,8 @@ function SplashIntroPage() {
         </h1>
 
         {/* Professional Title */}
-        <div className="relative z-10 mt-1.5 inline-flex items-center gap-1.5 rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-0.5 text-[11px] font-semibold tracking-wide text-violet-200">
-          <Sparkles className="h-3 w-3 text-violet-400 shrink-0" />
+        <div className="relative z-10 mt-1.5 inline-flex items-center gap-1.5 rounded-full border border-gym-accent/30 bg-gym-accent/10 px-3 py-0.5 text-[11px] font-semibold tracking-wide text-gym-accent">
+          <Sparkles className="h-3 w-3 text-gym-accent shrink-0" />
           <span>Software Development Engineer</span>
         </div>
 
@@ -468,10 +436,10 @@ function SplashIntroPage() {
         {/* Countdown progress bar */}
         <div className="relative z-10 w-full mt-5 space-y-1.5">
           <div className="flex items-center justify-between text-[11px] font-medium tracking-wider text-slate-400">
-            <span className="flex items-center gap-1.5 text-violet-300/80">
+            <span className="flex items-center gap-1.5 text-gym-accent/80">
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-violet-500" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gym-accent opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-gym-accent" />
               </span>
               Redirecting to platform
             </span>
@@ -479,7 +447,7 @@ function SplashIntroPage() {
           </div>
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-violet-500 via-purple-500 to-emerald-400 transition-all duration-1000 ease-linear"
+              className="h-full rounded-full bg-gradient-to-r from-gym-accent via-gym-accent to-gym-secondary transition-all duration-1000 ease-linear"
               style={{ width: `${(countdown / 3) * 100}%` }}
             />
           </div>
@@ -490,14 +458,14 @@ function SplashIntroPage() {
           <button
             type="button"
             onClick={advance}
-            className="btn-secondary py-2 text-xs font-semibold border-violet-500/25 bg-white/5 text-violet-200 hover:bg-violet-500/15 hover:border-violet-400/50 transition-all active:scale-95"
+            className="btn-secondary py-2 text-xs font-semibold border-gym-accent/25 bg-white/5 text-gym-accent hover:bg-gym-accent/15 hover:border-gym-accent/50 transition-all active:scale-95"
           >
             Skip Intro
           </button>
           <button
             type="button"
             onClick={advance}
-            className="btn-primary py-2 text-xs font-semibold bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 shadow-md shadow-violet-600/30 transition-all active:scale-95"
+            className="btn-primary py-2 text-xs font-semibold bg-gradient-to-r from-gym-accent via-gym-accent to-gym-secondary hover:from-gym-accent hover:to-gym-secondary shadow-md shadow-gym-accent/30 transition-all active:scale-95"
           >
             Continue
           </button>
@@ -632,8 +600,8 @@ function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#090A0F] text-white">
-      <header className="sticky top-0 z-50 border-b border-violet-400/10 bg-[#090A0F]/80 backdrop-blur-xl">
+    <div className="min-h-screen bg-[#20252B] text-white">
+      <header className="sticky top-0 z-50 border-b border-gym-accent/10 bg-[#20252B]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           <button
             type="button"
@@ -643,7 +611,7 @@ function LandingPage() {
             <BrandLogo mode="mark" className="h-10 w-10 rounded-2xl" />
             <div className="text-left">
               <div className="text-sm font-bold tracking-wide text-white">
-                Peter-GYM
+                FZ Gym
               </div>
               <div className="text-[10px] uppercase tracking-[0.22em] text-slate-400">
                 Performance Club
@@ -680,16 +648,16 @@ function LandingPage() {
                 <button
                   type="button"
                   onClick={() => navigate("/login")}
-                  className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full border border-violet-400/35 bg-[#111827]/80 px-2.5 py-2 text-[11px] font-semibold text-violet-100 shadow-[0_0_0_1px_rgba(139,92,246,0.20)] transition hover:-translate-y-0.5 hover:border-violet-300/70 hover:bg-violet-500/10 sm:gap-2 sm:px-4 sm:text-sm"
+                  className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full border border-gym-accent/35 bg-[#252B32]/80 px-2.5 py-2 text-[11px] font-semibold text-gym-accent shadow-[0_0_0_1px_rgba(229,57,70,0.20)] transition hover:-translate-y-0.5 hover:border-gym-accent/70 hover:bg-gym-accent/10 sm:gap-2 sm:px-4 sm:text-sm"
                 >
-                  <span className="absolute inset-0 bg-gradient-to-r from-violet-500/8 to-transparent opacity-0 transition group-hover:opacity-100" />
+                  <span className="absolute inset-0 bg-gradient-to-r from-gym-accent/8 to-transparent opacity-0 transition group-hover:opacity-100" />
                   <LockKeyhole className="relative h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   <span className="relative">Login</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => navigate("/register")}
-                  className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full bg-gradient-to-r from-violet-500 via-violet-500 to-emerald-400 px-2.5 py-2 text-[11px] font-bold text-[#090A0F] shadow-[0_8px_22px_rgba(139,92,246,0.45)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(52,211,153,0.35)] sm:gap-2 sm:px-4 sm:text-sm"
+                  className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full bg-gradient-to-r from-gym-accent via-gym-accent to-gym-secondary px-2.5 py-2 text-[11px] font-bold text-white shadow-[0_8px_22px_rgba(229,57,70,0.45)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(19,166,160,0.35)] sm:gap-2 sm:px-4 sm:text-sm"
                 >
                   <span className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.4),transparent_55%)]" />
                   <Sparkles className="relative h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -701,14 +669,14 @@ function LandingPage() {
                 <button
                   type="button"
                   onClick={handleDashboard}
-                  className="hidden rounded-full border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-200 sm:inline-flex"
+                  className="hidden rounded-full border border-gym-secondary/30 bg-gym-secondary/10 px-4 py-2 text-sm font-medium text-gym-secondary sm:inline-flex"
                 >
                   Dashboard
                 </button>
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 transition hover:border-violet-400/30 hover:text-white"
+                  className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 transition hover:border-gym-accent/30 hover:text-white"
                 >
                   Logout
                 </button>
@@ -721,7 +689,7 @@ function LandingPage() {
       <main>
         {location.pathname === "/home" && showInstallPrompt && (
           <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-[#05070b]/70 px-3 pb-5 pt-4 sm:py-6 backdrop-blur-sm">
-            <div className="relative w-full max-w-sm overflow-hidden rounded-[22px] border border-violet-400/20 bg-[#0b1017]/95 p-3.5 shadow-[0_0_0_1px_rgba(139,92,246,0.12),0_20px_60px_rgba(15,17,24,0.8)]">
+            <div className="relative w-full max-w-sm overflow-hidden rounded-[22px] border border-gym-accent/20 bg-[#252B32]/95 p-3.5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)]">
               {/* Close */}
               <button
                 type="button"
@@ -734,16 +702,16 @@ function LandingPage() {
 
               {/* Icon + title row */}
               <div className="flex items-center gap-3 pr-8">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-[14px] border border-violet-400/30 bg-[#090A0F] shadow-[0_0_18px_rgba(139,92,246,0.3)]">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-[14px] border border-gym-accent/30 bg-[#20252B] shadow-[0_0_18px_rgba(229,57,70,0.3)]">
                   <img
                     src="/icons/icon-192x192.png"
-                    alt="Peter-GYM Icon"
-                    className="h-full w-full rounded-[12px] object-cover"
+                    alt="FZ Gym app icon"
+                    className="h-full w-full rounded-[12px] object-contain"
                   />
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-sm font-black tracking-tight text-white">
-                    Install Peter-GYM
+                    Install FZ Gym
                   </h3>
                   <p className="mt-0.5 text-[11px] leading-snug text-slate-400">
                     Add to home screen for instant access
@@ -763,7 +731,7 @@ function LandingPage() {
                 <button
                   type="button"
                   onClick={handleInstallApp}
-                  className="flex-[2] inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 to-emerald-400 px-4 py-2 text-xs font-bold text-[#090A0F] shadow-[0_0_16px_rgba(139,92,246,0.35)] transition hover:brightness-110 active:scale-[0.99]"
+                  className="flex-[2] inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-gym-accent to-gym-secondary px-4 py-2 text-xs font-bold text-white shadow-[0_0_16px_rgba(229,57,70,0.35)] transition hover:brightness-110 active:scale-[0.99]"
                 >
                   Install App
                 </button>
@@ -779,11 +747,11 @@ function LandingPage() {
         )}
 
         <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(139,92,246,0.22),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(52,211,153,0.18),transparent_25%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(229,57,70,0.22),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(19,166,160,0.18),transparent_25%)]" />
           <div className="relative mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:gap-10 lg:px-8 lg:py-20">
             <div className="flex flex-col items-center justify-center text-center lg:items-start lg:text-left">
-              <span className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-violet-400/20 bg-violet-500/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-violet-200">
-                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+              <span className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-gym-accent/20 bg-gym-accent/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-gym-accent">
+                <span className="h-2 w-2 rounded-full bg-gym-secondary" />
                 Modern Gym Management
               </span>
 
@@ -792,7 +760,7 @@ function LandingPage() {
               </h1>
 
               <p className="mt-5 max-w-xl text-sm text-slate-300 sm:text-base lg:text-lg">
-                Peter-GYM brings high-performance training culture and smart gym
+                FZ Gym brings high-performance training culture and smart gym
                 operations together so athletes push harder, teams stay
                 organized, and every member can track visible progress with
                 premium, real-world systems.
@@ -802,13 +770,13 @@ function LandingPage() {
                 <button
                   type="button"
                   onClick={() => navigate("/register")}
-                  className="inline-flex rounded-full bg-gradient-to-r from-violet-500 to-emerald-400 px-5 py-3 text-sm font-semibold text-[#090A0F] shadow-[0_0_26px_rgba(139,92,246,0.45)] transition hover:brightness-110 sm:px-6"
+                  className="inline-flex rounded-full bg-gradient-to-r from-gym-accent to-gym-secondary px-5 py-3 text-sm font-semibold text-white shadow-[0_0_26px_rgba(229,57,70,0.45)] transition hover:brightness-110 sm:px-6"
                 >
                   Get Started
                 </button>
                 <a
                   href="#features"
-                  className="inline-flex rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:border-violet-400/30 hover:bg-violet-500/5 sm:px-6"
+                  className="inline-flex rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:border-gym-accent/30 hover:bg-gym-accent/5 sm:px-6"
                 >
                   Explore Features
                 </a>
@@ -822,7 +790,7 @@ function LandingPage() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="rounded-2xl border border-violet-400/10 bg-white/5 p-3 text-center backdrop-blur-sm"
+                    className="rounded-2xl border border-gym-accent/10 bg-white/5 p-3 text-center backdrop-blur-sm"
                   >
                     <div className="text-lg font-bold text-white sm:text-xl">
                       {item.value}
@@ -836,19 +804,19 @@ function LandingPage() {
             </div>
 
             <div className="relative flex items-center justify-center">
-              <div className="relative w-full max-w-xl overflow-hidden rounded-[28px] border border-violet-400/20 bg-[#11141C] p-3 shadow-[0_30px_80px_rgba(15,17,24,0.7)] sm:rounded-[32px] sm:p-4">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(139,92,246,0.25),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(52,211,153,0.2),transparent_28%)]" />
-                <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[#141823] p-3 sm:rounded-[24px] sm:p-4">
+              <div className="relative w-full max-w-xl overflow-hidden rounded-[28px] border border-gym-accent/20 bg-[#252B32] p-3 shadow-[0_30px_80px_rgba(15,17,24,0.7)] sm:rounded-[32px] sm:p-4">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(229,57,70,0.25),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(19,166,160,0.2),transparent_28%)]" />
+                <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[#252B32] p-3 sm:rounded-[24px] sm:p-4">
                   <div className="relative overflow-hidden rounded-[18px] sm:rounded-[20px] ring-1 ring-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]">
                     <img
                       src="/gym/hero.jpeg"
-                      alt="Peter-GYM bodybuilder hero image"
+                      alt="FZ Gym training"
                       className="h-[300px] w-full rounded-[18px] object-cover object-center sm:h-[500px] lg:h-[560px] [object-position:center_8%] scale-[1.12] contrast-[1.08] saturate-[0.9] -translate-y-4 sm:-translate-y-8"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#090A0F] via-[#090A0F]/25 to-[#090A0F]/10" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#20252B] via-[#20252B]/25 to-[#20252B]/10" />
                   </div>
 
-                  <div className="absolute left-3 top-2 rounded-xl border border-violet-400/20 bg-[#090A0F]/70 p-2 shadow-lg backdrop-blur-md sm:left-6 sm:top-5 sm:p-2.5">
+                  <div className="absolute left-3 top-2 rounded-xl border border-gym-accent/20 bg-[#20252B]/70 p-2 shadow-lg backdrop-blur-md sm:left-6 sm:top-5 sm:p-2.5">
                     <div className="text-[8px] uppercase tracking-[0.22em] text-slate-400 sm:text-[9px]">
                       Body score
                     </div>
@@ -856,18 +824,18 @@ function LandingPage() {
                       88%
                     </div>
                     <div className="mt-1.5 h-1.5 w-16 overflow-hidden rounded-full bg-white/5 sm:w-20">
-                      <div className="h-full w-[88%] rounded-full bg-gradient-to-r from-violet-500 to-emerald-400" />
+                      <div className="h-full w-[88%] rounded-full bg-gradient-to-r from-gym-accent to-gym-secondary" />
                     </div>
                   </div>
 
-                  <div className="absolute right-3 bottom-2 rounded-xl border border-emerald-400/20 bg-[#090A0F]/70 p-2 shadow-lg backdrop-blur-md sm:right-6 sm:bottom-3 sm:p-2.5">
+                  <div className="absolute right-3 bottom-2 rounded-xl border border-gym-secondary/20 bg-[#20252B]/70 p-2 shadow-lg backdrop-blur-md sm:right-6 sm:bottom-3 sm:p-2.5">
                     <div className="text-[8px] uppercase tracking-[0.18em] text-slate-400 sm:text-[9px]">
                       Weekly gain
                     </div>
                     <div className="mt-1 text-base font-bold text-white sm:text-xl">
                       +18.2%
                     </div>
-                    <div className="mt-0.5 text-[8px] text-emerald-300 sm:text-[9px]">
+                    <div className="mt-0.5 text-[8px] text-gym-secondary sm:text-[9px]">
                       strength & definition
                     </div>
                   </div>
@@ -879,7 +847,7 @@ function LandingPage() {
 
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-8 text-center">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-violet-200/80">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-gym-accent/80">
               Body transformation
             </p>
             <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">
@@ -913,7 +881,7 @@ function LandingPage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="group overflow-hidden rounded-[30px] border border-violet-400/10 bg-[#11141B] shadow-[0_20px_60px_rgba(15,17,24,0.5)] transition duration-300 hover:-translate-y-1 hover:border-violet-400/30"
+                className="group overflow-hidden rounded-[30px] border border-gym-accent/10 bg-[#252B32] shadow-[0_20px_60px_rgba(15,17,24,0.5)] transition duration-300 hover:-translate-y-1 hover:border-gym-accent/30"
               >
                 <div className="relative h-[440px] overflow-hidden">
                   <img
@@ -921,9 +889,9 @@ function LandingPage() {
                     alt={item.title}
                     className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-105 grayscale-[0.08] [object-position:center_20%]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#090A0F] via-[#090A0F]/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#20252B] via-[#20252B]/20 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-5">
-                    <span className="inline-flex rounded-full border border-white/10 bg-[#090A0F]/55 px-2.5 py-1 text-[9px] uppercase tracking-[0.22em] text-violet-100 backdrop-blur-sm">
+                    <span className="inline-flex rounded-full border border-white/10 bg-[#20252B]/55 px-2.5 py-1 text-[9px] uppercase tracking-[0.22em] text-gym-accent backdrop-blur-sm">
                       {item.badge}
                     </span>
                     <h3 className="mt-3 text-2xl font-bold text-white">
@@ -944,7 +912,7 @@ function LandingPage() {
           className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8"
         >
           <div className="mb-10 text-center">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-violet-200/80">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-gym-accent/80">
               Features
             </p>
             <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">
@@ -997,9 +965,9 @@ function LandingPage() {
             ].map(({ title, icon: Icon, desc }) => (
               <div
                 key={title}
-                className="group rounded-[24px] border border-violet-400/10 bg-[#11141B] p-5 transition duration-300 hover:-translate-y-1 hover:border-violet-400/30 hover:shadow-[0_18px_40px_rgba(139,92,246,0.12)]"
+                className="group rounded-[24px] border border-gym-accent/10 bg-[#252B32] p-5 transition duration-300 hover:-translate-y-1 hover:border-gym-accent/30 hover:shadow-[0_18px_40px_rgba(229,57,70,0.12)]"
               >
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/20 to-emerald-400/20 text-violet-100 ring-1 ring-violet-400/20">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-gym-accent/20 to-gym-secondary/20 text-gym-accent ring-1 ring-gym-accent/20">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="text-lg font-semibold text-white">{title}</h3>
@@ -1009,10 +977,10 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="border-y border-violet-400/10 bg-[#0d0f15]">
+        <section className="border-y border-gym-accent/10 bg-[#171B20]">
           <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
             <div className="mb-10 text-center">
-              <p className="text-[10px] uppercase tracking-[0.3em] text-violet-200/80">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-gym-accent/80">
                 How it works
               </p>
               <h2 className="mt-3 text-3xl font-bold text-white">
@@ -1040,9 +1008,9 @@ function LandingPage() {
               ].map((item) => (
                 <div
                   key={item.step}
-                  className="rounded-[26px] border border-violet-400/10 bg-[#11141B] p-6 text-center"
+                  className="rounded-[26px] border border-gym-accent/10 bg-[#252B32] p-6 text-center"
                 >
-                  <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-emerald-400 text-sm font-black text-[#090A0F]">
+                  <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-gym-accent to-gym-secondary text-sm font-black text-white">
                     {item.step}
                   </div>
                   <h3 className="text-xl font-semibold text-white">
@@ -1058,15 +1026,15 @@ function LandingPage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="rounded-[30px] border border-violet-400/10 bg-[linear-gradient(135deg,rgba(139,92,246,0.12),rgba(52,211,153,0.08),rgba(17,20,27,1))] p-8 text-center shadow-[0_0_0_1px_rgba(139,92,246,0.06)]">
-            <p className="text-[10px] uppercase tracking-[0.28em] text-violet-200/80">
+          <div className="rounded-[30px] border border-gym-accent/10 bg-[linear-gradient(135deg,rgba(229,57,70,0.12),rgba(19,166,160,0.08),rgba(17,20,27,1))] p-8 text-center shadow-[0_0_0_1px_rgba(229,57,70,0.06)]">
+            <p className="text-[10px] uppercase tracking-[0.28em] text-gym-accent/80">
               Get started
             </p>
             <h2 className="mt-4 text-3xl font-bold text-white sm:text-4xl">
               Build a stronger, smarter gym experience.
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base text-slate-300">
-              Whether you're running a gym or joining one, Peter-GYM gives every
+              Whether you're running a gym or joining one, FZ Gym gives every
               stakeholder the tools to perform better, plan smarter, and stay
               motivated.
             </p>
@@ -1074,14 +1042,14 @@ function LandingPage() {
               <button
                 type="button"
                 onClick={() => navigate("/register")}
-                className="inline-flex rounded-full bg-gradient-to-r from-violet-500 to-emerald-400 px-6 py-3 text-sm font-semibold text-[#090A0F]"
+                className="inline-flex rounded-full bg-gradient-to-r from-gym-accent to-gym-secondary px-6 py-3 text-sm font-semibold text-white"
               >
                 Get Started
               </button>
               <button
                 type="button"
                 onClick={() => navigate("/login")}
-                className="inline-flex rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-violet-400/30"
+                className="inline-flex rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-gym-accent/30"
               >
                 Login
               </button>
@@ -1092,14 +1060,14 @@ function LandingPage() {
 
       <footer
         id="contact"
-        className="border-t border-violet-400/10 bg-[#090A0F]"
+        className="border-t border-gym-accent/10 bg-[#20252B]"
       >
         <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 text-sm text-slate-300 sm:px-6 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.9fr] lg:px-8">
           <div>
             <div className="mb-3 flex items-center gap-3">
               <BrandLogo mode="mark" className="h-9 w-9 rounded-xl" />
               <div>
-                <div className="font-semibold text-white">Peter-GYM</div>
+                <div className="font-semibold text-white">FZ Gym</div>
                 <div className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
                   Smarter fitness
                 </div>
@@ -1181,8 +1149,8 @@ function LandingPage() {
           </div>
         </div>
 
-        <div className="border-t border-violet-400/10 py-4 text-center text-xs text-slate-400">
-          © 2026 Peter-GYM. All rights reserved.
+        <div className="border-t border-gym-accent/10 py-4 text-center text-xs text-slate-400">
+          © 2026 FZ Gym. All rights reserved.
         </div>
       </footer>
     </div>
@@ -1445,7 +1413,7 @@ function AppShell() {
               <BrandLogo mode="mark" className="h-9 w-9 rounded-xl" />
               {sidebarOpen && (
                 <div className="text-sm font-semibold text-gym-text">
-                  Peter-GYM
+                  FZ Gym
                 </div>
               )}
             </div>
@@ -1478,7 +1446,7 @@ function AppShell() {
                   className={({ isActive }) =>
                     `group flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                       isActive
-                        ? "border border-violet-400/30 bg-violet-500/10 text-violet-200 shadow-[0_0_18px_rgba(139,92,246,0.12)]"
+                        ? "border border-gym-accent/30 bg-gym-accent/10 text-gym-accent shadow-[0_0_18px_rgba(229,57,70,0.12)]"
                         : "text-gym-text/70 hover:bg-gym-card hover:text-gym-text"
                     } ${isLogout ? "mt-2 border border-red-500/20 bg-red-500/5 text-red-200 hover:bg-red-500/10" : ""}`
                   }
@@ -1573,28 +1541,28 @@ function AppShell() {
       </div>
 
       <div
-        className={`fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm transition-opacity duration-200 lg:hidden ${mobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`fixed inset-0 z-50 bg-gym-panel/70 backdrop-blur-sm transition-opacity duration-200 lg:hidden ${mobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
         onClick={() => setMobileMenuOpen(false)}
       />
 
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-[84%] max-w-[320px] -translate-x-full border-r border-violet-400/20 bg-[#0d1018]/95 shadow-[0_30px_80px_rgba(15,17,24,0.9)] backdrop-blur-2xl transition-transform duration-200 lg:hidden overflow-y-auto ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-50 w-[84%] max-w-[320px] -translate-x-full border-r border-gym-accent/20 bg-[#171B20]/95 shadow-[0_30px_80px_rgba(15,17,24,0.9)] backdrop-blur-2xl transition-transform duration-200 lg:hidden overflow-y-auto ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 sticky top-0 bg-[#0d1018] z-10">
+        <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 sticky top-0 bg-[#171B20] z-10">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-violet-400/30 bg-violet-500/10">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-gym-accent/30 bg-gym-accent/10">
               <BrandLogo mode="mark" className="h-7 w-7 rounded-xl" />
             </div>
             <div>
-              <div className="text-sm font-bold text-white">Peter-GYM</div>
+              <div className="text-sm font-bold text-white">FZ Gym</div>
               <div className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-                Fitflow Club
+                FZ Gym
               </div>
             </div>
           </div>
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-200 transition hover:border-violet-400/30 hover:text-white"
+            className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-200 transition hover:border-gym-accent/30 hover:text-white"
             aria-label="Close navigation menu"
           >
             <X className="h-4 w-4" />
@@ -1608,7 +1576,7 @@ function AppShell() {
                 key={to}
                 to={to === "/login" ? "#" : to}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-2xl px-3.5 py-3 text-sm font-semibold transition-all duration-200 ${isActive ? "border border-violet-400/30 bg-violet-500/15 text-violet-200 shadow-[0_0_18px_rgba(139,92,246,0.15)]" : "text-slate-200 hover:bg-white/5 hover:text-white"} ${isLogout ? "mt-4 border border-red-500/20 bg-red-500/5 text-red-200 hover:bg-red-500/10" : ""}`
+                  `flex items-center gap-3 rounded-2xl px-3.5 py-3 text-sm font-semibold transition-all duration-200 ${isActive ? "border border-gym-accent/30 bg-gym-accent/15 text-gym-accent shadow-[0_0_18px_rgba(229,57,70,0.15)]" : "text-slate-200 hover:bg-white/5 hover:text-white"} ${isLogout ? "mt-4 border border-red-500/20 bg-red-500/5 text-red-200 hover:bg-red-500/10" : ""}`
                 }
                 onClick={(event) => {
                   if (isLogout) {
@@ -1671,9 +1639,9 @@ function StatCard({
 }) {
   const styles: Record<string, string> = {
     lime: "bg-gym-accent/10 text-gym-accent",
-    cyan: "bg-cyan-400/10 text-cyan-300",
+    cyan: "bg-gym-secondary/10 text-gym-secondary",
     amber: "bg-amber-400/10 text-amber-300",
-    purple: "bg-violet-400/10 text-violet-300",
+    purple: "bg-gym-accent/10 text-gym-accent",
   };
 
   return (
@@ -1709,24 +1677,24 @@ function DashboardHeroBanner() {
     .reduce((sum, payment) => sum + payment.amount, 0);
 
   return (
-    <div className="relative isolate overflow-hidden rounded-[28px] border border-gym-border bg-gradient-to-r from-[#180f29] via-[#0f141a] to-[#0d1820] p-4 shadow-soft sm:p-5">
+    <div className="relative isolate overflow-hidden rounded-[28px] border border-gym-border bg-gradient-to-r from-[#343C44] via-[#252B32] to-[#171B20] p-4 shadow-soft sm:p-5">
       <div
         className="absolute inset-0 bg-cover bg-center opacity-20"
         style={{
           backgroundImage: `url(${gymGallery[2]})`,
         }}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(168,85,247,0.42),transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(52,211,153,0.28),transparent_28%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(229,57,70,0.42),transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(19,166,160,0.28),transparent_28%)]" />
 
       <div className="relative flex flex-col gap-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-violet-500 via-purple-500 to-emerald-400 p-1.5 shadow-glow">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-gym-accent via-gym-accent to-gym-secondary p-1.5 shadow-glow">
               <BrandLogo mode="mark" className="h-full w-full rounded-xl" />
             </div>
             <div>
               <p className="text-[10px] uppercase tracking-[0.26em] text-gym-muted">
-                GymLane
+                FZ Gym
               </p>
               <h2 className="mt-1 text-xl font-semibold text-gym-text sm:text-2xl">
                 Dashboard overview
@@ -1735,17 +1703,17 @@ function DashboardHeroBanner() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-[11px] text-gym-text/75 sm:text-xs">
-            <span className="chip border-emerald-400/30 bg-emerald-500/10 text-emerald-300">
+            <span className="chip border-gym-secondary/30 bg-gym-secondary/10 text-gym-secondary">
               +18.2% this month
             </span>
-            <span className="chip border-violet-400/30 bg-violet-500/10 text-violet-200">
+            <span className="chip border-gym-accent/30 bg-gym-accent/10 text-gym-accent">
               42 classes live
             </span>
           </div>
         </div>
 
         <div className="grid gap-3 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="rounded-2xl border border-white/10 bg-[#11141b]/70 p-3 backdrop-blur-sm sm:p-4">
+          <div className="rounded-2xl border border-white/10 bg-[#252B32]/70 p-3 backdrop-blur-sm sm:p-4">
             <p className="text-[10px] uppercase tracking-[0.22em] text-gym-muted">
               Today
             </p>
@@ -1758,7 +1726,7 @@ function DashboardHeroBanner() {
                   Gross monthly revenue
                 </p>
               </div>
-              <div className="rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-medium text-emerald-300">
+              <div className="rounded-full border border-gym-secondary/20 bg-gym-secondary/10 px-2.5 py-1 text-[10px] font-medium text-gym-secondary">
                 +12.4%
               </div>
             </div>
@@ -1773,17 +1741,17 @@ function DashboardHeroBanner() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-[#121720]/70 p-3 backdrop-blur-sm">
+          <div className="rounded-2xl border border-white/10 bg-[#252B32]/70 p-3 backdrop-blur-sm">
             <div className="flex items-center justify-between text-[11px] text-gym-muted">
               <span>Live studio</span>
               <span className="inline-flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="h-2 w-2 rounded-full bg-gym-secondary animate-pulse" />
                 Online
               </span>
             </div>
 
             <div className="mt-3 flex items-center gap-3">
-              <div className="h-12 w-12 overflow-hidden rounded-xl border border-white/10 bg-[#1c2430]">
+              <div className="h-12 w-12 overflow-hidden rounded-xl border border-white/10 bg-[#343C44]">
                 <img
                   src={gymGallery[1]}
                   alt="Gym training"
@@ -1825,7 +1793,7 @@ function DashboardHeroBanner() {
             <p className="mt-2 text-xl font-semibold text-gym-text">
               {todayAttendance}
             </p>
-            <p className="mt-1 text-[11px] text-emerald-300">Live today</p>
+            <p className="mt-1 text-[11px] text-gym-secondary">Live today</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur-sm">
             <p className="text-[10px] uppercase tracking-[0.22em] text-gym-muted">
@@ -1834,7 +1802,7 @@ function DashboardHeroBanner() {
             <p className="mt-2 text-xl font-semibold text-gym-text">
               {seedMembers.length}
             </p>
-            <p className="mt-1 text-[11px] text-violet-200">+14 new joins</p>
+            <p className="mt-1 text-[11px] text-gym-accent">+14 new joins</p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur-sm">
             <p className="text-[10px] uppercase tracking-[0.22em] text-gym-muted">
@@ -1894,7 +1862,7 @@ function DashboardPage() {
       <DashboardHeroBanner />
 
       {/* Admin Festival Offer Management Banner */}
-      <div className="panel p-4 sm:p-5 border-amber-500/35 bg-gradient-to-r from-[#1c142b] via-[#120f20] to-[#18120b] shadow-[0_4px_25px_rgba(245,158,11,0.12)]">
+      <div className="panel p-4 sm:p-5 border-amber-500/35 bg-gradient-to-r from-[#343C44] via-[#252B32] to-[#171B20] shadow-[0_4px_25px_rgba(245,158,11,0.12)]">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300">
@@ -1905,7 +1873,7 @@ function DashboardPage() {
                 <h3 className="text-base sm:text-lg font-bold text-white">
                   Festive Offers & Campaigns Hub
                 </h3>
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 border border-emerald-400/30 text-emerald-300">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-gym-secondary/15 border border-gym-secondary/30 text-gym-secondary">
                   Real-Time Sync
                 </span>
               </div>
@@ -1977,8 +1945,8 @@ function DashboardPage() {
               <AreaChart data={revenueSeries}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.72} />
-                    <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0.08} />
+                    <stop offset="5%" stopColor="#E53946" stopOpacity={0.72} />
+                    <stop offset="95%" stopColor="#E53946" stopOpacity={0.08} />
                   </linearGradient>
                 </defs>
                 <XAxis
@@ -2004,7 +1972,7 @@ function DashboardPage() {
                 <Area
                   type="monotone"
                   dataKey="revenue"
-                  stroke="#8B5CF6"
+                  stroke="#E53946"
                   strokeWidth={3}
                   fill="url(#colorRevenue)"
                 />
@@ -2026,14 +1994,14 @@ function DashboardPage() {
                   innerRadius={42}
                   outerRadius={68}
                   paddingAngle={3}
-                  stroke="#111315"
+                  stroke="#20252B"
                   strokeWidth={4}
                 >
                   {membershipDistribution.map((entry, index) => (
                     <Cell
                       key={entry.name}
                       fill={
-                        ["#8B5CF6", "#34D399", "#FBBF24", "#A78BFA"][index % 4]
+                        ["#E53946", "#13A6A0", "#C62835", "#087873"][index % 4]
                       }
                     />
                   ))}
@@ -2059,10 +2027,10 @@ function DashboardPage() {
                     className="h-2.5 w-2.5 rounded-full"
                     style={{
                       backgroundColor: [
-                        "#8B5CF6",
-                        "#34D399",
-                        "#FBBF24",
-                        "#A78BFA",
+                        "#E53946",
+                        "#13A6A0",
+                        "#C62835",
+                        "#087873",
                       ][index % 4],
                     }}
                   />
@@ -2099,7 +2067,7 @@ function DashboardPage() {
                   axisLine={false}
                   tick={{ fontSize: 10 }}
                 />
-                <Bar dataKey="members" radius={[6, 6, 0, 0]} fill="#34D399" />
+                <Bar dataKey="members" radius={[6, 6, 0, 0]} fill="#13A6A0" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -2776,10 +2744,10 @@ function MembershipsPage() {
           </h1>
         </div>
         {activePlan && (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-gym-secondary/30 bg-gym-secondary/10 px-3 py-1 text-xs font-medium text-gym-secondary">
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gym-secondary opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-gym-secondary" />
             </span>
             Active: {activePlan.planName} · Expires {activePlan.expiryDate}
           </span>
@@ -2788,12 +2756,12 @@ function MembershipsPage() {
 
       {/* Success / Error banners */}
       {paymentState === "success" && (
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4 text-sm text-emerald-200">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-2xl border border-gym-secondary/30 bg-gym-secondary/10 p-4 text-sm text-gym-secondary">
           <div className="flex items-start gap-3">
-            <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400 mt-0.5" />
+            <CheckCircle2 className="h-5 w-5 shrink-0 text-gym-secondary mt-0.5" />
             <div>
               <p className="font-semibold text-white">Payment Verified & Membership Activated!</p>
-              <p className="text-xs text-emerald-300/90 mt-0.5">
+              <p className="text-xs text-gym-secondary/90 mt-0.5">
                 Your <span className="font-bold text-white">{activePlan?.planName}</span> is active until{" "}
                 <span className="font-bold text-white">{activePlan?.expiryDate}</span>. An official confirmation email & SMS notification have been dispatched.
               </p>
@@ -2802,7 +2770,7 @@ function MembershipsPage() {
           <button
             type="button"
             onClick={() => setShowConfirmationModal(true)}
-            className="btn-secondary py-1.5 px-3.5 text-xs font-bold shrink-0 self-start sm:self-auto border-emerald-400/40 bg-emerald-500/15 text-emerald-200 hover:bg-emerald-500/25 flex items-center gap-1.5"
+            className="btn-secondary py-1.5 px-3.5 text-xs font-bold shrink-0 self-start sm:self-auto border-gym-secondary/40 bg-gym-secondary/15 text-gym-secondary hover:bg-gym-secondary/25 flex items-center gap-1.5"
           >
             <Mail className="h-3.5 w-3.5" />
             View Official Confirmation Receipt
@@ -2811,8 +2779,8 @@ function MembershipsPage() {
       )}
 
       {paymentState === "error" && (
-        <div className="flex items-center gap-3 rounded-2xl border border-rose-400/30 bg-rose-500/10 px-4 py-4 text-sm text-rose-200">
-          <AlertCircle className="h-5 w-5 shrink-0 text-rose-400" />
+        <div className="flex items-center gap-3 rounded-2xl border border-gym-accent/30 bg-gym-accent/10 px-4 py-4 text-sm text-gym-accent">
+          <AlertCircle className="h-5 w-5 shrink-0 text-gym-accent" />
           <p>{errorMessage}</p>
         </div>
       )}
@@ -2843,18 +2811,18 @@ function MembershipsPage() {
               key={plan.id}
               className={`panel relative flex flex-col gap-4 p-5 transition-all ${
                 isSelected
-                  ? "ring-2 ring-violet-400/70 shadow-[0_0_25px_rgba(139,92,246,0.25)]"
+                  ? "ring-2 ring-gym-accent/70 shadow-[0_0_25px_rgba(229,57,70,0.25)]"
                   : "hover:ring-1 hover:ring-gym-border"
               }`}
             >
               {/* Badge */}
               {plan.id === "annual" && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-violet-500 to-purple-500 px-3 py-0.5 text-[10px] font-bold text-white shadow-md">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-gym-accent to-gym-accent px-3 py-0.5 text-[10px] font-bold text-white shadow-md">
                   ⭐ Best Value
                 </span>
               )}
               {plan.id === "half_yearly" && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-3 py-0.5 text-[10px] font-bold text-white shadow-md">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-gym-secondary to-teal-500 px-3 py-0.5 text-[10px] font-bold text-white shadow-md">
                   ⚡ Best for Results
                 </span>
               )}
@@ -2865,7 +2833,7 @@ function MembershipsPage() {
               )}
 
               {isCurrentActive && (
-                <span className="absolute right-4 top-4 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300">
+                <span className="absolute right-4 top-4 rounded-full border border-gym-secondary/30 bg-gym-secondary/10 px-2.5 py-0.5 text-[11px] font-medium text-gym-secondary">
                   Current Plan
                 </span>
               )}
@@ -2890,12 +2858,12 @@ function MembershipsPage() {
                   </span>
                 )}
                 {plan.id === "half_yearly" && (
-                  <span className="mt-2 inline-block rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-medium text-emerald-300">
+                  <span className="mt-2 inline-block rounded-full border border-gym-secondary/30 bg-gym-secondary/10 px-2.5 py-0.5 text-[10px] font-medium text-gym-secondary">
                     💰 Save ₹400 vs monthly
                   </span>
                 )}
                 {plan.id === "quarterly" && (
-                  <span className="mt-2 inline-block rounded-full border border-violet-400/30 bg-violet-500/10 px-2.5 py-0.5 text-[10px] font-medium text-violet-300">
+                  <span className="mt-2 inline-block rounded-full border border-gym-accent/30 bg-gym-accent/10 px-2.5 py-0.5 text-[10px] font-medium text-gym-accent">
                     💰 Save ₹100 vs monthly
                   </span>
                 )}
@@ -2923,8 +2891,8 @@ function MembershipsPage() {
                   type="button"
                   className={`w-full rounded-xl border py-2 text-xs font-semibold transition ${
                     isSelected
-                      ? "border-violet-400/60 bg-violet-500/15 text-violet-200"
-                      : "border-gym-border bg-gym-panel text-gym-muted hover:border-violet-400/40 hover:text-gym-text"
+                      ? "border-gym-accent/60 bg-gym-accent/15 text-gym-accent"
+                      : "border-gym-border bg-gym-panel text-gym-muted hover:border-gym-accent/40 hover:text-gym-text"
                   }`}
                   onClick={() => {
                     setSelectedPlanId(plan.id);
@@ -2953,8 +2921,8 @@ function MembershipsPage() {
               {selectedPlan.duration} · Full gym access · Instant SMS & Email Confirmation
             </p>
           </div>
-          <div className="rounded-2xl border border-violet-400/25 bg-violet-500/10 px-4 sm:px-5 py-3 text-left sm:text-right w-full sm:w-auto">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-violet-200/80">
+          <div className="rounded-2xl border border-gym-accent/25 bg-gym-accent/10 px-4 sm:px-5 py-3 text-left sm:text-right w-full sm:w-auto">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-gym-accent/80">
               Total Payable
             </p>
             <p className="mt-1 text-2xl font-bold text-gym-text">
@@ -2991,7 +2959,7 @@ function MembershipsPage() {
             <button
               type="button"
               onClick={() => setShowConfirmationModal(true)}
-              className="btn-secondary w-full sm:w-auto justify-center gap-2 text-violet-300 border-violet-400/40 bg-violet-500/10 hover:bg-violet-500/20"
+              className="btn-secondary w-full sm:w-auto justify-center gap-2 text-gym-accent border-gym-accent/40 bg-gym-accent/10 hover:bg-gym-accent/20"
             >
               <Mail className="h-4 w-4" />
               View Email & SMS Receipt
@@ -3027,7 +2995,7 @@ function PaymentQrCode({ size = 92 }: { size?: number }) {
 
   return (
     <div
-      className="grid place-items-center rounded-2xl border border-violet-200/40 bg-white p-2 shadow-lg shadow-violet-500/10"
+      className="grid place-items-center rounded-2xl border border-gym-accent/40 bg-white p-2 shadow-lg shadow-gym-accent/10"
       style={{ width: size, height: size }}
     >
       <div
@@ -3037,7 +3005,7 @@ function PaymentQrCode({ size = 92 }: { size?: number }) {
         {cells.map((cell, index) => (
           <span
             key={`${cell.row}-${cell.col}-${index}`}
-            className={`block rounded-[2px] ${cell.isFilled ? "bg-violet-900" : "bg-transparent"}`}
+            className={`block rounded-[2px] ${cell.isFilled ? "bg-gym-accent" : "bg-transparent"}`}
           />
         ))}
       </div>
@@ -3066,26 +3034,26 @@ function PaymentsPage() {
     {
       id: "UPI",
       name: "UPI",
-      accent: "from-violet-500 to-purple-500",
+      accent: "from-gym-accent to-gym-accent",
       badge: "UPI",
     },
     {
       id: "Google Pay",
       name: "Google Pay",
-      accent: "from-blue-500 to-cyan-400",
+      accent: "from-gym-secondary to-gym-secondary",
       badge: "G",
     },
     {
       id: "PhonePe",
       name: "PhonePe",
-      accent: "from-indigo-500 to-violet-500",
+      accent: "from-gym-secondary to-gym-accent",
       badge: "P",
     },
   ] as const;
 
   const handlePayNow = () => {
     const amount = Number(form.amount || 0);
-    const upiLink = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent("GymLane")}&am=${amount}&cu=INR&tn=${encodeURIComponent("GymLane Membership Payment")}`;
+    const upiLink = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent("FZ Gym")}&am=${amount}&cu=INR&tn=${encodeURIComponent("FZ Gym Membership Payment")}`;
 
     setPaymentState("processing");
     setShowToast(false);
@@ -3159,8 +3127,8 @@ function PaymentsPage() {
 
       <div className="grid gap-6 xl:grid-cols-[0.82fr_1.18fr]">
         {showToast && (
-          <div className="fixed right-4 top-24 z-50 flex items-center gap-3 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200 shadow-lg shadow-emerald-500/10 backdrop-blur-md sm:right-6">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/20 text-lg">
+          <div className="fixed right-4 top-24 z-50 flex items-center gap-3 rounded-2xl border border-gym-secondary/30 bg-gym-secondary/10 px-4 py-3 text-sm text-gym-secondary shadow-lg shadow-gym-secondary/10 backdrop-blur-md sm:right-6">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gym-secondary/20 text-lg">
               ✓
             </div>
             Payment successful — membership is now active.
@@ -3168,7 +3136,7 @@ function PaymentsPage() {
         )}
 
         <form onSubmit={handleSubmit} className="panel space-y-4 p-5">
-          <div className="rounded-2xl border border-gym-border bg-gradient-to-r from-violet-500/10 via-purple-500/10 to-emerald-500/10 p-4">
+          <div className="rounded-2xl border border-gym-border bg-gradient-to-r from-gym-accent/10 via-gym-accent/10 to-gym-secondary/10 p-4">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-[10px] uppercase tracking-[0.26em] text-gym-muted">
@@ -3178,7 +3146,7 @@ function PaymentsPage() {
                   Secure checkout
                 </h3>
               </div>
-              <span className="chip border-emerald-400/30 bg-emerald-500/10 text-emerald-300">
+              <span className="chip border-gym-secondary/30 bg-gym-secondary/10 text-gym-secondary">
                 SSL secure
               </span>
             </div>
@@ -3189,20 +3157,20 @@ function PaymentsPage() {
                   {formatCurrency(Number(form.amount || 0))}
                 </p>
               </div>
-              <div className="rounded-full border border-violet-400/30 bg-violet-500/10 px-2.5 py-1 text-[10px] text-violet-200">
+              <div className="rounded-full border border-gym-accent/30 bg-gym-accent/10 px-2.5 py-1 text-[10px] text-gym-accent">
                 {selectedPaymentMethod}
               </div>
             </div>
           </div>
 
           {paymentState === "success" && (
-            <div className="rounded-2xl border border-emerald-400/30 bg-gradient-to-r from-emerald-500/15 to-emerald-400/5 p-4 shadow-lg shadow-emerald-500/10 animate-pulse">
+            <div className="rounded-2xl border border-gym-secondary/30 bg-gradient-to-r from-gym-secondary/15 to-gym-secondary/5 p-4 shadow-lg shadow-gym-secondary/10 animate-pulse">
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500/15 text-xl text-emerald-300">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gym-secondary/15 text-xl text-gym-secondary">
                   ✓
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-emerald-300">
+                  <p className="text-sm font-semibold text-gym-secondary">
                     Payment successful
                   </p>
                   <p className="text-xs text-gym-muted">
@@ -3214,7 +3182,7 @@ function PaymentsPage() {
           )}
 
           {paymentState === "processing" && (
-            <div className="rounded-2xl border border-violet-400/30 bg-violet-500/5 p-3 text-sm text-violet-200">
+            <div className="rounded-2xl border border-gym-accent/30 bg-gym-accent/5 p-3 text-sm text-gym-accent">
               Processing your secure payment…
             </div>
           )}
@@ -3292,7 +3260,7 @@ function PaymentsPage() {
               </div>
             </div>
 
-            <div className="mt-4 rounded-2xl border border-gym-border bg-[#0f1217] p-3">
+            <div className="mt-4 rounded-2xl border border-gym-border bg-[#252B32] p-3">
               <div className="flex items-center justify-between text-xs text-gym-muted">
                 <span>Amount</span>
                 <span className="font-semibold text-gym-text">
@@ -3308,17 +3276,17 @@ function PaymentsPage() {
             </div>
 
             {paymentState === "success" && (
-              <div className="mt-4 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-3">
+              <div className="mt-4 rounded-2xl border border-gym-secondary/20 bg-gym-secondary/10 p-3">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.22em] text-emerald-300">
+                    <p className="text-xs uppercase tracking-[0.22em] text-gym-secondary">
                       Receipt
                     </p>
                     <p className="mt-1 text-sm font-semibold text-gym-text">
                       Membership activated
                     </p>
                   </div>
-                  <span className="rounded-full bg-emerald-500/20 px-2 py-1 text-[10px] text-emerald-200">
+                  <span className="rounded-full bg-gym-secondary/20 px-2 py-1 text-[10px] text-gym-secondary">
                     Received
                   </span>
                 </div>
@@ -3658,7 +3626,7 @@ function AttendancePage() {
               <span>{isCheckingIn ? "Checking In..." : "Check In"}</span>
             </button>
             <button
-              className="btn-secondary flex w-full items-center justify-center gap-2 border-rose-500/40 px-3 py-2.5 text-xs font-semibold text-rose-300 hover:border-rose-400 hover:bg-rose-500/10 sm:w-auto sm:px-4 sm:text-sm disabled:cursor-not-allowed disabled:opacity-40"
+              className="btn-secondary flex w-full items-center justify-center gap-2 border-gym-accent/40 px-3 py-2.5 text-xs font-semibold text-gym-accent hover:border-gym-accent hover:bg-gym-accent/10 sm:w-auto sm:px-4 sm:text-sm disabled:cursor-not-allowed disabled:opacity-40"
               onClick={handleCheckOut}
               disabled={isCheckingOut || !activeSession}
               title={
@@ -3675,28 +3643,28 @@ function AttendancePage() {
 
         {/* Action feedback banners */}
         {actionSuccess && (
-          <div className="flex w-full min-w-0 items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-3 text-xs text-emerald-300 sm:px-4 sm:text-sm">
+          <div className="flex w-full min-w-0 items-center justify-between rounded-xl border border-gym-secondary/30 bg-gym-secondary/10 px-3.5 py-3 text-xs text-gym-secondary sm:px-4 sm:text-sm">
             <div className="flex min-w-0 items-center gap-2.5">
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-gym-secondary" />
               <span className="break-words">{actionSuccess}</span>
             </div>
             <button
               onClick={() => setActionSuccess(null)}
-              className="ml-2 shrink-0 text-emerald-400 hover:text-emerald-200"
+              className="ml-2 shrink-0 text-gym-secondary hover:text-gym-secondary"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
         )}
         {actionError && (
-          <div className="flex w-full min-w-0 items-center justify-between rounded-xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-3 text-xs text-rose-300 sm:px-4 sm:text-sm">
+          <div className="flex w-full min-w-0 items-center justify-between rounded-xl border border-gym-accent/30 bg-gym-accent/10 px-3.5 py-3 text-xs text-gym-accent sm:px-4 sm:text-sm">
             <div className="flex min-w-0 items-center gap-2.5">
-              <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+              <AlertCircle className="h-4 w-4 shrink-0 text-gym-accent" />
               <span className="break-words">{actionError}</span>
             </div>
             <button
               onClick={() => setActionError(null)}
-              className="ml-2 shrink-0 text-rose-400 hover:text-rose-200"
+              className="ml-2 shrink-0 text-gym-accent hover:text-gym-accent"
             >
               <X className="h-4 w-4" />
             </button>
@@ -3714,8 +3682,8 @@ function AttendancePage() {
               <div className="flex min-w-0 items-center gap-2">
                 {activeSession ? (
                   <span className="relative flex h-3 w-3 shrink-0">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gym-secondary opacity-75" />
+                    <span className="relative inline-flex h-3 w-3 rounded-full bg-gym-secondary" />
                   </span>
                 ) : (
                   <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-slate-500" />
@@ -3731,7 +3699,7 @@ function AttendancePage() {
               <span
                 className={`chip shrink-0 text-[10px] ${
                   activeSession
-                    ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-300"
+                    ? "border-gym-secondary/40 bg-gym-secondary/10 text-gym-secondary"
                     : ""
                 }`}
               >
@@ -3775,7 +3743,7 @@ function AttendancePage() {
               <p className="text-[10px] uppercase tracking-[0.22em] text-gym-muted">
                 Check-out Time
               </p>
-              <Clock className="h-4 w-4 text-violet-400 shrink-0" />
+              <Clock className="h-4 w-4 text-gym-accent shrink-0" />
             </div>
             <p className="mt-2 font-mono text-xl font-bold text-gym-text">
               {activeSession
@@ -3800,7 +3768,7 @@ function AttendancePage() {
               <Timer
                 className={`h-4 w-4 shrink-0 ${
                   activeSession
-                    ? "animate-spin text-emerald-400"
+                    ? "animate-spin text-gym-secondary"
                     : "text-amber-400"
                 }`}
               />
@@ -3899,7 +3867,7 @@ function AttendancePage() {
                         <span
                           className={`chip ${
                             entry.status === "Checked In"
-                              ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-300"
+                              ? "border-gym-secondary/40 bg-gym-secondary/10 text-gym-secondary"
                               : ""
                           }`}
                         >
@@ -3931,7 +3899,7 @@ function AttendancePage() {
           </h1>
         </div>
         <div className="self-start sm:self-auto">
-          <span className="inline-block max-w-full truncate rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 text-xs font-medium text-violet-200">
+          <span className="inline-block max-w-full truncate rounded-full border border-gym-accent/30 bg-gym-accent/10 px-3 py-1 text-xs font-medium text-gym-accent">
             {user.role === "super_admin"
               ? "Admin Overview • All Authorized Records"
               : `Trainer Portal • Gym: ${user.gymId || "gym_1"}`}
@@ -3948,7 +3916,7 @@ function AttendancePage() {
           <p className="mt-1.5 text-xl font-bold text-gym-text sm:text-2xl">
             {todayTotalCheckIns}
           </p>
-          <p className="mt-1 text-[11px] text-emerald-300 sm:text-xs">
+          <p className="mt-1 text-[11px] text-gym-secondary sm:text-xs">
             Sessions today
           </p>
         </div>
@@ -3959,11 +3927,11 @@ function AttendancePage() {
               Active Now
             </p>
             <span className="relative flex h-2.5 w-2.5 shrink-0">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gym-secondary opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-gym-secondary" />
             </span>
           </div>
-          <p className="mt-1.5 text-xl font-bold text-emerald-300 sm:text-2xl">
+          <p className="mt-1.5 text-xl font-bold text-gym-secondary sm:text-2xl">
             {currentlyActiveCount}
           </p>
           <p className="mt-1 text-[11px] text-gym-muted sm:text-xs">
@@ -4087,7 +4055,7 @@ function AttendancePage() {
                   <tr key={entry.id} className="hover:bg-white/[0.02]">
                     <td className="whitespace-nowrap px-3 py-2.5 sm:px-4 sm:py-3">
                       <div className="flex items-center gap-2.5 sm:gap-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-500/15 text-xs font-bold text-violet-300">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gym-accent/15 text-xs font-bold text-gym-accent">
                           {entry.memberName
                             ? entry.memberName
                                 .split(" ")
@@ -4127,7 +4095,7 @@ function AttendancePage() {
                       <span
                         className={`chip ${
                           entry.status === "Checked In"
-                            ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-300"
+                            ? "border-gym-secondary/40 bg-gym-secondary/10 text-gym-secondary"
                             : ""
                         }`}
                       >
@@ -4400,7 +4368,7 @@ function CalendarPage() {
                     day === null
                       ? "border-transparent bg-transparent text-transparent"
                       : isSelected
-                        ? "border-violet-400/40 bg-violet-500/10 text-violet-200"
+                        ? "border-gym-accent/40 bg-gym-accent/10 text-gym-accent"
                         : "border-gym-border bg-gym-panel text-gym-text hover:border-gym-accent/60"
                   }`}
                 >
@@ -4434,9 +4402,9 @@ function CalendarPage() {
                   <span
                     className={`h-2.5 w-2.5 rounded-full ${
                       event.color === "violet"
-                        ? "bg-violet-400"
+                        ? "bg-gym-accent"
                         : event.color === "emerald"
-                          ? "bg-emerald-400"
+                          ? "bg-gym-secondary"
                           : "bg-amber-400"
                     }`}
                   />
@@ -4503,14 +4471,14 @@ function GymFeaturesPage() {
       description:
         "Book sessions, manage capacity, and automate confirmation texts.",
       status: "Live",
-      tone: "bg-emerald-400/10 text-emerald-300",
+      tone: "bg-gym-secondary/10 text-gym-secondary",
     },
     {
       title: "Trainer tracking",
       description:
         "Assign members, schedule sessions, and monitor coach performance.",
       status: "Live",
-      tone: "bg-cyan-400/10 text-cyan-300",
+      tone: "bg-gym-secondary/10 text-gym-secondary",
     },
     {
       title: "Nutrition coaching",
@@ -4524,14 +4492,14 @@ function GymFeaturesPage() {
       description:
         "Loyalty points, referral incentives, and achievement badges.",
       status: "Live",
-      tone: "bg-violet-400/10 text-violet-300",
+      tone: "bg-gym-accent/10 text-gym-accent",
     },
     {
       title: "Gym CRM alerts",
       description:
         "Proactive retention workflows, attendance nudges, and reminders.",
       status: "Live",
-      tone: "bg-rose-400/10 text-rose-300",
+      tone: "bg-gym-accent/10 text-gym-accent",
     },
   ];
 
@@ -4641,7 +4609,7 @@ type DeveloperProfileRecord = {
 const defaultDeveloperProfile: DeveloperProfileRecord = {
   name: "Er. Manish Kumar",
   title: "Software Engineer",
-  project: "Peter-GYM",
+  project: "FZ Gym",
   portfolio: "https://roomspot.manish25er.workers.dev/portfolio",
   tagline: "Building smarter fitness experiences through technology.",
   bio: "I design digital experiences that connect performance, coaching, and modern gym operations into one premium ecosystem.",
@@ -4823,7 +4791,7 @@ function DeveloperProfilePage() {
                 Developer profile
               </p>
               <h1 className="mt-1 text-2xl font-semibold text-gym-text">
-                {profile?.project ?? "Peter-GYM"}
+                {profile?.project ?? "FZ Gym"}
               </h1>
             </div>
           </div>
@@ -4952,22 +4920,22 @@ function DeveloperProfilePage() {
         <div className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
           <div className="panel p-5 sm:p-6">
             <div className="flex flex-col gap-5 md:flex-row md:items-center">
-              <div className="relative mx-auto flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border border-violet-400/30 bg-gym-panel p-2 shadow-[0_0_30px_rgba(139,92,246,0.18)] md:mx-0">
+              <div className="relative mx-auto flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border border-gym-accent/30 bg-gym-panel p-2 shadow-[0_0_30px_rgba(229,57,70,0.18)] md:mx-0">
                 <img
                   src={profile?.image ?? profilePhoto}
                   alt={profile?.name ?? "Er. Manish Kumar Yadav"}
-                  className="h-full w-full rounded-full object-cover object-center ring-2 ring-violet-500/30"
+                  className="h-full w-full rounded-full object-cover object-center ring-2 ring-gym-accent/30"
                 />
               </div>
 
               <div className="flex-1">
-                <div className="inline-flex rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.24em] text-emerald-300">
-                  {profile?.project ?? "Peter-GYM"}
+                <div className="inline-flex rounded-full border border-gym-secondary/30 bg-gym-secondary/10 px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.24em] text-gym-secondary">
+                  {profile?.project ?? "FZ Gym"}
                 </div>
                 <h2 className="mt-3 text-3xl font-bold text-gym-text">
                   {profile?.name ?? "Er. Manish Kumar Yadav"}
                 </h2>
-                <p className="mt-2 text-sm uppercase tracking-[0.24em] text-violet-200/80">
+                <p className="mt-2 text-sm uppercase tracking-[0.24em] text-gym-accent/80">
                   {profile?.title ?? "Software Development Engineer"}
                 </p>
                 <p className="mt-4 max-w-xl text-gym-muted">
@@ -5001,13 +4969,13 @@ function DeveloperProfilePage() {
               <h3 className="text-lg font-semibold">Contact information</h3>
               <div className="mt-4 space-y-3">
                 <div className="flex items-center gap-3 rounded-xl border border-gym-border bg-gym-panel p-3">
-                  <Mail className="h-4 w-4 text-violet-300" />
+                  <Mail className="h-4 w-4 text-gym-accent" />
                   <span className="text-sm text-gym-text">
                     {profile?.email ?? "your.email@example.com"}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 rounded-xl border border-gym-border bg-gym-panel p-3">
-                  <Users className="h-4 w-4 text-emerald-300" />
+                  <Users className="h-4 w-4 text-gym-secondary" />
                   <span className="text-sm text-gym-text">
                     {profile?.phone ?? "+91 00000 00000"}
                   </span>
@@ -5020,7 +4988,7 @@ function DeveloperProfilePage() {
               <div className="mt-4 flex items-center gap-3 rounded-xl border border-gym-border bg-gym-panel p-3">
                 <BrandLogo mode="mark" className="h-10 w-10 rounded-xl" />
                 <div>
-                  <p className="font-medium text-gym-text">Peter-GYM</p>
+                  <p className="font-medium text-gym-text">FZ Gym</p>
                   <p className="text-xs text-gym-muted">
                     Premium gym technology experiences
                   </p>
@@ -5357,20 +5325,17 @@ function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#090A0F] px-4 py-8 sm:px-6">
-      <div className="w-full max-w-md rounded-[28px] border border-violet-400/20 bg-slate-950/80 p-5 shadow-[0_0_0_1px_rgba(139,92,246,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
-        <div className="mb-6 flex items-center justify-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-violet-400/30 bg-violet-500/10">
-            <BrandLogo mode="mark" className="h-8 w-8" />
-          </div>
-          <BrandLogo mode="full" className="h-7 w-auto" />
+    <div className="flex min-h-screen items-center justify-center bg-[#20252B] px-4 py-8 sm:px-6">
+      <div className="w-full max-w-md rounded-[28px] border border-gym-accent/20 bg-gym-panel/80 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
+        <div className="mb-6 flex justify-center">
+          <BrandLogo mode="full" className="h-14 w-14" />
         </div>
 
         <div className="mb-6 text-center">
-          <p className="text-[10px] uppercase tracking-[0.28em] text-violet-200/80">
+          <p className="text-[10px] uppercase tracking-[0.28em] text-gym-accent/80">
             Create account
           </p>
-          <h2 className="mt-2 text-3xl font-bold text-white">Join Peter-GYM</h2>
+          <h2 className="mt-2 text-3xl font-bold text-white">Join FZ Gym</h2>
         </div>
 
         <form onSubmit={submit} className="space-y-4">
@@ -5426,7 +5391,7 @@ function RegisterPage() {
           <button
             type="button"
             onClick={() => navigate("/login")}
-            className="font-semibold text-violet-300 underline underline-offset-2"
+            className="font-semibold text-gym-accent underline underline-offset-2"
           >
             Login
           </button>
@@ -5467,17 +5432,14 @@ function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#090A0F] px-4 py-8 sm:px-6">
-      <div className="w-full max-w-md rounded-[28px] border border-violet-400/20 bg-slate-950/80 p-5 shadow-[0_0_0_1px_rgba(139,92,246,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
-        <div className="mb-6 flex items-center justify-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-violet-400/30 bg-violet-500/10">
-            <BrandLogo mode="mark" className="h-8 w-8" />
-          </div>
-          <BrandLogo mode="full" className="h-7 w-auto" />
+    <div className="flex min-h-screen items-center justify-center bg-[#20252B] px-4 py-8 sm:px-6">
+      <div className="w-full max-w-md rounded-[28px] border border-gym-accent/20 bg-gym-panel/80 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
+        <div className="mb-6 flex justify-center">
+          <BrandLogo mode="full" className="h-14 w-14" />
         </div>
 
         <div className="mb-6 text-center">
-          <p className="text-[10px] uppercase tracking-[0.28em] text-violet-200/80">
+          <p className="text-[10px] uppercase tracking-[0.28em] text-gym-accent/80">
             Welcome back
           </p>
           <h2 className="mt-2 text-3xl font-bold text-white">Sign in</h2>
@@ -5533,7 +5495,7 @@ function LoginPage() {
           <div className="flex items-center justify-end text-sm">
             <a
               href="/forgot-password"
-              className="font-medium text-violet-300 hover:underline"
+              className="font-medium text-gym-accent hover:underline"
             >
               Forgot password?
             </a>
@@ -5553,7 +5515,7 @@ function LoginPage() {
           <button
             type="button"
             onClick={() => navigate("/register")}
-            className="font-semibold text-violet-300 underline underline-offset-2"
+            className="font-semibold text-gym-accent underline underline-offset-2"
           >
             Register
           </button>

@@ -183,7 +183,7 @@ export function NavratriArtwork({
       style={{ width: size, height: size }}
     >
       <div
-        className={`absolute inset-0 -m-3 rounded-full bg-gradient-to-tr from-fuchsia-500/25 via-purple-500/20 to-pink-500/15 blur-xl pointer-events-none ${
+        className={`absolute inset-0 -m-3 rounded-full bg-gradient-to-tr from-gym-secondary/25 via-gym-accent/20 to-gym-secondary/15 blur-xl pointer-events-none ${
           isPaused ? "" : "animate-diya-glow"
         }`}
       />
@@ -191,7 +191,7 @@ export function NavratriArtwork({
         viewBox="0 0 100 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full relative z-10 drop-shadow-[0_4px_14px_rgba(217,70,239,0.55)]"
+        className="w-full h-full relative z-10 drop-shadow-[0_4px_14px_rgba(19,166,160,0.55)]"
       >
         <defs>
           <linearGradient id="stick1Grad" x1="0" y1="0" x2="1" y2="1">
@@ -200,7 +200,7 @@ export function NavratriArtwork({
             <stop offset="100%" stopColor="#fbbf24" />
           </linearGradient>
           <linearGradient id="stick2Grad" x1="1" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#8b5cf6" />
+            <stop offset="0%" stopColor="#E53946" />
             <stop offset="50%" stopColor="#a855f7" />
             <stop offset="100%" stopColor="#f59e0b" />
           </linearGradient>
@@ -289,7 +289,7 @@ export function NewYearArtwork({
       style={{ width: size, height: size }}
     >
       <div
-        className={`absolute inset-0 -m-3 rounded-full bg-gradient-to-tr from-yellow-500/25 via-purple-600/20 to-blue-500/15 blur-xl pointer-events-none ${
+        className={`absolute inset-0 -m-3 rounded-full bg-gradient-to-tr from-yellow-500/25 via-gym-accent/20 to-blue-500/15 blur-xl pointer-events-none ${
           isPaused ? "" : "animate-diya-glow"
         }`}
       />
@@ -384,4 +384,3 @@ export function FestivalArtworkRenderer({
       return <DiwaliDiyaArtwork size={size} isPaused={isPaused} />;
   }
 }
-

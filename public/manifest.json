@@ -1,14 +1,14 @@
 {
-  "name": "Peter-GYM",
-  "short_name": "Peter-GYM",
-  "description": "Premium gym management app for memberships, training, attendance, and performance tracking.",
+  "name": "FZ Gym",
+  "short_name": "FZ Gym",
+  "description": "FZ Gym management app for memberships, training, attendance, and performance tracking.",
   "id": "/",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone"],
-  "background_color": "#090A0F",
-  "theme_color": "#090A0F",
+  "background_color": "#20252B",
+  "theme_color": "#20252B",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -49,4 +49,3 @@
     }
   ]
 }
-

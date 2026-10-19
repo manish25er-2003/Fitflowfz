@@ -348,7 +348,7 @@ export function AdminOffersManager() {
       {/* Header bar */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-xs font-bold text-amber-300">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gym-secondary/10 border border-gym-secondary/30 text-xs font-bold text-gym-secondary">
             <Sparkles className="h-3.5 w-3.5" />
             <span>Admin Festival Hub</span>
           </div>
@@ -376,9 +376,9 @@ export function AdminOffersManager() {
           <button
             type="button"
             onClick={() => setIsSchedulingNewYear(true)}
-            className="btn-secondary text-xs px-3 py-2 flex items-center gap-1.5 border-amber-400/40 text-amber-300 hover:bg-amber-500/15"
+            className="btn-secondary text-xs px-3 py-2 flex items-center gap-1.5 border-gym-secondary/40 text-gym-secondary hover:bg-gym-secondary/15"
           >
-            <Calendar className="h-3.5 w-3.5 text-amber-400" />
+            <Calendar className="h-3.5 w-3.5 text-gym-secondary" />
             <span>Schedule New Year (Jan 1)</span>
           </button>
 
@@ -417,35 +417,35 @@ export function AdminOffersManager() {
         <button
           type="button"
           onClick={() => openCreateModal("diwali")}
-          className="px-3 py-1.5 rounded-full border border-amber-400/40 bg-amber-500/10 text-amber-300 font-bold hover:bg-amber-500/20 transition flex items-center gap-1.5 shrink-0"
+          className="px-3 py-1.5 rounded-full border border-gym-accent/40 bg-gym-accent/10 text-gym-accent font-bold hover:bg-gym-accent/20 transition flex items-center gap-1.5 shrink-0"
         >
           <span>🪔</span> Diwali Offer
         </button>
         <button
           type="button"
           onClick={() => openCreateModal("dussehra")}
-          className="px-3 py-1.5 rounded-full border border-orange-400/40 bg-orange-500/10 text-orange-300 font-bold hover:bg-orange-500/20 transition flex items-center gap-1.5 shrink-0"
+          className="px-3 py-1.5 rounded-full border border-gym-secondary/40 bg-gym-secondary/10 text-gym-secondary font-bold hover:bg-gym-secondary/20 transition flex items-center gap-1.5 shrink-0"
         >
           <span>🏹</span> Dussehra Offer
         </button>
         <button
           type="button"
           onClick={() => openCreateModal("navratri")}
-          className="px-3 py-1.5 rounded-full border border-fuchsia-400/40 bg-fuchsia-500/10 text-fuchsia-300 font-bold hover:bg-fuchsia-500/20 transition flex items-center gap-1.5 shrink-0"
+          className="px-3 py-1.5 rounded-full border border-gym-secondary/40 bg-gym-secondary/10 text-gym-secondary font-bold hover:bg-gym-secondary/20 transition flex items-center gap-1.5 shrink-0"
         >
           <span>💃</span> Navratri Offer
         </button>
         <button
           type="button"
           onClick={() => openCreateModal("new_year")}
-          className="px-3 py-1.5 rounded-full border border-yellow-400/40 bg-yellow-500/10 text-yellow-300 font-bold hover:bg-yellow-500/20 transition flex items-center gap-1.5 shrink-0"
+          className="px-3 py-1.5 rounded-full border border-gym-accent/40 bg-gym-accent/10 text-gym-accent font-bold hover:bg-gym-accent/20 transition flex items-center gap-1.5 shrink-0"
         >
           <span>🎉</span> New Year Resolution
         </button>
         <button
           type="button"
           onClick={() => openCreateModal("custom")}
-          className="px-3 py-1.5 rounded-full border border-purple-400/40 bg-purple-500/10 text-purple-300 font-bold hover:bg-purple-500/20 transition flex items-center gap-1.5 shrink-0"
+          className="px-3 py-1.5 rounded-full border border-gym-accent/40 bg-gym-accent/10 text-gym-accent font-bold hover:bg-gym-accent/20 transition flex items-center gap-1.5 shrink-0"
         >
           <span>✨</span> Custom Festival
         </button>
@@ -486,7 +486,7 @@ export function AdminOffersManager() {
         <div className="flex items-center gap-3 text-gym-muted text-[11px] sm:text-xs">
           <span>Total: <strong className="text-white">{offers.length}</strong></span>
           <span>•</span>
-          <span>Live for Users: <strong className="text-emerald-400">{offers.filter((o) => o.status === "Active" && o.expiryDate >= today && (!o.startDate || o.startDate <= today)).length}</strong></span>
+          <span>Live for Users: <strong className="text-gym-secondary">{offers.filter((o) => o.status === "Active" && o.expiryDate >= today && (!o.startDate || o.startDate <= today)).length}</strong></span>
         </div>
       </div>
 
@@ -495,15 +495,15 @@ export function AdminOffersManager() {
         <div
           className={`p-3.5 rounded-2xl flex items-center justify-between gap-2 text-xs sm:text-sm border animate-in fade-in ${
             statusMessage.type === "success"
-              ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
-              : "bg-rose-500/10 border-rose-500/30 text-rose-300"
+              ? "bg-gym-secondary/10 border-gym-secondary/30 text-gym-secondary"
+              : "bg-gym-accent/10 border-gym-accent/30 text-gym-accent"
           }`}
         >
           <div className="flex items-center gap-2">
             {statusMessage.type === "success" ? (
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-gym-secondary" />
             ) : (
-              <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+              <AlertCircle className="h-4 w-4 shrink-0 text-gym-accent" />
             )}
             <span>{statusMessage.text}</span>
           </div>
@@ -518,8 +518,8 @@ export function AdminOffersManager() {
 
       {/* Live Preview Section */}
       {showPreview && (
-        <div className="rounded-3xl border border-amber-500/30 bg-slate-950/70 p-4 sm:p-6 space-y-4 shadow-2xl">
-          <div className="flex items-center justify-between text-xs text-amber-300 font-extrabold uppercase tracking-wider">
+        <div className="rounded-3xl border border-gym-secondary/30 bg-gym-panel/70 p-4 sm:p-6 space-y-4 shadow-2xl">
+          <div className="flex items-center justify-between text-xs text-gym-secondary font-extrabold uppercase tracking-wider">
             <span>✨ Live Preview: Real-Time Member Dashboard View</span>
             <span className="text-[10px] text-gym-muted">Instant Firestore sync</span>
           </div>
@@ -573,7 +573,7 @@ export function AdminOffersManager() {
                 key={offer.id}
                 className={`panel relative p-4 sm:p-5 flex flex-col justify-between transition-all rounded-2xl border ${
                   isCurrentlyActive
-                    ? "border-amber-500/40 shadow-[0_4px_25px_rgba(245,158,11,0.14)]"
+                    ? "border-gym-secondary/40 shadow-[0_4px_25px_rgba(245,158,11,0.14)]"
                     : "opacity-75 border-gym-border"
                 }`}
               >
@@ -590,11 +590,11 @@ export function AdminOffersManager() {
                       <span
                         className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border ${
                           isCurrentlyActive
-                            ? "bg-amber-500/15 border-amber-400/40 text-amber-300"
+                            ? "bg-gym-secondary/15 border-gym-secondary/40 text-gym-secondary"
                             : isExpired
-                            ? "bg-rose-500/10 border-rose-500/30 text-rose-300"
+                            ? "bg-gym-accent/10 border-gym-accent/30 text-gym-accent"
                             : isUpcoming
-                            ? "bg-sky-500/10 border-sky-500/30 text-sky-300"
+                            ? "bg-gym-secondary/10 border-gym-secondary/30 text-gym-secondary"
                             : "bg-slate-500/10 border-slate-500/30 text-slate-300"
                         }`}
                       >
@@ -608,14 +608,14 @@ export function AdminOffersManager() {
                       </span>
                     </div>
 
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-400/40 text-[11px] font-black text-emerald-300 shrink-0">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-gym-secondary/15 border border-gym-secondary/40 text-[11px] font-black text-gym-secondary shrink-0">
                       {discountPercent}% OFF
                     </span>
                   </div>
 
                   {/* Festival Name & Offer Title */}
                   <div className="mt-3">
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-amber-400/90">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-gym-secondary/90">
                       {offer.festivalName || "Special Festival"}
                     </span>
                     <h3 className="text-base sm:text-lg font-bold text-gym-text leading-snug">
@@ -623,19 +623,19 @@ export function AdminOffersManager() {
                     </h3>
                   </div>
 
-                  <p className="text-xs text-purple-300 font-semibold mt-0.5">
+                  <p className="text-xs text-gym-accent font-semibold mt-0.5">
                     {offer.planName} Membership • {offer.durationDays} Days
                   </p>
 
                   {/* Price Display */}
                   <div className="mt-3 flex flex-wrap items-baseline gap-2">
-                    <span className="text-2xl font-black text-amber-300">
+                    <span className="text-2xl font-black text-gym-secondary">
                       ₹{offer.discountedPrice}
                     </span>
                     <span className="text-sm text-gym-muted line-through font-medium">
                       ₹{offer.originalPrice}
                     </span>
-                    <span className="text-xs text-emerald-400 font-bold">
+                    <span className="text-xs text-gym-secondary font-bold">
                       (Save ₹{saving})
                     </span>
                   </div>
@@ -654,7 +654,7 @@ export function AdminOffersManager() {
                       <span>Valid until:</span>
                       <span
                         className={`font-semibold ${
-                          isExpired ? "text-rose-400" : "text-amber-300"
+                          isExpired ? "text-gym-accent" : "text-gym-secondary"
                         }`}
                       >
                         {offer.expiryDate}
@@ -678,7 +678,7 @@ export function AdminOffersManager() {
                     onClick={() => handleToggle(offer)}
                     className={`flex-1 min-h-[38px] py-1.5 px-3 rounded-xl border text-xs font-bold transition flex items-center justify-center ${
                       offer.status === "Active"
-                        ? "border-amber-400/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20"
+                        ? "border-gym-secondary/40 bg-gym-secondary/10 text-gym-secondary hover:bg-gym-secondary/20"
                         : "border-gym-border bg-gym-panel text-gym-muted hover:text-white"
                     }`}
                   >
@@ -698,7 +698,7 @@ export function AdminOffersManager() {
                   <button
                     type="button"
                     onClick={() => handleDelete(offer)}
-                    className="min-h-[38px] min-w-[38px] p-2 rounded-xl border border-gym-border bg-gym-panel text-gym-muted hover:text-rose-400 hover:border-rose-400/40 transition flex items-center justify-center shrink-0"
+                    className="min-h-[38px] min-w-[38px] p-2 rounded-xl border border-gym-border bg-gym-panel text-gym-muted hover:text-gym-accent hover:border-gym-accent/40 transition flex items-center justify-center shrink-0"
                     title="Delete Offer"
                     aria-label="Delete Offer"
                   >
@@ -713,8 +713,8 @@ export function AdminOffersManager() {
 
       {/* Schedule New Year Modal */}
       {isSchedulingNewYear && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in">
-          <div className="relative w-full max-w-md rounded-3xl border border-yellow-500/40 bg-gym-card p-5 sm:p-6 shadow-2xl text-gym-text">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-gym-panel/80 backdrop-blur-md animate-in fade-in">
+          <div className="relative w-full max-w-md rounded-3xl border border-gym-accent/40 bg-gym-card p-5 sm:p-6 shadow-2xl text-gym-text">
             <button
               onClick={() => setIsSchedulingNewYear(false)}
               className="absolute top-4 right-4 p-1.5 rounded-full border border-gym-border text-gym-muted hover:text-white"
@@ -723,7 +723,7 @@ export function AdminOffersManager() {
             </button>
 
             <div className="flex items-center gap-2 mb-4 border-b border-gym-border pb-3">
-              <Calendar className="h-5 w-5 text-yellow-400" />
+              <Calendar className="h-5 w-5 text-gym-accent" />
               <h3 className="text-lg font-bold text-white">
                 Schedule New Year Resolution Offer
               </h3>
@@ -769,10 +769,10 @@ export function AdminOffersManager() {
                       discountedPrice: Number(e.target.value),
                     })
                   }
-                  className="input font-bold text-yellow-300"
+                  className="input font-bold text-gym-accent"
                   required
                 />
-                <p className="text-[11px] text-emerald-400 mt-1">
+                <p className="text-[11px] text-gym-secondary mt-1">
                   Standard Annual: ₹6,000 • Savings: ₹{6000 - nyScheduleData.discountedPrice} (
                   {Math.round(((6000 - nyScheduleData.discountedPrice) / 6000) * 100)}% off)
                 </p>
@@ -838,7 +838,7 @@ export function AdminOffersManager() {
 
       {/* Create / Edit Modal */}
       {isCreating && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-gym-panel/80 backdrop-blur-md animate-in fade-in">
           <div className="relative w-full max-w-lg rounded-3xl border border-gym-border bg-gym-card p-4 sm:p-6 shadow-2xl text-gym-text max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setIsCreating(false)}
@@ -848,7 +848,7 @@ export function AdminOffersManager() {
             </button>
 
             <div className="flex items-center gap-2 mb-4 border-b border-gym-border pb-3">
-              <Sparkles className="h-5 w-5 text-amber-400" />
+              <Sparkles className="h-5 w-5 text-gym-secondary" />
               <h3 className="text-lg font-bold text-white">
                 {editingOffer ? "Edit Festival Offer" : "Create Festival Offer"}
               </h3>
@@ -955,7 +955,7 @@ export function AdminOffersManager() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-amber-400 mb-1 font-semibold">
+                  <label className="block text-xs uppercase tracking-wider text-gym-secondary mb-1 font-semibold">
                     Discounted Price (₹)
                   </label>
                   <input
@@ -969,15 +969,15 @@ export function AdminOffersManager() {
                         discountedPrice: Number(e.target.value),
                       })
                     }
-                    className="input font-bold text-amber-300 border-amber-400/40"
+                    className="input font-bold text-gym-secondary border-gym-secondary/40"
                   />
                 </div>
               </div>
 
               {/* Calculated Savings Pill */}
-              <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-400/25 flex items-center justify-between text-xs">
+              <div className="p-2.5 rounded-xl bg-gym-secondary/10 border border-gym-secondary/25 flex items-center justify-between text-xs">
                 <span className="text-gym-muted">Calculated Member Savings:</span>
-                <span className="font-bold text-emerald-400">
+                <span className="font-bold text-gym-secondary">
                   Save ₹
                   {Math.max(0, formData.originalPrice - formData.discountedPrice)}{" "}
                   (

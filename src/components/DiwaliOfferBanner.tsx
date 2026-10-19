@@ -40,11 +40,11 @@ export function getFestivalThemeClasses(festiveType?: FestiveType) {
       return {
         card: "dussehra-festive-card",
         button: "dussehra-claim-btn",
-        glow: "rgba(249, 115, 22, 0.25)",
-        textGradient: "from-orange-300 via-amber-300 to-amber-500",
-        badgeBg: "bg-orange-500/20 border-orange-500/40 text-orange-300",
-        accentText: "text-orange-400",
-        borderAccent: "border-orange-500/40 hover:border-orange-400/80",
+        glow: "rgba(229,57,70, 0.25)",
+        textGradient: "from-gym-secondary via-gym-accent to-gym-accent",
+        badgeBg: "bg-gym-secondary/20 border-gym-secondary/40 text-gym-secondary",
+        accentText: "text-gym-secondary",
+        borderAccent: "border-gym-secondary/40 hover:border-gym-secondary/80",
         icon: Swords,
         festIcon: "🏹",
         dealTag: "VIJAYADASHAMI SPECIAL",
@@ -53,11 +53,11 @@ export function getFestivalThemeClasses(festiveType?: FestiveType) {
       return {
         card: "navratri-festive-card",
         button: "navratri-claim-btn",
-        glow: "rgba(217, 70, 239, 0.25)",
-        textGradient: "from-pink-300 via-fuchsia-300 to-purple-400",
-        badgeBg: "bg-fuchsia-500/20 border-fuchsia-500/40 text-fuchsia-300",
-        accentText: "text-fuchsia-400",
-        borderAccent: "border-fuchsia-500/40 hover:border-fuchsia-400/80",
+        glow: "rgba(19,166,160, 0.25)",
+        textGradient: "from-gym-secondary via-gym-secondary to-gym-accent",
+        badgeBg: "bg-gym-secondary/20 border-gym-secondary/40 text-gym-secondary",
+        accentText: "text-gym-secondary",
+        borderAccent: "border-gym-secondary/40 hover:border-gym-secondary/80",
         icon: Sparkles,
         festIcon: "💃",
         dealTag: "NAVRATRI UTSAV DEAL",
@@ -66,11 +66,11 @@ export function getFestivalThemeClasses(festiveType?: FestiveType) {
       return {
         card: "newyear-festive-card",
         button: "newyear-claim-btn",
-        glow: "rgba(250, 204, 21, 0.25)",
-        textGradient: "from-yellow-200 via-amber-300 to-yellow-400",
-        badgeBg: "bg-yellow-500/20 border-yellow-500/40 text-yellow-300",
-        accentText: "text-yellow-400",
-        borderAccent: "border-yellow-500/40 hover:border-yellow-400/80",
+        glow: "rgba(19,166,160, 0.25)",
+        textGradient: "from-gym-secondary via-gym-accent to-gym-secondary",
+        badgeBg: "bg-gym-secondary/20 border-gym-secondary/40 text-gym-secondary",
+        accentText: "text-gym-secondary",
+        borderAccent: "border-gym-secondary/40 hover:border-gym-secondary/80",
         icon: PartyPopper,
         festIcon: "🎉",
         dealTag: "NEW YEAR RESOLUTION",
@@ -79,11 +79,11 @@ export function getFestivalThemeClasses(festiveType?: FestiveType) {
       return {
         card: "diwali-festive-card",
         button: "diwali-claim-btn",
-        glow: "rgba(168, 85, 247, 0.25)",
-        textGradient: "from-purple-200 via-violet-300 to-amber-300",
-        badgeBg: "bg-purple-500/20 border-purple-500/40 text-purple-300",
-        accentText: "text-purple-400",
-        borderAccent: "border-purple-500/40 hover:border-purple-400/80",
+        glow: "rgba(229,57,70, 0.25)",
+        textGradient: "from-gym-accent via-gym-accent to-gym-accent",
+        badgeBg: "bg-gym-accent/20 border-gym-accent/40 text-gym-accent",
+        accentText: "text-gym-accent",
+        borderAccent: "border-gym-accent/40 hover:border-gym-accent/80",
         icon: Sparkles,
         festIcon: "✨",
         dealTag: "SPECIAL FESTIVAL DEAL",
@@ -93,11 +93,11 @@ export function getFestivalThemeClasses(festiveType?: FestiveType) {
       return {
         card: "diwali-festive-card",
         button: "diwali-claim-btn",
-        glow: "rgba(245, 158, 11, 0.25)",
-        textGradient: "from-yellow-200 via-amber-300 to-yellow-400",
-        badgeBg: "bg-amber-500/20 border-amber-500/40 text-amber-300",
-        accentText: "text-amber-400",
-        borderAccent: "border-amber-500/40 hover:border-amber-400/80",
+        glow: "rgba(229,57,70, 0.25)",
+        textGradient: "from-gym-secondary via-gym-accent to-gym-secondary",
+        badgeBg: "bg-gym-accent/20 border-gym-accent/40 text-gym-accent",
+        accentText: "text-gym-accent",
+        borderAccent: "border-gym-accent/40 hover:border-gym-accent/80",
         icon: Flame,
         festIcon: "🪔",
         dealTag: "DIWALI DHAMAKA DEAL",
@@ -120,19 +120,19 @@ function FestiveSparkles({
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
       <span
-        className="absolute top-2 right-6 text-yellow-300 text-xs animate-sparkle-1"
+        className="absolute top-2 right-6 text-gym-secondary text-xs animate-sparkle-1"
         style={{ animationDelay: "0s" }}
       >
         ✦
       </span>
       <span
-        className="absolute top-6 left-4 text-amber-300 text-[10px] animate-sparkle-2"
+        className="absolute top-6 left-4 text-gym-accent text-[10px] animate-sparkle-2"
         style={{ animationDelay: "0.8s" }}
       >
         ✧
       </span>
       <span
-        className="absolute bottom-4 right-10 text-yellow-200 text-sm animate-sparkle-3"
+        className="absolute bottom-4 right-10 text-gym-secondary text-sm animate-sparkle-3"
         style={{ animationDelay: "1.4s" }}
       >
         ★
@@ -140,12 +140,12 @@ function FestiveSparkles({
       <div
         className={`absolute top-2 right-1/4 w-8 h-8 rounded-full blur-xl opacity-30 ${
           festiveType === "navratri"
-            ? "bg-fuchsia-500"
+            ? "bg-gym-secondary"
             : festiveType === "dussehra"
-            ? "bg-orange-500"
+            ? "bg-gym-secondary"
             : festiveType === "new_year"
-            ? "bg-yellow-400"
-            : "bg-amber-500"
+            ? "bg-gym-secondary"
+            : "bg-gym-accent"
         }`}
       />
     </div>
@@ -246,13 +246,13 @@ export function FestiveOfferCheckoutModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg rounded-3xl border border-amber-500/30 bg-gradient-to-b from-[#19152b] via-[#110f1e] to-[#0a0812] p-4 sm:p-7 shadow-[0_24px_70px_rgba(139,92,246,0.3)] text-gym-text max-h-[92vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-gym-panel/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg rounded-3xl border border-gym-accent/30 bg-gradient-to-b from-[#252b32] via-[#20252b] to-[#171b20] p-4 sm:p-7 shadow-[0_24px_70px_rgba(229,57,70,0.3)] text-gym-text max-h-[92vh] overflow-y-auto">
         {/* Close Button */}
         {paymentState !== "verifying" && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-1.5 rounded-full border border-white/10 bg-white/5 text-gym-muted hover:text-white hover:border-amber-400/40 transition"
+            className="absolute top-4 right-4 p-1.5 rounded-full border border-white/10 bg-white/5 text-gym-muted hover:text-white hover:border-gym-accent/40 transition"
             aria-label="Close modal"
           >
             <X className="h-4 w-4" />
@@ -262,12 +262,12 @@ export function FestiveOfferCheckoutModal({
         {/* State: Success Screen */}
         {paymentState === "success" && successDetails && (
           <div className="py-4 text-center space-y-4 animate-in zoom-in-95 duration-300">
-            <div className="mx-auto w-16 h-16 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 shadow-[0_0_24px_rgba(52,211,153,0.4)]">
+            <div className="mx-auto w-16 h-16 rounded-full bg-gym-secondary/20 border-2 border-gym-secondary flex items-center justify-center text-gym-secondary shadow-[0_0_24px_rgba(19,166,160,0.4)]">
               <CheckCircle2 className="h-9 w-9" />
             </div>
 
             <div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-gym-secondary/15 border border-gym-secondary/30 text-gym-secondary">
                 <Sparkles className="h-3.5 w-3.5" /> Payment Verified
               </span>
               <h3 className="mt-2 text-2xl font-black text-white">
@@ -279,20 +279,20 @@ export function FestiveOfferCheckoutModal({
             </div>
 
             {/* Receipt Summary Card */}
-            <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/5 p-4 text-left space-y-2.5 text-xs sm:text-sm">
+            <div className="rounded-2xl border border-gym-secondary/25 bg-gym-secondary/5 p-4 text-left space-y-2.5 text-xs sm:text-sm">
               <div className="flex justify-between items-center text-gym-muted">
                 <span>Plan Activated:</span>
                 <span className="font-bold text-white">{successDetails.planName}</span>
               </div>
               <div className="flex justify-between items-center text-gym-muted">
                 <span>Active Until:</span>
-                <span className="font-bold text-emerald-300">{successDetails.expiryDate}</span>
+                <span className="font-bold text-gym-secondary">{successDetails.expiryDate}</span>
               </div>
               <div className="flex justify-between items-center text-gym-muted">
                 <span>Amount Paid:</span>
-                <span className="font-extrabold text-amber-300 text-base">₹{successDetails.amount}</span>
+                <span className="font-extrabold text-gym-accent text-base">₹{successDetails.amount}</span>
               </div>
-              <div className="flex justify-between items-center text-gym-muted pt-2 border-t border-emerald-500/20">
+              <div className="flex justify-between items-center text-gym-muted pt-2 border-t border-gym-secondary/20">
                 <span>Transaction Ref:</span>
                 <span className="font-mono text-[11px] text-gym-muted">{successDetails.reference}</span>
               </div>
@@ -302,7 +302,7 @@ export function FestiveOfferCheckoutModal({
               <button
                 type="button"
                 onClick={() => setShowReceiptModal(true)}
-                className="w-full py-2.5 px-4 rounded-xl font-bold text-xs border border-violet-400/40 bg-violet-500/10 text-violet-200 hover:bg-violet-500/20 transition flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 px-4 rounded-xl font-bold text-xs border border-gym-accent/40 bg-gym-accent/10 text-gym-accent hover:bg-gym-accent/20 transition flex items-center justify-center gap-1.5"
               >
                 <Mail className="h-3.5 w-3.5" />
                 View Email & SMS Receipt
@@ -310,7 +310,7 @@ export function FestiveOfferCheckoutModal({
               <button
                 type="button"
                 onClick={handleCompleteSuccess}
-                className="w-full py-2.5 px-5 rounded-xl font-extrabold text-xs bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 text-stone-950 shadow-lg shadow-emerald-500/25 hover:brightness-110 transition active:scale-98"
+                className="w-full py-2.5 px-5 rounded-xl font-extrabold text-xs bg-gradient-to-r from-gym-secondary via-teal-500 to-gym-secondary text-stone-950 shadow-lg shadow-gym-secondary/25 hover:brightness-110 transition active:scale-98"
               >
                 Continue to Dashboard
               </button>
@@ -329,8 +329,8 @@ export function FestiveOfferCheckoutModal({
         {paymentState === "verifying" && (
           <div className="py-10 text-center space-y-4 animate-in fade-in duration-200">
             <div className="relative mx-auto w-16 h-16 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border-4 border-amber-400/20 border-t-amber-400 animate-spin" />
-              <ShieldCheck className="h-7 w-7 text-amber-300" />
+              <div className="absolute inset-0 rounded-full border-4 border-gym-accent/20 border-t-gym-accent animate-spin" />
+              <ShieldCheck className="h-7 w-7 text-gym-accent" />
             </div>
             <div>
               <h3 className="text-lg font-bold text-white">
@@ -341,7 +341,7 @@ export function FestiveOfferCheckoutModal({
               </p>
             </div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] bg-white/5 border border-white/10 text-gym-muted">
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-gym-accent animate-pulse" />
               <span>Verifying transaction authenticity</span>
             </div>
           </div>
@@ -363,7 +363,7 @@ export function FestiveOfferCheckoutModal({
                   <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[10px] font-extrabold uppercase tracking-wider ${theme.badgeBg}`}>
                     {theme.festIcon} {festivalName} Special Deal
                   </span>
-                  <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-extrabold text-[11px]">
+                  <span className="px-2 py-0.5 rounded-md bg-gym-secondary/20 border border-gym-secondary/40 text-gym-secondary font-extrabold text-[11px]">
                     {discountPercent}% OFF
                   </span>
                 </div>
@@ -388,10 +388,10 @@ export function FestiveOfferCheckoutModal({
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-emerald-400 font-medium">
+                <span className="text-gym-secondary font-medium">
                   {festivalName} Deal Savings:
                 </span>
-                <span className="font-bold text-emerald-400">
+                <span className="font-bold text-gym-secondary">
                   - ₹{savingAmount} ({discountPercent}% OFF)
                 </span>
               </div>
@@ -401,7 +401,7 @@ export function FestiveOfferCheckoutModal({
                   <p className="text-[10px] text-gym-muted">Includes full gym access & locker</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-xl sm:text-3xl font-black text-amber-300">
+                  <span className="text-xl sm:text-3xl font-black text-gym-accent">
                     ₹{offer.discountedPrice}
                   </span>
                 </div>
@@ -412,7 +412,7 @@ export function FestiveOfferCheckoutModal({
             <div className="mt-4 space-y-2">
               <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-gym-muted">
                 <span>Select Payment Method</span>
-                <span className="text-emerald-400 text-[10px] font-bold">100% SECURE</span>
+                <span className="text-gym-secondary text-[10px] font-bold">100% SECURE</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -428,8 +428,8 @@ export function FestiveOfferCheckoutModal({
                     onClick={() => setMethod(p.id as any)}
                     className={`py-2 px-2 rounded-xl border text-center transition ${
                       method === p.id
-                        ? "border-amber-400 bg-amber-500/15 text-amber-300 font-bold shadow-sm"
-                        : "border-gym-border bg-gym-panel/60 text-gym-muted hover:border-amber-400/30 hover:text-gym-text"
+                        ? "border-gym-accent bg-gym-accent/15 text-gym-accent font-bold shadow-sm"
+                        : "border-gym-border bg-gym-panel/60 text-gym-muted hover:border-gym-accent/30 hover:text-gym-text"
                     }`}
                   >
                     <div className="text-xs font-bold">{p.label}</div>
@@ -442,16 +442,16 @@ export function FestiveOfferCheckoutModal({
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between gap-2 mt-2">
                 <div className="min-w-0">
                   <p className="text-[10px] uppercase tracking-wider text-gym-muted font-medium">
-                    Merchant UPI ID (Fitflow Gym)
+                    Merchant UPI ID (FZ Gym)
                   </p>
-                  <p className="text-xs font-mono font-bold text-amber-300 truncate">
+                  <p className="text-xs font-mono font-bold text-gym-accent truncate">
                     {upiId}
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={handleCopyUpi}
-                  className="px-2.5 py-1.5 rounded-lg border border-amber-400/40 bg-amber-500/10 text-amber-300 text-xs font-semibold hover:bg-amber-500/20 transition flex items-center gap-1 shrink-0"
+                  className="px-2.5 py-1.5 rounded-lg border border-gym-accent/40 bg-gym-accent/10 text-gym-accent text-xs font-semibold hover:bg-gym-accent/20 transition flex items-center gap-1 shrink-0"
                 >
                   <Copy className="h-3 w-3" />
                   <span>{copiedUpi ? "Copied!" : "Copy"}</span>
@@ -460,8 +460,8 @@ export function FestiveOfferCheckoutModal({
             </div>
 
             {errorMessage && (
-              <div className="mt-3 flex items-center gap-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs animate-in shake">
-                <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+              <div className="mt-3 flex items-center gap-2 p-3 rounded-xl bg-gym-accent/10 border border-gym-accent/30 text-gym-accent text-xs animate-in shake">
+                <AlertCircle className="h-4 w-4 shrink-0 text-gym-accent" />
                 <span>{errorMessage}</span>
               </div>
             )}
@@ -478,7 +478,7 @@ export function FestiveOfferCheckoutModal({
               </button>
 
               <div className="flex items-center justify-center gap-2 text-[11px] text-gym-muted pt-1">
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+                <ShieldCheck className="h-3.5 w-3.5 text-gym-secondary" />
                 <span>Instant activation after payment verification • No hidden fees</span>
               </div>
             </div>
@@ -511,7 +511,7 @@ export function FestiveOfferCard({
 
   return (
     <div
-      className={`group relative rounded-2xl border ${theme.borderAccent} bg-gradient-to-b from-[#161226] via-[#100d1c] to-[#0c0a14] p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(139,92,246,0.18)] flex flex-col justify-between overflow-hidden`}
+      className={`group relative rounded-2xl border ${theme.borderAccent} bg-gradient-to-b from-[#20252B] via-[#252B32] to-[#20252B] p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(229,57,70,0.18)] flex flex-col justify-between overflow-hidden`}
     >
       {/* Ambient sparkles */}
       <FestiveSparkles festiveType={offer.festiveType} isPaused={isTabHidden} />
@@ -519,21 +519,21 @@ export function FestiveOfferCard({
       <div className="space-y-2">
         {/* Top row: Deal tag + Discount badge */}
         <div className="relative z-10 flex items-center justify-between gap-1.5">
-          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-500/20 border border-rose-500/40 text-[9px] font-black uppercase tracking-wider text-rose-300">
-            <Flame className="h-2.5 w-2.5 text-rose-400 animate-pulse" />
+          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gym-accent/20 border border-gym-accent/40 text-[9px] font-black uppercase tracking-wider text-gym-accent">
+            <Flame className="h-2.5 w-2.5 text-gym-accent animate-pulse" />
             <span className="truncate max-w-[80px]">{festivalName}</span>
           </div>
-          <div className="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-black text-[10px] tracking-wide shrink-0">
+          <div className="inline-flex items-center px-2 py-0.5 rounded-md bg-gym-secondary/20 border border-gym-secondary/40 text-gym-secondary font-black text-[10px] tracking-wide shrink-0">
             {discountPercent}% OFF
           </div>
         </div>
 
         {/* Offer title */}
         <div className="relative z-10">
-          <h3 className="text-sm font-black text-white group-hover:text-amber-200 transition line-clamp-1 leading-tight">
+          <h3 className="text-sm font-black text-white group-hover:text-gym-accent transition line-clamp-1 leading-tight">
             {offer.name}
           </h3>
-          <p className="text-[10px] text-purple-300 font-semibold mt-0.5 truncate">
+          <p className="text-[10px] text-gym-accent font-semibold mt-0.5 truncate">
             {offer.planName} Plan • {offer.durationDays}d
           </p>
           <p className="text-[10px] text-gym-muted line-clamp-1 mt-0.5 leading-snug">
@@ -544,19 +544,19 @@ export function FestiveOfferCard({
         {/* Price block */}
         <div className="relative z-10 pt-2 border-t border-white/10">
           <div className="flex items-baseline gap-1.5">
-            <span className="text-xl font-black text-amber-300 tracking-tight">
+            <span className="text-xl font-black text-gym-accent tracking-tight">
               ₹{offer.discountedPrice}
             </span>
-            <span className="text-xs text-gym-muted line-through font-medium decoration-rose-400/70">
+            <span className="text-xs text-gym-muted line-through font-medium decoration-gym-accent/70">
               ₹{offer.originalPrice}
             </span>
-            <span className="ml-auto text-[10px] font-bold text-emerald-400 shrink-0">
+            <span className="ml-auto text-[10px] font-bold text-gym-secondary shrink-0">
               Save ₹{savingAmount}
             </span>
           </div>
           {/* Expiry */}
-          <div className="mt-1 flex items-center gap-1 text-[10px] text-amber-200/70 font-medium">
-            <Clock className="h-2.5 w-2.5 text-amber-400 shrink-0" />
+          <div className="mt-1 flex items-center gap-1 text-[10px] text-gym-accent/70 font-medium">
+            <Clock className="h-2.5 w-2.5 text-gym-accent shrink-0" />
             <span>Expires {offer.expiryDate}</span>
           </div>
         </div>
@@ -565,8 +565,8 @@ export function FestiveOfferCard({
       {/* Action Button */}
       <div className="relative z-10 mt-2.5 pt-2 border-t border-white/5">
         {isAlreadyClaimed ? (
-          <div className="w-full py-2 px-3 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold flex items-center justify-center gap-1.5">
-            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+          <div className="w-full py-2 px-3 rounded-xl bg-gym-secondary/15 border border-gym-secondary/40 text-gym-secondary text-[11px] font-bold flex items-center justify-center gap-1.5">
+            <CheckCircle2 className="h-3.5 w-3.5 text-gym-secondary" />
             <span>Offer Active</span>
           </div>
         ) : (
@@ -586,7 +586,7 @@ export function FestiveOfferCard({
 
 /**
  * Premium Festive Offers Showcase for the Member Dashboard
- * Modern Amazon Deals / Flipkart Offers inspired design with Fitflow dark & purple branding.
+ * Modern festival offers styled with FZ Gym's red, charcoal, white, and teal branding.
  * Automatically hides cleanly if no active offers exist.
  */
 export function DiwaliOfferBanner({
@@ -659,16 +659,16 @@ export function DiwaliOfferBanner({
   return (
     <section className="w-full space-y-4 animate-in fade-in duration-300">
       {/* Header bar with Amazon / Flipkart Mega Sale styling */}
-      <div className="panel relative p-3 sm:p-4 rounded-2xl border border-amber-500/30 bg-gradient-to-r from-[#17122b] via-[#120f22] to-[#1a1329] overflow-hidden">
+      <div className="panel relative p-3 sm:p-4 rounded-2xl border border-gym-accent/30 bg-gradient-to-r from-[#20252B] via-[#252B32] to-[#2B3239] overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/20 via-purple-500/20 to-amber-500/20 border border-amber-400/40 text-[11px] font-black uppercase tracking-wider text-amber-300">
-              <Sparkles className="h-3.5 w-3.5 text-amber-400 animate-spin" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-gym-accent/20 via-gym-accent/20 to-gym-accent/20 border border-gym-accent/40 text-[11px] font-black uppercase tracking-wider text-gym-accent">
+              <Sparkles className="h-3.5 w-3.5 text-gym-accent animate-spin" />
               <span>FESTIVAL MEGA DEALS • LIMITED TIME</span>
             </div>
             <h2 className="text-lg sm:text-xl font-black text-white mt-1 flex flex-wrap items-center gap-2">
               <span>Festival Dhamaka Offers</span>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-extrabold">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-gym-secondary/20 border border-gym-secondary/40 text-gym-secondary font-extrabold">
                 Up to {Math.max(...activeValidOffers.map((o) => Math.round(((o.originalPrice - o.discountedPrice) / o.originalPrice) * 100)))}% OFF
               </span>
             </h2>
@@ -685,7 +685,7 @@ export function DiwaliOfferBanner({
                 onClick={() => setActiveCategory("all")}
                 className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1 ${
                   activeCategory === "all"
-                    ? "bg-amber-500 text-stone-950 shadow-md shadow-amber-500/20"
+                    ? "bg-gym-accent text-stone-950 shadow-md shadow-gym-accent/20"
                     : "bg-white/5 text-gym-muted border border-white/10 hover:text-white"
                 }`}
               >
@@ -703,7 +703,7 @@ export function DiwaliOfferBanner({
                     onClick={() => setActiveCategory(type)}
                     className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1 ${
                       activeCategory === type
-                        ? "bg-purple-600 text-white shadow-md shadow-purple-500/25"
+                        ? "bg-gym-accent text-white shadow-md shadow-gym-accent/25"
                         : "bg-white/5 text-gym-muted border border-white/10 hover:text-white"
                     }`}
                   >
@@ -719,8 +719,8 @@ export function DiwaliOfferBanner({
 
       {/* Claimed notice banner if just claimed */}
       {claimedNotice && (
-        <div className="flex items-center gap-2 p-3.5 rounded-2xl bg-emerald-500/15 border border-emerald-400/40 text-emerald-200 text-xs sm:text-sm animate-in fade-in">
-          <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400" />
+        <div className="flex items-center gap-2 p-3.5 rounded-2xl bg-gym-secondary/15 border border-gym-secondary/40 text-gym-secondary text-xs sm:text-sm animate-in fade-in">
+          <CheckCircle2 className="h-5 w-5 shrink-0 text-gym-secondary" />
           <span>{claimedNotice}</span>
         </div>
       )}

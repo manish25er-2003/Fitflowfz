@@ -6,46 +6,47 @@
 
 :root {
   font-family: "Inter", system-ui, sans-serif;
-  color: #f5f5fa;
-  background: #090a0f;
+  color: #ffffff;
+  background: #20252b;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --bg: #090a0f;
-  --sidebar: #0d0e14;
-  --card: #14151d;
-  --card-elevated: #191a24;
-  --panel: #11141a;
-  --border: #2a2b39;
-  --primary: #8b5cf6;
-  --primary-soft: rgba(139, 92, 246, 0.18);
-  --success: #34d399;
-  --success-soft: rgba(52, 211, 153, 0.18);
-  --text: #f5f5fa;
-  --muted: #9698aa;
+  --bg: #20252b;
+  --sidebar: #171b20;
+  --card: #2b3239;
+  --card-elevated: #343c44;
+  --panel: #252b32;
+  --border: #414a53;
+  --primary: #e53946;
+  --primary-soft: rgba(229, 57, 70, 0.18);
+  --secondary: #13a6a0;
+  --success: #13a6a0;
+  --success-soft: rgba(19, 166, 160, 0.18);
+  --text: #ffffff;
+  --muted: #b5bdc5;
 }
 
 .theme-dark {
   color-scheme: dark;
-  --theme-bg: #090a0f;
-  --theme-sidebar: #0d0e14;
-  --theme-card: #14151d;
-  --theme-panel: #11141a;
-  --theme-border: #2a2b39;
-  --theme-text: #f5f5fa;
-  --theme-muted: #9698aa;
+  --theme-bg: #20252b;
+  --theme-sidebar: #171b20;
+  --theme-card: #2b3239;
+  --theme-panel: #252b32;
+  --theme-border: #414a53;
+  --theme-text: #ffffff;
+  --theme-muted: #b5bdc5;
 }
 
 .theme-light {
   color-scheme: light;
-  --theme-bg: #edf3ff;
-  --theme-sidebar: #f9fbff;
+  --theme-bg: #f4f6f7;
+  --theme-sidebar: #ffffff;
   --theme-card: #ffffff;
-  --theme-panel: #eef3ff;
-  --theme-border: #dfe5f4;
-  --theme-text: #151826;
-  --theme-muted: #5f6780;
+  --theme-panel: #f4f6f7;
+  --theme-border: #d7dde2;
+  --theme-text: #20252b;
+  --theme-muted: #5c6670;
 }
 
 html,
@@ -62,10 +63,10 @@ body {
   min-height: 100vh;
   max-width: 100vw;
   background:
-    radial-gradient(circle at top, rgba(139, 92, 246, 0.12), transparent 28%),
+    radial-gradient(circle at top, rgba(229, 57, 70, 0.12), transparent 28%),
     radial-gradient(
       circle at bottom right,
-      rgba(52, 211, 153, 0.08),
+      rgba(19, 166, 160, 0.08),
       transparent 22%
     ),
     var(--theme-bg, var(--bg));
@@ -107,7 +108,7 @@ img {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #343847;
+  background: #525c65;
   border-radius: 999px;
 }
 
@@ -125,7 +126,7 @@ img {
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-xl bg-gym-accent px-4 py-2.5 text-sm font-semibold text-[#0c0d12] shadow-glow transition duration-200 hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center rounded-xl bg-gym-accent px-4 py-2.5 text-sm font-semibold text-white shadow-glow transition duration-200 hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .btn-secondary {
@@ -133,7 +134,7 @@ img {
   }
 
   .brand-badge {
-    @apply inline-flex items-center justify-center rounded-xl bg-gym-accent text-sm font-black text-[#0d0e14] shadow-glow;
+    @apply inline-flex items-center justify-center rounded-xl bg-gym-accent text-sm font-black text-white shadow-glow;
   }
 
   .glass-card {
@@ -146,13 +147,13 @@ img {
 }
 
 .theme-light .bg-gym-bg {
-  background-color: #edf3ff !important;
+  background-color: #f4f6f7 !important;
 }
 .theme-light .bg-gym-sidebar {
-  background-color: #f9fbff !important;
+  background-color: #ffffff !important;
 }
 .theme-light .bg-gym-panel {
-  background-color: #eef3ff !important;
+  background-color: #f4f6f7 !important;
 }
 .theme-light .bg-gym-card {
   background-color: #ffffff !important;
@@ -160,117 +161,141 @@ img {
 .theme-light .bg-gym-card\/80 {
   background-color: rgba(255, 255, 255, 0.82) !important;
 }
+.theme-light .bg-gym-bg\/80 {
+  background-color: rgba(244, 246, 247, 0.8) !important;
+}
+.theme-light .bg-gym-sidebar\/90 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+.theme-light .bg-gym-panel\/80 {
+  background-color: rgba(244, 246, 247, 0.8) !important;
+}
 .theme-light .border-gym-border {
-  border-color: #dfe5f4 !important;
+  border-color: #d7dde2 !important;
 }
 .theme-light .text-gym-text {
-  color: #151826 !important;
+  color: #20252b !important;
 }
 .theme-light .text-gym-muted {
-  color: #5f6780 !important;
+  color: #5c6670 !important;
 }
 .theme-light .text-gym-text\/80 {
-  color: rgba(21, 24, 38, 0.8) !important;
+  color: rgba(32, 37, 43, 0.8) !important;
 }
 .theme-light .text-gym-text\/65 {
-  color: rgba(21, 24, 38, 0.65) !important;
+  color: rgba(32, 37, 43, 0.65) !important;
 }
 .theme-light .text-gym-text\/75 {
-  color: rgba(21, 24, 38, 0.75) !important;
+  color: rgba(32, 37, 43, 0.75) !important;
 }
 .theme-light .bg-gym-accent\/10 {
-  background-color: rgba(139, 92, 246, 0.12) !important;
+  background-color: rgba(229, 57, 70, 0.12) !important;
 }
 .theme-light .bg-gym-accent\/15 {
-  background-color: rgba(139, 92, 246, 0.16) !important;
+  background-color: rgba(229, 57, 70, 0.16) !important;
 }
 .theme-light .bg-gym-accent\/20 {
-  background-color: rgba(139, 92, 246, 0.18) !important;
+  background-color: rgba(229, 57, 70, 0.18) !important;
 }
 .theme-light .text-gym-accent {
-  color: #7c3aed !important;
+  color: #c62835 !important;
 }
 .theme-light .bg-gym-accent {
-  background-color: #8b5cf6 !important;
+  background-color: #e53946 !important;
 }
-.theme-light .text-violet-200,
-.theme-light .text-violet-200\/80,
-.theme-light .text-violet-100 {
-  color: #4c1d95 !important;
+.theme-light .text-gym-accent,
+.theme-light .text-gym-accent\/70,
+.theme-light .text-gym-accent\/80,
+.theme-light .text-gym-accent\/90 {
+  color: #c62835 !important;
 }
-.theme-light .text-emerald-300,
-.theme-light .text-emerald-200 {
-  color: #047857 !important;
+.theme-light .text-gym-secondary,
+.theme-light .text-gym-secondary\/80,
+.theme-light .text-gym-secondary\/90 {
+  color: #087873 !important;
 }
-.theme-light .border-violet-400\/30,
-.theme-light .border-emerald-400\/30 {
-  border-color: rgba(109, 40, 217, 0.35) !important;
+.theme-light .border-gym-accent\/30 {
+  border-color: rgba(198, 40, 53, 0.35) !important;
 }
-.theme-light .bg-violet-500\/10,
-.theme-light .bg-emerald-500\/10 {
-  background-color: rgba(139, 92, 246, 0.12) !important;
+.theme-light .border-gym-secondary\/30 {
+  border-color: rgba(8, 120, 115, 0.35) !important;
+}
+.theme-light .bg-gym-accent\/10 {
+  background-color: rgba(229, 57, 70, 0.12) !important;
+}
+.theme-light .bg-gym-secondary\/10 {
+  background-color: rgba(19, 166, 160, 0.12) !important;
 }
 .theme-light .shadow-soft {
   box-shadow: 0 18px 40px rgba(148, 163, 184, 0.18) !important;
 }
 .theme-light .shadow-glow {
   box-shadow:
-    0 0 0 1px rgba(139, 92, 246, 0.2),
-    0 18px 32px rgba(139, 92, 246, 0.12) !important;
+    0 0 0 1px rgba(229, 57, 70, 0.2),
+    0 18px 32px rgba(229, 57, 70, 0.12) !important;
 }
 
 .theme-dark .bg-gym-bg {
-  background-color: #090a0f !important;
+  background-color: #20252b !important;
 }
 .theme-dark .bg-gym-sidebar {
-  background-color: #0d0e14 !important;
+  background-color: #171b20 !important;
 }
 .theme-dark .bg-gym-panel {
-  background-color: #11141a !important;
+  background-color: #252b32 !important;
 }
 .theme-dark .bg-gym-card {
-  background-color: #14151d !important;
+  background-color: #2b3239 !important;
 }
 .theme-dark .bg-gym-card\/80 {
-  background-color: rgba(20, 21, 29, 0.8) !important;
+  background-color: rgba(43, 50, 57, 0.8) !important;
+}
+.theme-dark .bg-gym-bg\/80 {
+  background-color: rgba(32, 37, 43, 0.8) !important;
+}
+.theme-dark .bg-gym-sidebar\/90 {
+  background-color: rgba(23, 27, 32, 0.9) !important;
+}
+.theme-dark .bg-gym-panel\/80 {
+  background-color: rgba(37, 43, 50, 0.8) !important;
 }
 .theme-dark .border-gym-border {
-  border-color: #2a2b39 !important;
+  border-color: #414a53 !important;
 }
 .theme-dark .text-gym-text {
-  color: #f5f5fa !important;
+  color: #ffffff !important;
 }
 .theme-dark .text-gym-muted {
-  color: #9698aa !important;
+  color: #b5bdc5 !important;
 }
 .theme-dark .text-gym-text\/80 {
-  color: rgba(245, 245, 250, 0.8) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 .theme-dark .text-gym-text\/65 {
-  color: rgba(245, 245, 250, 0.65) !important;
+  color: rgba(255, 255, 255, 0.65) !important;
 }
 .theme-dark .text-gym-text\/75 {
-  color: rgba(245, 245, 250, 0.75) !important;
+  color: rgba(255, 255, 255, 0.75) !important;
 }
 .theme-dark .bg-gym-accent\/10 {
-  background-color: rgba(139, 92, 246, 0.12) !important;
+  background-color: rgba(229, 57, 70, 0.12) !important;
 }
 .theme-dark .bg-gym-accent\/15 {
-  background-color: rgba(139, 92, 246, 0.16) !important;
+  background-color: rgba(229, 57, 70, 0.16) !important;
 }
 .theme-dark .text-gym-accent {
-  color: #8b5cf6 !important;
+  color: #e53946 !important;
 }
 .theme-dark .bg-gym-accent {
-  background-color: #8b5cf6 !important;
+  background-color: #e53946 !important;
 }
 .theme-dark .shadow-soft {
   box-shadow: 0 18px 40px rgba(19, 20, 28, 0.45) !important;
 }
 .theme-dark .shadow-glow {
   box-shadow:
-    0 0 0 1px rgba(139, 92, 246, 0.26),
-    0 18px 32px rgba(139, 92, 246, 0.18) !important;
+    0 0 0 1px rgba(229, 57, 70, 0.26),
+    0 18px 32px rgba(229, 57, 70, 0.18) !important;
 }
 
 @media (max-width: 768px) {
@@ -304,22 +329,22 @@ img {
 @keyframes flame-flicker {
   0%, 100% {
     transform: scale(1) rotate(-1.5deg);
-    filter: drop-shadow(0 0 10px #f59e0b) drop-shadow(0 0 20px #ef4444);
+    filter: drop-shadow(0 0 10px #13a6a0) drop-shadow(0 0 20px #e53946);
     opacity: 0.95;
   }
   25% {
     transform: scale(1.08, 0.94) rotate(1.8deg);
-    filter: drop-shadow(0 0 14px #fbbf24) drop-shadow(0 0 24px #ea580c);
+    filter: drop-shadow(0 0 14px #13a6a0) drop-shadow(0 0 24px #e53946);
     opacity: 1;
   }
   50% {
     transform: scale(0.96, 1.05) rotate(-2deg);
-    filter: drop-shadow(0 0 9px #f59e0b) drop-shadow(0 0 18px #ef4444);
+    filter: drop-shadow(0 0 9px #13a6a0) drop-shadow(0 0 18px #e53946);
     opacity: 0.9;
   }
   75% {
     transform: scale(1.04, 0.97) rotate(1.2deg);
-    filter: drop-shadow(0 0 15px #fde047) drop-shadow(0 0 26px #f97316);
+    filter: drop-shadow(0 0 15px #13a6a0) drop-shadow(0 0 26px #e53946);
     opacity: 0.98;
   }
 }
@@ -419,28 +444,28 @@ img {
 }
 
 .diwali-gold-gradient {
-  background: linear-gradient(135deg, #fde047 0%, #f59e0b 50%, #d97706 100%);
+  background: linear-gradient(135deg, #e53946 0%, #20252b 50%, #13a6a0 100%);
 }
 
 .diwali-festive-card {
   position: relative;
-  background: radial-gradient(circle at 85% 25%, rgba(245, 158, 11, 0.18), transparent 45%),
-              radial-gradient(circle at 15% 85%, rgba(139, 92, 246, 0.25), transparent 50%),
-              linear-gradient(135deg, #161128 0%, #0d0f18 55%, #18120b 100%);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  box-shadow: 0 12px 40px -10px rgba(245, 158, 11, 0.2), 0 0 20px rgba(139, 92, 246, 0.12);
+  background: radial-gradient(circle at 85% 25%, rgba(19, 166, 160, 0.18), transparent 45%),
+              radial-gradient(circle at 15% 85%, rgba(229, 57, 70, 0.25), transparent 50%),
+              linear-gradient(135deg, #252b32 0%, #20252b 55%, #171b20 100%);
+  border: 1px solid rgba(19, 166, 160, 0.35);
+  box-shadow: 0 12px 40px -10px rgba(229, 57, 70, 0.2), 0 0 20px rgba(19, 166, 160, 0.12);
 }
 
 .diwali-claim-btn {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
-  color: #1a1005;
-  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, #e53946 0%, #c62835 50%, #13a6a0 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 20px rgba(229, 57, 70, 0.4);
   transition: all 0.25s ease;
 }
 
 .diwali-claim-btn:hover {
   filter: brightness(1.1);
-  box-shadow: 0 6px 28px rgba(245, 158, 11, 0.6);
+  box-shadow: 0 6px 28px rgba(229, 57, 70, 0.6);
   transform: translateY(-1px);
 }
 
@@ -451,10 +476,10 @@ img {
 /* --- Dussehra (Vijayadashami) Festival Styling --- */
 @keyframes victory-glow {
   0%, 100% {
-    filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.6)) drop-shadow(0 0 20px rgba(234, 88, 12, 0.4));
+    filter: drop-shadow(0 0 10px rgba(229, 57, 70, 0.6)) drop-shadow(0 0 20px rgba(19, 166, 160, 0.4));
   }
   50% {
-    filter: drop-shadow(0 0 16px rgba(251, 146, 60, 0.85)) drop-shadow(0 0 28px rgba(234, 88, 12, 0.6));
+    filter: drop-shadow(0 0 16px rgba(229, 57, 70, 0.85)) drop-shadow(0 0 28px rgba(19, 166, 160, 0.6));
   }
 }
 
@@ -464,23 +489,23 @@ img {
 
 .dussehra-festive-card {
   position: relative;
-  background: radial-gradient(circle at 85% 20%, rgba(249, 115, 22, 0.22), transparent 45%),
-              radial-gradient(circle at 15% 85%, rgba(180, 83, 9, 0.25), transparent 50%),
-              linear-gradient(135deg, #1c100a 0%, #110d18 55%, #180d07 100%);
-  border: 1px solid rgba(249, 115, 22, 0.4);
-  box-shadow: 0 12px 40px -10px rgba(249, 115, 22, 0.25), 0 0 20px rgba(217, 119, 6, 0.15);
+  background: radial-gradient(circle at 85% 20%, rgba(229, 57, 70, 0.22), transparent 45%),
+              radial-gradient(circle at 15% 85%, rgba(19, 166, 160, 0.25), transparent 50%),
+              linear-gradient(135deg, #252b32 0%, #20252b 55%, #171b20 100%);
+  border: 1px solid rgba(229, 57, 70, 0.4);
+  box-shadow: 0 12px 40px -10px rgba(229, 57, 70, 0.25), 0 0 20px rgba(19, 166, 160, 0.15);
 }
 
 .dussehra-claim-btn {
-  background: linear-gradient(135deg, #fb923c 0%, #ea580c 50%, #c2410c 100%);
+  background: linear-gradient(135deg, #e53946 0%, #c62835 50%, #13a6a0 100%);
   color: #fff;
-  box-shadow: 0 4px 20px rgba(234, 88, 12, 0.45);
+  box-shadow: 0 4px 20px rgba(229, 57, 70, 0.45);
   transition: all 0.25s ease;
 }
 
 .dussehra-claim-btn:hover {
   filter: brightness(1.1);
-  box-shadow: 0 6px 28px rgba(234, 88, 12, 0.65);
+  box-shadow: 0 6px 28px rgba(229, 57, 70, 0.65);
   transform: translateY(-1px);
 }
 
@@ -501,23 +526,23 @@ img {
 
 .navratri-festive-card {
   position: relative;
-  background: radial-gradient(circle at 85% 20%, rgba(217, 70, 239, 0.22), transparent 45%),
-              radial-gradient(circle at 15% 85%, rgba(147, 51, 234, 0.28), transparent 50%),
-              linear-gradient(135deg, #1f0b24 0%, #120a1c 55%, #17091f 100%);
-  border: 1px solid rgba(217, 70, 239, 0.4);
-  box-shadow: 0 12px 40px -10px rgba(217, 70, 239, 0.25), 0 0 20px rgba(168, 85, 247, 0.15);
+  background: radial-gradient(circle at 85% 20%, rgba(19, 166, 160, 0.22), transparent 45%),
+              radial-gradient(circle at 15% 85%, rgba(229, 57, 70, 0.28), transparent 50%),
+              linear-gradient(135deg, #252b32 0%, #20252b 55%, #171b20 100%);
+  border: 1px solid rgba(19, 166, 160, 0.4);
+  box-shadow: 0 12px 40px -10px rgba(229, 57, 70, 0.25), 0 0 20px rgba(19, 166, 160, 0.15);
 }
 
 .navratri-claim-btn {
-  background: linear-gradient(135deg, #f43f5e 0%, #d946ef 50%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #13a6a0 0%, #20252b 50%, #e53946 100%);
   color: #fff;
-  box-shadow: 0 4px 20px rgba(217, 70, 239, 0.45);
+  box-shadow: 0 4px 20px rgba(19, 166, 160, 0.45);
   transition: all 0.25s ease;
 }
 
 .navratri-claim-btn:hover {
   filter: brightness(1.1);
-  box-shadow: 0 6px 28px rgba(217, 70, 239, 0.65);
+  box-shadow: 0 6px 28px rgba(19, 166, 160, 0.65);
   transform: translateY(-1px);
 }
 
@@ -542,23 +567,23 @@ img {
 
 .newyear-festive-card {
   position: relative;
-  background: radial-gradient(circle at 85% 20%, rgba(250, 204, 21, 0.2), transparent 45%),
-              radial-gradient(circle at 15% 85%, rgba(124, 58, 237, 0.3), transparent 50%),
-              linear-gradient(135deg, #0b1126 0%, #0d0f1a 55%, #120c24 100%);
-  border: 1px solid rgba(250, 204, 21, 0.4);
-  box-shadow: 0 12px 40px -10px rgba(250, 204, 21, 0.25), 0 0 20px rgba(124, 58, 237, 0.2);
+  background: radial-gradient(circle at 85% 20%, rgba(19, 166, 160, 0.2), transparent 45%),
+              radial-gradient(circle at 15% 85%, rgba(229, 57, 70, 0.3), transparent 50%),
+              linear-gradient(135deg, #252b32 0%, #20252b 55%, #171b20 100%);
+  border: 1px solid rgba(19, 166, 160, 0.4);
+  box-shadow: 0 12px 40px -10px rgba(19, 166, 160, 0.25), 0 0 20px rgba(229, 57, 70, 0.2);
 }
 
 .newyear-claim-btn {
-  background: linear-gradient(135deg, #fde047 0%, #eab308 50%, #ca8a04 100%);
-  color: #1a1200;
-  box-shadow: 0 4px 20px rgba(234, 179, 8, 0.45);
+  background: linear-gradient(135deg, #13a6a0 0%, #087873 50%, #20252b 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 20px rgba(19, 166, 160, 0.45);
   transition: all 0.25s ease;
 }
 
 .newyear-claim-btn:hover {
   filter: brightness(1.1);
-  box-shadow: 0 6px 28px rgba(234, 179, 8, 0.65);
+  box-shadow: 0 6px 28px rgba(19, 166, 160, 0.65);
   transform: translateY(-1px);
 }
 
@@ -574,12 +599,12 @@ img {
   }
 }
 
-@keyframes purple-glow-pulse {
+@keyframes brand-glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 35px -5px rgba(139, 92, 246, 0.4), 0 0 15px rgba(168, 85, 247, 0.2);
+    box-shadow: 0 0 35px -5px rgba(229, 57, 70, 0.4), 0 0 15px rgba(19, 166, 160, 0.2);
   }
   50% {
-    box-shadow: 0 0 50px -2px rgba(139, 92, 246, 0.65), 0 0 25px rgba(168, 85, 247, 0.35);
+    box-shadow: 0 0 50px -2px rgba(229, 57, 70, 0.65), 0 0 25px rgba(19, 166, 160, 0.35);
   }
 }
 
@@ -588,7 +613,7 @@ img {
 }
 
 .animate-avatar-glow {
-  animation: purple-glow-pulse 3s ease-in-out infinite;
+  animation: brand-glow-pulse 3s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -608,5 +633,3 @@ img {
     transform: none !important;
   }
 }
-
-

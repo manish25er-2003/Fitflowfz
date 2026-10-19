@@ -111,7 +111,7 @@ export function getNotificationHistory(): NotificationDeliveryResult[] {
 }
 
 /**
- * Generate a mobile-responsive, dark-themed HTML email with purple Fitflow branding
+ * Generate a mobile-responsive, dark-themed HTML email with FZ Gym branding
  */
 export function generateMembershipConfirmationEmail(
   payload: MembershipNotificationPayload
@@ -127,33 +127,32 @@ export function generateMembershipConfirmationEmail(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fitflow Membership Confirmation - ${payload.planName}</title>
+  <title>FZ Gym Membership Confirmation - ${payload.planName}</title>
   <style>
     /* Reset & responsive rules */
     body, p, h1, h2, h3, table, td { margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #08090e; color: #f5f5fa; }
-    .email-container { max-width: 600px; margin: 0 auto; background: #0c0d15; border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
-    .header-banner { background: linear-gradient(135deg, #1b0f2e 0%, #0d0e17 50%, #101626 100%); padding: 36px 24px; text-align: center; border-bottom: 1px solid rgba(139, 92, 246, 0.2); }
-    .logo-badge { display: inline-block; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #ffffff; font-weight: 900; font-size: 20px; width: 44px; height: 44px; line-height: 44px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 4px 18px rgba(139, 92, 246, 0.45); }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #20252b; color: #ffffff; }
+    .email-container { max-width: 600px; margin: 0 auto; background: #2b3239; border: 1px solid rgba(229, 57, 70, 0.25); border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+    .header-banner { background: linear-gradient(135deg, #20252b 0%, #171b20 50%, #252b32 100%); padding: 36px 24px; text-align: center; border-bottom: 1px solid rgba(229, 57, 70, 0.2); }
     .brand-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: #ffffff; }
-    .status-pill { display: inline-block; background: rgba(52, 211, 153, 0.15); border: 1px solid rgba(52, 211, 153, 0.4); color: #34d399; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; padding: 4px 12px; border-radius: 999px; margin-top: 10px; }
+    .status-pill { display: inline-block; background: rgba(19, 166, 160, 0.15); border: 1px solid rgba(19, 166, 160, 0.4); color: #13a6a0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; padding: 4px 12px; border-radius: 999px; margin-top: 10px; }
     .content-body { padding: 32px 28px; }
     .greeting { font-size: 18px; font-weight: 600; color: #ffffff; margin-bottom: 8px; }
     .tagline-p { font-size: 14px; color: #9ca3af; line-height: 1.6; margin-bottom: 24px; }
-    .plan-card { background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 18px; padding: 22px; margin-bottom: 24px; }
-    .plan-name { font-size: 22px; font-weight: 800; color: #c4b5fd; margin-bottom: 4px; }
+    .plan-card { background: rgba(229, 57, 70, 0.08); border: 1px solid rgba(229, 57, 70, 0.3); border-radius: 18px; padding: 22px; margin-bottom: 24px; }
+    .plan-name { font-size: 22px; font-weight: 800; color: #ffffff; margin-bottom: 4px; }
     .plan-amount { font-size: 32px; font-weight: 900; color: #ffffff; margin: 8px 0; }
-    .plan-paid-chip { display: inline-block; background: #059669; color: #ffffff; font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.08em; vertical-align: middle; margin-left: 6px; }
+    .plan-paid-chip { display: inline-block; background: #087873; color: #ffffff; font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.08em; vertical-align: middle; margin-left: 6px; }
     .receipt-table { width: 100%; border-collapse: collapse; margin-top: 14px; }
     .receipt-row td { padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06); font-size: 13px; }
     .receipt-label { color: #9ca3af; }
     .receipt-value { text-align: right; color: #f3f4f6; font-weight: 600; }
     .benefits-list { list-style: none; padding: 0; margin: 18px 0 0 0; }
     .benefit-item { font-size: 13px; color: #d1d5db; padding: 5px 0; display: flex; align-items: center; }
-    .benefit-item::before { content: "✓"; color: #34d399; font-weight: bold; margin-right: 8px; }
-    .cta-button { display: block; width: 100%; box-sizing: border-box; text-align: center; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: #ffffff; text-decoration: none; padding: 14px 20px; font-weight: 700; font-size: 14px; border-radius: 14px; margin-top: 24px; box-shadow: 0 8px 24px rgba(124, 58, 237, 0.35); }
-    .footer-section { background: #08090e; padding: 24px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.06); font-size: 12px; color: #6b7280; line-height: 1.6; }
-    .footer-section a { color: #a78bfa; text-decoration: none; }
+    .benefit-item::before { content: "✓"; color: #13a6a0; font-weight: bold; margin-right: 8px; }
+    .cta-button { display: block; width: 100%; box-sizing: border-box; text-align: center; background: #e53946; color: #ffffff; text-decoration: none; padding: 14px 20px; font-weight: 700; font-size: 14px; border-radius: 14px; margin-top: 24px; box-shadow: 0 8px 24px rgba(229, 57, 70, 0.35); }
+    .footer-section { background: #20252b; padding: 24px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.06); font-size: 12px; color: #b5bdc5; line-height: 1.6; }
+    .footer-section a { color: #13a6a0; text-decoration: none; }
     @media only screen and (max-width: 600px) {
       .email-container { border-radius: 0 !important; border: none !important; }
       .content-body { padding: 24px 18px !important; }
@@ -163,13 +162,12 @@ export function generateMembershipConfirmationEmail(
   </style>
 </head>
 <body>
-  <div style="padding: 20px 0; background-color: #08090e;">
+  <div style="padding: 20px 0; background-color: #20252b;">
     <div class="email-container">
       <!-- Header -->
       <div class="header-banner">
-        <div class="logo-badge">F</div>
-        <div class="brand-title">Fitflow Gym</div>
-        <div style="margin-top: 4px; font-size: 12px; color: #a78bfa; letter-spacing: 0.1em; text-transform: uppercase;">Premium Fitness & Wellness</div>
+        <div class="brand-title">FZ Gym</div>
+        <div style="margin-top: 4px; font-size: 12px; color: #13a6a0; letter-spacing: 0.1em; text-transform: uppercase;">Premium Fitness & Wellness</div>
         <div>
           <span class="status-pill">✓ Payment Verified & Active</span>
         </div>
@@ -179,12 +177,12 @@ export function generateMembershipConfirmationEmail(
       <div class="content-body">
         <div class="greeting">Hi ${payload.memberName},</div>
         <p class="tagline-p">
-          Congratulations! Your official <strong>Fitflow Gym</strong> membership is confirmed. Your full access pass is now activated and ready to use immediately at the gym reception desk and via the Fitflow Member Portal.
+          Congratulations! Your official <strong>FZ Gym</strong> membership is confirmed. Your full access pass is now activated and ready to use immediately at the gym reception desk and via the FZ Gym member portal.
         </p>
 
         <!-- Plan Summary Card -->
         <div class="plan-card">
-          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: #a78bfa; font-weight: 700;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: #13a6a0; font-weight: 700;">
             ${payload.isOffer ? (payload.offerName || "Special Festive Plan") : "Activated Membership Plan"}
           </div>
           <div class="plan-name">${payload.planName}</div>
@@ -201,7 +199,7 @@ export function generateMembershipConfirmationEmail(
             </tr>
             <tr class="receipt-row">
               <td class="receipt-label">Expiry / Renewal Date</td>
-              <td class="receipt-value" style="color: #34d399;">${payload.expiryDate}</td>
+              <td class="receipt-value" style="color: #13a6a0;">${payload.expiryDate}</td>
             </tr>
             <tr class="receipt-row">
               <td class="receipt-label">Payment Method</td>
@@ -214,18 +212,18 @@ export function generateMembershipConfirmationEmail(
             ${payload.savings && payload.savings > 0 ? `
             <tr class="receipt-row">
               <td class="receipt-label">Total Savings</td>
-              <td class="receipt-value" style="color: #fbbf24;">₹${payload.savings.toLocaleString('en-IN')} Saved</td>
+              <td class="receipt-value" style="color: #13a6a0;">₹${payload.savings.toLocaleString('en-IN')} Saved</td>
             </tr>` : ""}
           </table>
 
           <!-- Included Features -->
-          <div style="margin-top: 18px; font-size: 12px; font-weight: 700; color: #c4b5fd; text-transform: uppercase; letter-spacing: 0.1em;">
+          <div style="margin-top: 18px; font-size: 12px; font-weight: 700; color: #13a6a0; text-transform: uppercase; letter-spacing: 0.1em;">
             What's Included:
           </div>
           <ul class="benefits-list">
             <li class="benefit-item">Unlimited access to cardio, free weights, and resistance machines</li>
             <li class="benefit-item">Locker room & private shower facilities</li>
-            <li class="benefit-item">Digital attendance check-in & workout streaks in Fitflow</li>
+            <li class="benefit-item">Digital attendance check-in & workout streaks in FZ Gym</li>
             <li class="benefit-item">Trainer consultation & posture guidance</li>
           </ul>
         </div>
@@ -241,9 +239,9 @@ export function generateMembershipConfirmationEmail(
 
       <!-- Footer -->
       <div class="footer-section">
-        <p><strong>Fitflow Gym Center</strong> • Lalru, Punjab (Pin: 140501)</p>
+        <p><strong>FZ Gym Center</strong> • Lalru, Punjab (Pin: 140501)</p>
         <p>Questions? Reach out directly via phone <a href="tel:+919988776655">+91 9988776655</a> or email <a href="mailto:support@fitflowgym.com">support@fitflowgym.com</a>.</p>
-        <p style="margin-top: 10px; font-size: 11px; color: #4b5563;">This is an automated membership transaction confirmation. Please keep this receipt for your records.</p>
+        <p style="margin-top: 10px; font-size: 11px; color: #b5bdc5;">This is an automated membership transaction confirmation. Please keep this receipt for your records.</p>
       </div>
     </div>
   </div>
@@ -258,7 +256,7 @@ export function generateMembershipConfirmationSms(
   payload: MembershipNotificationPayload
 ): string {
   const formattedAmount = `₹${payload.amountPaid.toLocaleString("en-IN")}`;
-  return `Fitflow Gym: Welcome ${payload.memberName}! Your ${payload.planName} membership is CONFIRMED (${payload.paymentStatus}: ${formattedAmount}). Valid from ${payload.startDate} to ${payload.expiryDate}. Ref: ${payload.referenceId}. Show this SMS at reception desk for fast entry. Let's achieve your fitness goals!`;
+  return `FZ Gym: Welcome ${payload.memberName}! Your ${payload.planName} membership is CONFIRMED (${payload.paymentStatus}: ${formattedAmount}). Valid from ${payload.startDate} to ${payload.expiryDate}. Ref: ${payload.referenceId}. Show this SMS at reception desk for fast entry. Let's achieve your fitness goals!`;
 }
 
 /**
@@ -335,7 +333,7 @@ export async function sendMembershipConfirmation(
         provider: providers.email.provider,
         status: "sent",
         recipient: payload.memberEmail,
-        subject: `Fitflow Membership Confirmed - ${payload.planName}`,
+        subject: `FZ Gym Membership Confirmed - ${payload.planName}`,
         message: "Duplicate prevented. Already delivered previously.",
         html: emailHtml,
       },
@@ -360,7 +358,7 @@ export async function sendMembershipConfirmation(
     provider: providers.email.provider,
     status: "unconfigured_provider",
     recipient: payload.memberEmail,
-    subject: `Fitflow Membership Confirmed - ${payload.planName}`,
+    subject: `FZ Gym Membership Confirmed - ${payload.planName}`,
     message: "External email provider not configured in .env (add VITE_RESEND_API_KEY or VITE_EMAIL_SERVICE_URL). Full HTML email generated and ready for carrier delivery.",
     html: emailHtml,
   };
@@ -377,9 +375,9 @@ export async function sendMembershipConfirmation(
             Authorization: `Bearer ${env.VITE_RESEND_API_KEY}`,
           },
           body: JSON.stringify({
-            from: env.VITE_EMAIL_FROM || "Fitflow Gym <onboarding@resend.dev>",
+            from: env.VITE_EMAIL_FROM || "FZ Gym <onboarding@resend.dev>",
             to: payload.memberEmail,
-            subject: `Fitflow Membership Confirmed - ${payload.planName}`,
+            subject: `FZ Gym Membership Confirmed - ${payload.planName}`,
             html: emailHtml,
           }),
         });
@@ -398,7 +396,7 @@ export async function sendMembershipConfirmation(
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             to: payload.memberEmail,
-            subject: `Fitflow Membership Confirmed - ${payload.planName}`,
+            subject: `FZ Gym Membership Confirmed - ${payload.planName}`,
             html: emailHtml,
             payload,
           }),
@@ -506,4 +504,3 @@ export async function sendMembershipConfirmation(
 
   return finalResult;
 }
-
