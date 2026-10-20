@@ -50,8 +50,8 @@ export function AdminOffersManager() {
     name: "",
     description: "",
     imageUrl: "",
-    originalPrice: 600,
-    discountedPrice: 400,
+    originalPrice: 1500,
+    discountedPrice: 1200,
     planId: "monthly",
     planName: "Monthly",
     durationDays: 30,
@@ -67,7 +67,7 @@ export function AdminOffersManager() {
   // New Year Scheduler Form fields
   const [nyScheduleData, setNyScheduleData] = useState({
     year: new Date().getFullYear() + 1,
-    discountedPrice: 4800,
+    discountedPrice: 14400,
     expiryDate: `${new Date().getFullYear() + 1}-01-31`,
     status: "Active" as OfferStatus,
   });
@@ -86,56 +86,56 @@ export function AdminOffersManager() {
     let defaultDesc =
       "Celebrate the festival of lights with peak health! Special limited-time discount on Monthly Gym Membership with full access to all facilities.";
     let defaultFestName = "Diwali";
-    let defaultOrig = 600;
-    let defaultDisc = 400;
+    let defaultOrig = 1500;
+    let defaultDisc = 1200;
     let defaultPlan = "monthly";
     let defaultPlanName = "Monthly";
     let defaultDays = 30;
-    let defaultBadge = "Diwali Mega Deal • Save ₹200";
-    let defaultCode = "DIWALI400";
+    let defaultBadge = "Diwali Mega Deal • Save ₹300";
+    let defaultCode = "DIWALI1200";
 
     if (festivalType === "dussehra") {
       defaultName = "Vijayadashami Warrior Pass";
       defaultDesc =
         "Victory of strength and discipline! Conquer your fitness goals with our celebratory Dussehra monthly access pass.";
       defaultFestName = "Dussehra";
-      defaultOrig = 600;
-      defaultDisc = 450;
-      defaultBadge = "Dussehra Special • Save ₹150";
-      defaultCode = "VIJAYA450";
+      defaultOrig = 1500;
+      defaultDisc = 1200;
+      defaultBadge = "Dussehra Special • Save ₹300";
+      defaultCode = "VIJAYA1200";
     } else if (festivalType === "navratri") {
       defaultName = "Navratri 9-Nights Energy Pass";
       defaultDesc =
         "Nine nights of rhythm, stamina, and divine energy! Fuel your cardio and stamina with our festive workout pass.";
       defaultFestName = "Navratri";
-      defaultOrig = 600;
-      defaultDisc = 399;
-      defaultBadge = "Navratri Utsav • Save ₹201";
-      defaultCode = "GARBA399";
+      defaultOrig = 1500;
+      defaultDisc = 1199;
+      defaultBadge = "Navratri Utsav • Save ₹301";
+      defaultCode = "GARBA1199";
     } else if (festivalType === "new_year") {
       defaultName = `New Year ${new Date().getFullYear() + 1} Fitness Resolution`;
       defaultDesc =
         "Transform your life in the new year! Complete 12-month Annual Membership with priority coaching and progress checks.";
       defaultFestName = "New Year";
-      defaultOrig = 6000;
-      defaultDisc = 4800;
+      defaultOrig = 18000;
+      defaultDisc = 14400;
       defaultPlan = "annual";
-      defaultPlanName = "Annual";
+      defaultPlanName = "Yearly";
       defaultDays = 365;
-      defaultBadge = `New Year Early Bird • Save ₹1,200`;
+      defaultBadge = `New Year Early Bird • Save ₹3,600`;
       defaultCode = `NEWYEAR${String(new Date().getFullYear() + 1).slice(-2)}`;
     } else if (festivalType === "custom") {
       defaultName = "Special Festival Pass";
       defaultDesc =
         "Exclusive celebratory offer on gym membership with premium coaching and complete gym access.";
       defaultFestName = "Festival";
-      defaultOrig = 600;
-      defaultDisc = 420;
+      defaultOrig = 1500;
+      defaultDisc = 1200;
       defaultPlan = "monthly";
       defaultPlanName = "Monthly";
       defaultDays = 30;
-      defaultBadge = "Special Deal • Save ₹180";
-      defaultCode = "FESTIVE420";
+      defaultBadge = "Special Deal • Save ₹300";
+      defaultCode = "FESTIVE1200";
     }
 
     setFormData({
@@ -245,11 +245,11 @@ export function AdminOffersManager() {
           festivalName: "New Year",
           festiveType: "new_year",
           name: `New Year ${year} Fitness Resolution`,
-          description: `Transform your body and mind in ${year}! Full 12-month Annual Membership with complete access and guidance.`,
-          originalPrice: 6000,
+          description: `Transform your body and mind in ${year}! Full 12-month Yearly Membership with complete access and guidance.`,
+          originalPrice: 18000,
           discountedPrice: nyScheduleData.discountedPrice,
           planId: "annual",
-          planName: "Annual",
+          planName: "Yearly",
           durationDays: 365,
           startDate,
           expiryDate,
@@ -773,8 +773,8 @@ export function AdminOffersManager() {
                   required
                 />
                 <p className="text-[11px] text-gym-secondary mt-1">
-                  Standard Annual: ₹6,000 • Savings: ₹{6000 - nyScheduleData.discountedPrice} (
-                  {Math.round(((6000 - nyScheduleData.discountedPrice) / 6000) * 100)}% off)
+                  Standard Yearly: ₹18,000 • Savings: ₹{18000 - nyScheduleData.discountedPrice} (
+                  {Math.round(((18000 - nyScheduleData.discountedPrice) / 18000) * 100)}% off)
                 </p>
               </div>
 
@@ -1025,7 +1025,7 @@ export function AdminOffersManager() {
                     <option value="monthly">Monthly Plan (30 Days)</option>
                     <option value="quarterly">Quarterly Plan (90 Days)</option>
                     <option value="half_yearly">6-Month Plan (180 Days)</option>
-                    <option value="annual">Annual Plan (365 Days)</option>
+                    <option value="annual">Yearly Plan (365 Days)</option>
                   </select>
                 </div>
                 <div>

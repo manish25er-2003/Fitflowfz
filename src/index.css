@@ -25,6 +25,12 @@
   --success-soft: rgba(19, 166, 160, 0.18);
   --text: #ffffff;
   --muted: #b5bdc5;
+  --nav-text: rgba(255, 255, 255, 0.82);
+  --nav-hover-bg: rgba(255, 255, 255, 0.06);
+  --nav-hover-text: #ffffff;
+  --nav-active-bg: rgba(229, 57, 70, 0.12);
+  --nav-active-text: #ff8a94;
+  --nav-active-border: rgba(229, 57, 70, 0.32);
 }
 
 .theme-dark {
@@ -36,6 +42,12 @@
   --theme-border: #414a53;
   --theme-text: #ffffff;
   --theme-muted: #b5bdc5;
+  --nav-text: rgba(255, 255, 255, 0.82);
+  --nav-hover-bg: rgba(255, 255, 255, 0.06);
+  --nav-hover-text: #ffffff;
+  --nav-active-bg: rgba(229, 57, 70, 0.12);
+  --nav-active-text: #ff8a94;
+  --nav-active-border: rgba(229, 57, 70, 0.32);
 }
 
 .theme-light {
@@ -47,6 +59,12 @@
   --theme-border: #d7dde2;
   --theme-text: #20252b;
   --theme-muted: #5c6670;
+  --nav-text: #374151;
+  --nav-hover-bg: #f3f4f6;
+  --nav-hover-text: #111827;
+  --nav-active-bg: rgba(229, 57, 70, 0.1);
+  --nav-active-text: #c62835;
+  --nav-active-border: rgba(198, 40, 53, 0.28);
 }
 
 html,
@@ -144,6 +162,52 @@ img {
   .native-toolbar {
     @apply sticky top-0 z-20 border-b border-gym-border bg-gym-bg/80 backdrop-blur-md;
   }
+
+  .sidebar-nav-item {
+    color: var(--nav-text);
+    background-color: transparent;
+    border-color: transparent;
+    transition:
+      background-color 180ms ease,
+      color 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .sidebar-nav-item:hover,
+  .sidebar-nav-item:focus-visible {
+    background-color: var(--nav-hover-bg);
+    color: var(--nav-hover-text);
+  }
+
+  .sidebar-nav-item svg {
+    color: inherit;
+    stroke: currentColor;
+  }
+
+  .sidebar-nav-item.is-active {
+    background-color: var(--nav-active-bg);
+    border-color: var(--nav-active-border);
+    color: var(--nav-active-text);
+    box-shadow: 0 0 18px rgba(229, 57, 70, 0.1);
+  }
+
+  .sidebar-nav-item.is-active svg {
+    color: var(--nav-active-text);
+    stroke: currentColor;
+  }
+
+  .sidebar-nav-item.logout-item {
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.22);
+    background-color: rgba(239, 68, 68, 0.04);
+  }
+
+  .sidebar-nav-item.logout-item:hover,
+  .sidebar-nav-item.logout-item:focus-visible {
+    background-color: rgba(239, 68, 68, 0.08);
+    color: #b91c1c;
+  }
 }
 
 .theme-light .bg-gym-bg {
@@ -179,14 +243,11 @@ img {
 .theme-light .text-gym-muted {
   color: #5c6670 !important;
 }
-.theme-light .text-gym-text\/80 {
-  color: rgba(32, 37, 43, 0.8) !important;
-}
+.theme-light .text-gym-text\/70,
+.theme-light .text-gym-text\/75,
+.theme-light .text-gym-text\/80,
 .theme-light .text-gym-text\/65 {
-  color: rgba(32, 37, 43, 0.65) !important;
-}
-.theme-light .text-gym-text\/75 {
-  color: rgba(32, 37, 43, 0.75) !important;
+  color: rgba(32, 37, 43, 0.8) !important;
 }
 .theme-light .bg-gym-accent\/10 {
   background-color: rgba(229, 57, 70, 0.12) !important;
@@ -220,9 +281,6 @@ img {
 .theme-light .border-gym-secondary\/30 {
   border-color: rgba(8, 120, 115, 0.35) !important;
 }
-.theme-light .bg-gym-accent\/10 {
-  background-color: rgba(229, 57, 70, 0.12) !important;
-}
 .theme-light .bg-gym-secondary\/10 {
   background-color: rgba(19, 166, 160, 0.12) !important;
 }
@@ -233,6 +291,101 @@ img {
   box-shadow:
     0 0 0 1px rgba(229, 57, 70, 0.2),
     0 18px 32px rgba(229, 57, 70, 0.12) !important;
+}
+
+/* Keep white text on intentionally dark overlays (welcome banners, hero cards, etc.) */
+.theme-light .bg-gym-sidebar,
+.theme-light .bg-gym-panel,
+.theme-light .bg-gym-card,
+.theme-light .bg-gym-bg,
+.theme-light .bg-gym-sidebar\/95,
+.theme-light .bg-gym-panel\/80,
+.theme-light .bg-gym-card\/80 {
+  color: var(--theme-text) !important;
+}
+
+.theme-light .border-white\/10,
+.theme-light .border-white\/15,
+.theme-light .border-white\/20,
+.theme-light .border-white\/30,
+.theme-light .border-white\/40,
+.theme-light .border-white\/50,
+.theme-light .border-white\/75 {
+  border-color: rgba(15, 23, 42, 0.14) !important;
+}
+
+.theme-light .bg-white,
+.theme-light .bg-white\/5,
+.theme-light .bg-white\/10,
+.theme-light .bg-white\/20,
+.theme-light .bg-white\/40,
+.theme-light .bg-white\/80 {
+  background-color: #ffffff !important;
+}
+
+.theme-light .bg-\[\#090A0D\],
+.theme-light .bg-\[\#0B0B0D\],
+.theme-light .bg-\[\#171B20\],
+.theme-light .bg-\[\#20252B\],
+.theme-light .bg-\[\#252B32\] {
+  background-color: #f4f6f7 !important;
+}
+
+.theme-light .text-slate-200,
+.theme-light .text-slate-300,
+.theme-light .text-slate-400,
+.theme-light .text-slate-500,
+.theme-light .text-slate-600,
+.theme-light .text-slate-700 {
+  color: #475569 !important;
+}
+
+.theme-light .bg-black\/10,
+.theme-light .bg-black\/20,
+.theme-light .bg-black\/40,
+.theme-light .bg-black\/50,
+.theme-light .bg-black\/60,
+.theme-light .bg-black\/80 {
+  background-color: rgba(15, 23, 42, 0.05) !important;
+}
+
+.theme-light .text-slate-200,
+.theme-light .text-slate-200\/90,
+.theme-light .text-slate-300,
+.theme-light .text-slate-300\/90,
+.theme-light .text-slate-400,
+.theme-light .text-slate-500,
+.theme-light .text-slate-600,
+.theme-light .text-slate-700 {
+  color: #475569 !important;
+}
+
+.theme-light .border-white\/10,
+.theme-light .border-white\/20,
+.theme-light .border-white\/30,
+.theme-light .border-white\/40,
+.theme-light .border-white\/50,
+.theme-light .border-white\/75,
+.theme-light .border-white\/80 {
+  border-color: rgba(15, 23, 42, 0.14) !important;
+}
+
+.theme-light .bg-white\/5,
+.theme-light .bg-white\/10,
+.theme-light .bg-white\/20,
+.theme-light .bg-white\/40,
+.theme-light .bg-white\/50,
+.theme-light .bg-white\/80,
+.theme-light .bg-white\/90 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.theme-light .hover\:text-white:hover,
+.theme-light .hover\:bg-white\/5:hover,
+.theme-light .hover\:bg-white\/10:hover,
+.theme-light .hover\:bg-white\/20:hover {
+  color: #1f2937 !important;
+  background-color: rgba(255, 255, 255, 0.8) !important;
 }
 
 .theme-dark .bg-gym-bg {
@@ -327,7 +480,8 @@ img {
 
 /* --- Diwali Festive Styling & Realistic Animations --- */
 @keyframes flame-flicker {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1) rotate(-1.5deg);
     filter: drop-shadow(0 0 10px #13a6a0) drop-shadow(0 0 20px #e53946);
     opacity: 0.95;
@@ -350,7 +504,8 @@ img {
 }
 
 @keyframes diya-glow-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.75;
     transform: scale(1);
   }
@@ -361,7 +516,8 @@ img {
 }
 
 @keyframes festive-sparkle {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) scale(0.7);
     opacity: 0.25;
   }
@@ -380,7 +536,8 @@ img {
     transform: scale(1);
     opacity: 0.7;
   }
-  70%, 100% {
+  70%,
+  100% {
     transform: scale(1.35);
     opacity: 0;
   }
@@ -427,6 +584,55 @@ img {
   animation: festive-sparkle 3.5s ease-in-out infinite;
 }
 
+.dashboard-welcome-hero {
+  background: linear-gradient(
+    135deg,
+    rgba(9, 17, 30, 1) 0%,
+    rgba(18, 38, 59, 1) 100%
+  );
+}
+
+.dashboard-script-banner {
+  filter: drop-shadow(0 18px 28px rgba(16, 24, 40, 0.22));
+}
+
+.dashboard-script-shell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 170px;
+  padding: 0.15rem 0.1rem 0.1rem 0;
+}
+
+.dashboard-script-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0.2rem -0.15rem 0.15rem 0.2rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.01)
+  );
+  border-radius: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  z-index: 0;
+}
+
+.dashboard-script-text {
+  position: relative;
+  z-index: 1;
+  max-width: 150px;
+  font-family: "Georgia", "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 1vw + 0.95rem, 2.4rem);
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
 .animate-sparkle-2 {
   animation: festive-sparkle 4.2s ease-in-out 1.2s infinite;
 }
@@ -449,17 +655,29 @@ img {
 
 .diwali-festive-card {
   position: relative;
-  background: radial-gradient(circle at 85% 25%, rgba(19, 166, 160, 0.18), transparent 45%),
-              radial-gradient(circle at 15% 85%, rgba(229, 57, 70, 0.25), transparent 50%),
-              linear-gradient(135deg, #252b32 0%, #20252b 55%, #171b20 100%);
-  border: 1px solid rgba(19, 166, 160, 0.35);
-  box-shadow: 0 12px 40px -10px rgba(229, 57, 70, 0.2), 0 0 20px rgba(19, 166, 160, 0.12);
+  background: linear-gradient(
+    135deg,
+    rgba(17, 24, 39, 0.9) 0%,
+    rgba(30, 41, 59, 0.78) 38%,
+    rgba(15, 23, 42, 0.9) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 40px -18px rgba(15, 23, 42, 0.4);
+}
+
+.diwali-festive-card h3,
+.diwali-festive-card p,
+.diwali-festive-card .text-gym-muted,
+.diwali-festive-card .text-gym-accent,
+.diwali-festive-card .text-gym-secondary,
+.diwali-festive-card .text-white {
+  color: #f8fafc !important;
 }
 
 .diwali-claim-btn {
-  background: linear-gradient(135deg, #e53946 0%, #c62835 50%, #13a6a0 100%);
+  background: linear-gradient(135deg, #ff7c4a 0%, #f04a5c 45%, #d22d86 100%);
   color: #ffffff;
-  box-shadow: 0 4px 20px rgba(229, 57, 70, 0.4);
+  box-shadow: 0 8px 20px rgba(224, 95, 94, 0.28);
   transition: all 0.25s ease;
 }
 
@@ -475,11 +693,14 @@ img {
 
 /* --- Dussehra (Vijayadashami) Festival Styling --- */
 @keyframes victory-glow {
-  0%, 100% {
-    filter: drop-shadow(0 0 10px rgba(229, 57, 70, 0.6)) drop-shadow(0 0 20px rgba(19, 166, 160, 0.4));
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(229, 57, 70, 0.6))
+      drop-shadow(0 0 20px rgba(19, 166, 160, 0.4));
   }
   50% {
-    filter: drop-shadow(0 0 16px rgba(229, 57, 70, 0.85)) drop-shadow(0 0 28px rgba(19, 166, 160, 0.6));
+    filter: drop-shadow(0 0 16px rgba(229, 57, 70, 0.85))
+      drop-shadow(0 0 28px rgba(19, 166, 160, 0.6));
   }
 }
 
@@ -489,17 +710,29 @@ img {
 
 .dussehra-festive-card {
   position: relative;
-  background: radial-gradient(circle at 85% 20%, rgba(229, 57, 70, 0.22), transparent 45%),
-              radial-gradient(circle at 15% 85%, rgba(19, 166, 160, 0.25), transparent 50%),
-              linear-gradient(135deg, #252b32 0%, #20252b 55%, #171b20 100%);
-  border: 1px solid rgba(229, 57, 70, 0.4);
-  box-shadow: 0 12px 40px -10px rgba(229, 57, 70, 0.25), 0 0 20px rgba(19, 166, 160, 0.15);
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.92) 0%,
+    rgba(39, 21, 26, 0.82) 38%,
+    rgba(15, 23, 42, 0.9) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 42px -18px rgba(15, 23, 42, 0.38);
+}
+
+.dussehra-festive-card h3,
+.dussehra-festive-card p,
+.dussehra-festive-card .text-gym-muted,
+.dussehra-festive-card .text-gym-accent,
+.dussehra-festive-card .text-gym-secondary,
+.dussehra-festive-card .text-white {
+  color: #f8f7fb !important;
 }
 
 .dussehra-claim-btn {
-  background: linear-gradient(135deg, #e53946 0%, #c62835 50%, #13a6a0 100%);
+  background: linear-gradient(135deg, #ff8b5e 0%, #ef4d5d 50%, #eb9c48 100%);
   color: #fff;
-  box-shadow: 0 4px 20px rgba(229, 57, 70, 0.45);
+  box-shadow: 0 8px 20px rgba(239, 77, 93, 0.3);
   transition: all 0.25s ease;
 }
 
@@ -511,7 +744,8 @@ img {
 
 /* --- Navratri Festival Styling --- */
 @keyframes garba-sway {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(-1.5deg) translateY(0);
   }
   50% {
@@ -526,17 +760,29 @@ img {
 
 .navratri-festive-card {
   position: relative;
-  background: radial-gradient(circle at 85% 20%, rgba(19, 166, 160, 0.22), transparent 45%),
-              radial-gradient(circle at 15% 85%, rgba(229, 57, 70, 0.28), transparent 50%),
-              linear-gradient(135deg, #252b32 0%, #20252b 55%, #171b20 100%);
-  border: 1px solid rgba(19, 166, 160, 0.4);
-  box-shadow: 0 12px 40px -10px rgba(229, 57, 70, 0.25), 0 0 20px rgba(19, 166, 160, 0.15);
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.9) 0%,
+    rgba(17, 24, 39, 0.8) 38%,
+    rgba(17, 24, 39, 0.92) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 40px -18px rgba(15, 23, 42, 0.38);
+}
+
+.navratri-festive-card h3,
+.navratri-festive-card p,
+.navratri-festive-card .text-gym-muted,
+.navratri-festive-card .text-gym-accent,
+.navratri-festive-card .text-gym-secondary,
+.navratri-festive-card .text-white {
+  color: #f8fafc !important;
 }
 
 .navratri-claim-btn {
-  background: linear-gradient(135deg, #13a6a0 0%, #20252b 50%, #e53946 100%);
+  background: linear-gradient(135deg, #21b9a7 0%, #17aabd 48%, #0f9d94 100%);
   color: #fff;
-  box-shadow: 0 4px 20px rgba(19, 166, 160, 0.45);
+  box-shadow: 0 8px 20px rgba(48, 149, 136, 0.3);
   transition: all 0.25s ease;
 }
 
@@ -567,17 +813,29 @@ img {
 
 .newyear-festive-card {
   position: relative;
-  background: radial-gradient(circle at 85% 20%, rgba(19, 166, 160, 0.2), transparent 45%),
-              radial-gradient(circle at 15% 85%, rgba(229, 57, 70, 0.3), transparent 50%),
-              linear-gradient(135deg, #252b32 0%, #20252b 55%, #171b20 100%);
-  border: 1px solid rgba(19, 166, 160, 0.4);
-  box-shadow: 0 12px 40px -10px rgba(19, 166, 160, 0.25), 0 0 20px rgba(229, 57, 70, 0.2);
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.92) 0%,
+    rgba(17, 24, 39, 0.82) 38%,
+    rgba(15, 23, 42, 0.92) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 42px -18px rgba(15, 23, 42, 0.38);
+}
+
+.newyear-festive-card h3,
+.newyear-festive-card p,
+.newyear-festive-card .text-gym-muted,
+.newyear-festive-card .text-gym-accent,
+.newyear-festive-card .text-gym-secondary,
+.newyear-festive-card .text-white {
+  color: #f3f7ff !important;
 }
 
 .newyear-claim-btn {
-  background: linear-gradient(135deg, #13a6a0 0%, #087873 50%, #20252b 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #2fd3ff 50%, #8b5cf6 100%);
   color: #ffffff;
-  box-shadow: 0 4px 20px rgba(19, 166, 160, 0.45);
+  box-shadow: 0 8px 20px rgba(62, 163, 255, 0.28);
   transition: all 0.25s ease;
 }
 
@@ -600,11 +858,16 @@ img {
 }
 
 @keyframes brand-glow-pulse {
-  0%, 100% {
-    box-shadow: 0 0 35px -5px rgba(229, 57, 70, 0.4), 0 0 15px rgba(19, 166, 160, 0.2);
+  0%,
+  100% {
+    box-shadow:
+      0 0 35px -5px rgba(229, 57, 70, 0.4),
+      0 0 15px rgba(19, 166, 160, 0.2);
   }
   50% {
-    box-shadow: 0 0 50px -2px rgba(229, 57, 70, 0.65), 0 0 25px rgba(19, 166, 160, 0.35);
+    box-shadow:
+      0 0 50px -2px rgba(229, 57, 70, 0.65),
+      0 0 25px rgba(19, 166, 160, 0.35);
   }
 }
 

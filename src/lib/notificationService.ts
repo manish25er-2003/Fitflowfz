@@ -53,6 +53,50 @@ const SENT_REFS_STORAGE_KEY = "fitflow_sent_notification_refs";
 const NOTIFICATION_HISTORY_KEY = "fitflow_notification_history";
 export const NOTIFICATION_EVENT = "fitflow-notification-dispatched";
 
+export function isDuplicateNotification(
+  referenceId: string,
+  refs: string[] = [],
+): boolean {
+  return Boolean(referenceId && refs.includes(referenceId));
+}
+
+export function validateNotificationPayload(
+  payload: MembershipNotificationPayload,
+): { isValid: boolean; errors: string[] } {
+  const errors: string[] = [];
+
+  if (!payload.memberName?.trim()) {
+    errors.push("memberName is required");
+  }
+
+  if (
+    !payload.memberEmail ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.memberEmail)
+  ) {
+    errors.push("memberEmail must be a valid email address");
+  }
+
+  if (
+    !payload.memberPhone ||
+    !/^\+?[1-9]\d{7,14}$/.test(payload.memberPhone.replace(/\s+/g, ""))
+  ) {
+    errors.push("memberPhone must be a valid mobile number");
+  }
+
+  if (!payload.referenceId?.trim()) {
+    errors.push("referenceId is required");
+  }
+
+  if (!payload.planName?.trim()) {
+    errors.push("planName is required");
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
+}
+
 /**
  * Retrieve list of already processed transaction reference IDs
  */
@@ -75,7 +119,10 @@ function recordSentNotificationRef(referenceId: string) {
     const refs = getSentNotificationRefs();
     if (!refs.includes(referenceId)) {
       refs.push(referenceId);
-      localStorage.setItem(SENT_REFS_STORAGE_KEY, JSON.stringify(refs.slice(-200)));
+      localStorage.setItem(
+        SENT_REFS_STORAGE_KEY,
+        JSON.stringify(refs.slice(-200)),
+      );
     }
   } catch (err) {
     console.warn("Failed to save sent notification ref:", err);
@@ -91,7 +138,10 @@ function recordNotificationHistory(result: NotificationDeliveryResult) {
     const raw = localStorage.getItem(NOTIFICATION_HISTORY_KEY);
     const history: NotificationDeliveryResult[] = raw ? JSON.parse(raw) : [];
     history.unshift(result);
-    localStorage.setItem(NOTIFICATION_HISTORY_KEY, JSON.stringify(history.slice(0, 50)));
+    localStorage.setItem(
+      NOTIFICATION_HISTORY_KEY,
+      JSON.stringify(history.slice(0, 50)),
+    );
   } catch (err) {
     console.warn("Failed to record notification history:", err);
   }
@@ -114,7 +164,7 @@ export function getNotificationHistory(): NotificationDeliveryResult[] {
  * Generate a mobile-responsive, dark-themed HTML email with FZ Gym branding
  */
 export function generateMembershipConfirmationEmail(
-  payload: MembershipNotificationPayload
+  payload: MembershipNotificationPayload,
 ): string {
   const formattedAmount = new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -183,7 +233,7 @@ export function generateMembershipConfirmationEmail(
         <!-- Plan Summary Card -->
         <div class="plan-card">
           <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: #13a6a0; font-weight: 700;">
-            ${payload.isOffer ? (payload.offerName || "Special Festive Plan") : "Activated Membership Plan"}
+            ${payload.isOffer ? payload.offerName || "Special Festive Plan" : "Activated Membership Plan"}
           </div>
           <div class="plan-name">${payload.planName}</div>
           <div class="plan-amount">
@@ -209,11 +259,15 @@ export function generateMembershipConfirmationEmail(
               <td class="receipt-label">Reference ID</td>
               <td class="receipt-value" style="font-family: monospace;">${payload.referenceId}</td>
             </tr>
-            ${payload.savings && payload.savings > 0 ? `
+            ${
+              payload.savings && payload.savings > 0
+                ? `
             <tr class="receipt-row">
               <td class="receipt-label">Total Savings</td>
-              <td class="receipt-value" style="color: #13a6a0;">₹${payload.savings.toLocaleString('en-IN')} Saved</td>
-            </tr>` : ""}
+              <td class="receipt-value" style="color: #13a6a0;">₹${payload.savings.toLocaleString("en-IN")} Saved</td>
+            </tr>`
+                : ""
+            }
           </table>
 
           <!-- Included Features -->
@@ -253,7 +307,7 @@ export function generateMembershipConfirmationEmail(
  * Generate a concise, professional SMS text confirmation message
  */
 export function generateMembershipConfirmationSms(
-  payload: MembershipNotificationPayload
+  payload: MembershipNotificationPayload,
 ): string {
   const formattedAmount = `₹${payload.amountPaid.toLocaleString("en-IN")}`;
   return `FZ Gym: Welcome ${payload.memberName}! Your ${payload.planName} membership is CONFIRMED (${payload.paymentStatus}: ${formattedAmount}). Valid from ${payload.startDate} to ${payload.expiryDate}. Ref: ${payload.referenceId}. Show this SMS at reception desk for fast entry. Let's achieve your fitness goals!`;
@@ -263,41 +317,34 @@ export function generateMembershipConfirmationSms(
  * Inspect environment configuration for real carrier SMS / Email services
  */
 export function inspectNotificationProviders() {
-  const env = (typeof import.meta !== "undefined" && import.meta.env) ? import.meta.env : ({} as any);
+  const env =
+    typeof import.meta !== "undefined" && import.meta.env
+      ? import.meta.env
+      : ({} as any);
 
-  // Email provider check
-  const hasResend = Boolean(env.VITE_RESEND_API_KEY);
-  const hasSendGrid = Boolean(env.VITE_SENDGRID_API_KEY);
-  const hasEmailWebhook = Boolean(env.VITE_EMAIL_SERVICE_URL);
-
-  let emailProvider = "Unconfigured (Local Audit Mode)";
-  if (hasResend) emailProvider = "Resend API";
-  else if (hasSendGrid) emailProvider = "SendGrid API";
-  else if (hasEmailWebhook) emailProvider = "Custom Email Webhook";
-
-  // SMS provider check
-  const hasTwilio = Boolean(env.VITE_TWILIO_ACCOUNT_SID && env.VITE_TWILIO_AUTH_TOKEN);
-  const hasFast2Sms = Boolean(env.VITE_FAST2SMS_API_KEY);
-  const hasSmsWebhook = Boolean(env.VITE_SMS_SERVICE_URL);
-
-  let smsProvider = "Unconfigured (Local Audit Mode)";
-  if (hasTwilio) smsProvider = "Twilio SMS API";
-  else if (hasFast2Sms) smsProvider = "Fast2SMS API";
-  else if (hasSmsWebhook) smsProvider = "Custom SMS Webhook";
+  const hasServerSwitch = Boolean(
+    env.VITE_NOTIFICATION_BACKEND ||
+    env.VITE_EMAIL_SERVICE_URL ||
+    env.VITE_SMS_SERVICE_URL,
+  );
 
   return {
     email: {
-      isConfigured: hasResend || hasSendGrid || hasEmailWebhook,
-      provider: emailProvider,
-      resendKey: hasResend,
-      sendgridKey: hasSendGrid,
+      isConfigured: hasServerSwitch,
+      provider: hasServerSwitch
+        ? "Server-side Email Delivery"
+        : "Unconfigured (Local Audit Mode)",
+      resendKey: false,
+      sendgridKey: false,
       webhookUrl: env.VITE_EMAIL_SERVICE_URL || null,
     },
     sms: {
-      isConfigured: hasTwilio || hasFast2Sms || hasSmsWebhook,
-      provider: smsProvider,
-      twilioConfigured: hasTwilio,
-      fast2smsKey: hasFast2Sms,
+      isConfigured: hasServerSwitch,
+      provider: hasServerSwitch
+        ? "Server-side SMS Delivery"
+        : "Unconfigured (Local Audit Mode)",
+      twilioConfigured: false,
+      fast2smsKey: false,
       webhookUrl: env.VITE_SMS_SERVICE_URL || null,
     },
   };
@@ -312,17 +359,47 @@ export function inspectNotificationProviders() {
  * 4. Logs full formatted email and SMS payloads to history for preview/printing.
  */
 export async function sendMembershipConfirmation(
-  payload: MembershipNotificationPayload
+  payload: MembershipNotificationPayload,
 ): Promise<NotificationDeliveryResult> {
   const timestamp = new Date().toISOString();
   const emailHtml = generateMembershipConfirmationEmail(payload);
   const smsText = generateMembershipConfirmationSms(payload);
   const providers = inspectNotificationProviders();
 
-  // 1. Idempotency Check: Prevent duplicate notifications
-  const sentRefs = getSentNotificationRefs();
-  if (sentRefs.includes(payload.referenceId)) {
-    console.info(`Notification for reference ${payload.referenceId} already sent. Skipping duplicate.`);
+  const validationResult = validateNotificationPayload(payload);
+  if (!validationResult.isValid) {
+    return {
+      success: false,
+      referenceId: payload.referenceId,
+      timestamp,
+      email: {
+        delivered: false,
+        provider: providers.email.provider,
+        status: "failed",
+        recipient: payload.memberEmail,
+        subject: `FZ Gym Membership Confirmed - ${payload.planName}`,
+        message: validationResult.errors.join("; "),
+        html: emailHtml,
+      },
+      sms: {
+        delivered: false,
+        provider: providers.sms.provider,
+        status: "failed",
+        recipient: payload.memberPhone,
+        message: validationResult.errors.join("; "),
+        text: smsText,
+      },
+      inApp: {
+        created: false,
+        notificationId: `notif-${payload.referenceId}`,
+      },
+    };
+  }
+
+  if (isDuplicateNotification(payload.referenceId, getSentNotificationRefs())) {
+    console.info(
+      `Notification for reference ${payload.referenceId} already sent. Skipping duplicate.`,
+    );
     return {
       success: true,
       duplicate: true,
@@ -352,155 +429,64 @@ export async function sendMembershipConfirmation(
     };
   }
 
-  // 2. Email Delivery Execution
-  let emailResult: NotificationDeliveryResult["email"] = {
-    delivered: false,
-    provider: providers.email.provider,
-    status: "unconfigured_provider",
-    recipient: payload.memberEmail,
-    subject: `FZ Gym Membership Confirmed - ${payload.planName}`,
-    message: "External email provider not configured in .env (add VITE_RESEND_API_KEY or VITE_EMAIL_SERVICE_URL). Full HTML email generated and ready for carrier delivery.",
-    html: emailHtml,
-  };
+  try {
+    const response = await fetch("/api/notifications/confirm-subscription", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-  const env = (typeof import.meta !== "undefined" && import.meta.env) ? import.meta.env : ({} as any);
-
-  if (providers.email.isConfigured) {
-    try {
-      if (env.VITE_RESEND_API_KEY) {
-        const res = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${env.VITE_RESEND_API_KEY}`,
-          },
-          body: JSON.stringify({
-            from: env.VITE_EMAIL_FROM || "FZ Gym <onboarding@resend.dev>",
-            to: payload.memberEmail,
-            subject: `FZ Gym Membership Confirmed - ${payload.planName}`,
-            html: emailHtml,
-          }),
-        });
-        if (res.ok) {
-          emailResult.delivered = true;
-          emailResult.status = "sent";
-          emailResult.message = "Successfully delivered via Resend API.";
-        } else {
-          const errData = await res.json().catch(() => ({}));
-          emailResult.status = "failed";
-          emailResult.message = `Resend API returned error: ${res.statusText} ${JSON.stringify(errData)}`;
-        }
-      } else if (env.VITE_EMAIL_SERVICE_URL) {
-        const res = await fetch(env.VITE_EMAIL_SERVICE_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            to: payload.memberEmail,
-            subject: `FZ Gym Membership Confirmed - ${payload.planName}`,
-            html: emailHtml,
-            payload,
-          }),
-        });
-        if (res.ok) {
-          emailResult.delivered = true;
-          emailResult.status = "sent";
-          emailResult.message = "Successfully delivered via custom Email Webhook.";
-        } else {
-          emailResult.status = "failed";
-          emailResult.message = `Email Webhook error: ${res.statusText}`;
-        }
-      }
-    } catch (err: any) {
-      console.error("Email delivery network error:", err);
-      emailResult.status = "failed";
-      emailResult.message = `Network exception during email dispatch: ${err?.message || err}`;
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const errorMessage = body?.error || "Notification service unavailable";
+      throw new Error(errorMessage);
     }
-  }
 
-  // 3. SMS Delivery Execution
-  let smsResult: NotificationDeliveryResult["sms"] = {
-    delivered: false,
-    provider: providers.sms.provider,
-    status: "unconfigured_provider",
-    recipient: payload.memberPhone,
-    message: "External SMS provider not configured in .env (add VITE_TWILIO_* or VITE_SMS_SERVICE_URL). SMS message formatted and ready for carrier delivery.",
-    text: smsText,
-  };
+    const notificationResult = body as NotificationDeliveryResult;
+    recordSentNotificationRef(payload.referenceId);
+    recordNotificationHistory(notificationResult);
 
-  if (providers.sms.isConfigured) {
-    try {
-      if (env.VITE_SMS_SERVICE_URL) {
-        const res = await fetch(env.VITE_SMS_SERVICE_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            to: payload.memberPhone,
-            message: smsText,
-            payload,
-          }),
-        });
-        if (res.ok) {
-          smsResult.delivered = true;
-          smsResult.status = "sent";
-          smsResult.message = "Successfully delivered via SMS Webhook.";
-        } else {
-          smsResult.status = "failed";
-          smsResult.message = `SMS Webhook error: ${res.statusText}`;
-        }
-      }
-    } catch (err: any) {
-      console.error("SMS delivery network error:", err);
-      smsResult.status = "failed";
-      smsResult.message = `Network exception during SMS dispatch: ${err?.message || err}`;
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent(NOTIFICATION_EVENT, { detail: notificationResult }),
+      );
     }
+
+    return notificationResult;
+  } catch (err: any) {
+    const errorMessage = err?.message || "Notification dispatch failed";
+    console.error("Notification dispatch failed:", errorMessage);
+
+    const failureResult: NotificationDeliveryResult = {
+      success: false,
+      referenceId: payload.referenceId,
+      timestamp,
+      email: {
+        delivered: false,
+        provider: providers.email.provider,
+        status: "failed",
+        recipient: payload.memberEmail,
+        subject: `FZ Gym Membership Confirmed - ${payload.planName}`,
+        message: errorMessage,
+        html: emailHtml,
+      },
+      sms: {
+        delivered: false,
+        provider: providers.sms.provider,
+        status: "failed",
+        recipient: payload.memberPhone,
+        message: errorMessage,
+        text: smsText,
+      },
+      inApp: {
+        created: false,
+        notificationId: `notif-${payload.referenceId}`,
+      },
+    };
+
+    recordNotificationHistory(failureResult);
+    return failureResult;
   }
-
-  // 4. In-App Notification Record (Guaranteed delivery)
-  const notificationId = `notif-${payload.referenceId}`;
-  const inAppItem: NotificationItem = {
-    id: notificationId,
-    title: `Membership Confirmed: ${payload.planName}`,
-    message: `Your ${payload.planName} membership of ₹${payload.amountPaid.toLocaleString('en-IN')} has been verified and activated until ${payload.expiryDate}. Reference: ${payload.referenceId}.`,
-    timestamp: "Just now",
-    read: false,
-    category: "membership",
-  };
-
-  // Save in-app notification to Firestore if enabled
-  if (firebaseEnabled && db && payload.memberId) {
-    try {
-      await setDoc(doc(db, "notifications", notificationId), {
-        ...inAppItem,
-        userId: payload.memberId,
-        userEmail: payload.memberEmail,
-        createdAt: timestamp,
-      });
-    } catch (err) {
-      console.warn("Firestore notification write error:", err);
-    }
-  }
-
-  // Record sent ref to prevent duplicates
-  recordSentNotificationRef(payload.referenceId);
-
-  const finalResult: NotificationDeliveryResult = {
-    success: true,
-    referenceId: payload.referenceId,
-    timestamp,
-    email: emailResult,
-    sms: smsResult,
-    inApp: {
-      created: true,
-      notificationId,
-    },
-  };
-
-  recordNotificationHistory(finalResult);
-
-  // Dispatch custom event so UI can react in real time
-  if (typeof window !== "undefined") {
-    window.dispatchEvent(new CustomEvent(NOTIFICATION_EVENT, { detail: finalResult }));
-  }
-
-  return finalResult;
 }

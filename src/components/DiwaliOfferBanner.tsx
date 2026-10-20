@@ -20,10 +20,7 @@ import {
   subscribeOffers,
   validateOffer,
 } from "../lib/offerService";
-import {
-  DiwaliDiyaArtwork,
-  FestivalArtworkRenderer,
-} from "./FestivalArtworks";
+import { DiwaliDiyaArtwork, FestivalArtworkRenderer } from "./FestivalArtworks";
 import { MembershipConfirmationModal } from "./MembershipConfirmationModal";
 import { getNotificationHistory } from "../lib/notificationService";
 import type { FestiveType, OfferRecord } from "../types";
@@ -42,7 +39,8 @@ export function getFestivalThemeClasses(festiveType?: FestiveType) {
         button: "dussehra-claim-btn",
         glow: "rgba(229,57,70, 0.25)",
         textGradient: "from-gym-secondary via-gym-accent to-gym-accent",
-        badgeBg: "bg-gym-secondary/20 border-gym-secondary/40 text-gym-secondary",
+        badgeBg:
+          "bg-gym-secondary/20 border-gym-secondary/40 text-gym-secondary",
         accentText: "text-gym-secondary",
         borderAccent: "border-gym-secondary/40 hover:border-gym-secondary/80",
         icon: Swords,
@@ -55,7 +53,8 @@ export function getFestivalThemeClasses(festiveType?: FestiveType) {
         button: "navratri-claim-btn",
         glow: "rgba(19,166,160, 0.25)",
         textGradient: "from-gym-secondary via-gym-secondary to-gym-accent",
-        badgeBg: "bg-gym-secondary/20 border-gym-secondary/40 text-gym-secondary",
+        badgeBg:
+          "bg-gym-secondary/20 border-gym-secondary/40 text-gym-secondary",
         accentText: "text-gym-secondary",
         borderAccent: "border-gym-secondary/40 hover:border-gym-secondary/80",
         icon: Sparkles,
@@ -68,7 +67,8 @@ export function getFestivalThemeClasses(festiveType?: FestiveType) {
         button: "newyear-claim-btn",
         glow: "rgba(19,166,160, 0.25)",
         textGradient: "from-gym-secondary via-gym-accent to-gym-secondary",
-        badgeBg: "bg-gym-secondary/20 border-gym-secondary/40 text-gym-secondary",
+        badgeBg:
+          "bg-gym-secondary/20 border-gym-secondary/40 text-gym-secondary",
         accentText: "text-gym-secondary",
         borderAccent: "border-gym-secondary/40 hover:border-gym-secondary/80",
         icon: PartyPopper,
@@ -142,10 +142,10 @@ function FestiveSparkles({
           festiveType === "navratri"
             ? "bg-gym-secondary"
             : festiveType === "dussehra"
-            ? "bg-gym-secondary"
-            : festiveType === "new_year"
-            ? "bg-gym-secondary"
-            : "bg-gym-accent"
+              ? "bg-gym-secondary"
+              : festiveType === "new_year"
+                ? "bg-gym-secondary"
+                : "bg-gym-accent"
         }`}
       />
     </div>
@@ -169,8 +169,12 @@ export function FestiveOfferCheckoutModal({
   onClose: () => void;
   onSuccess: (expiryDate: string, offerName: string) => void;
 }) {
-  const [method, setMethod] = useState<"UPI" | "GPay" | "PhonePe" | "QR">("UPI");
-  const [paymentState, setPaymentState] = useState<"idle" | "verifying" | "success" | "error">("idle");
+  const [method, setMethod] = useState<"UPI" | "GPay" | "PhonePe" | "QR">(
+    "UPI",
+  );
+  const [paymentState, setPaymentState] = useState<
+    "idle" | "verifying" | "success" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copiedUpi, setCopiedUpi] = useState(false);
   const [successDetails, setSuccessDetails] = useState<{
@@ -184,7 +188,9 @@ export function FestiveOfferCheckoutModal({
   if (!isOpen) return null;
 
   const savingAmount = offer.originalPrice - offer.discountedPrice;
-  const discountPercent = Math.round((savingAmount / offer.originalPrice) * 100);
+  const discountPercent = Math.round(
+    (savingAmount / offer.originalPrice) * 100,
+  );
   const upiId = "7087338600@ybl";
   const theme = getFestivalThemeClasses(offer.festiveType);
   const festivalName = offer.festivalName || "Festival";
@@ -204,7 +210,9 @@ export function FestiveOfferCheckoutModal({
     // 1. Strict validation of offer
     const validation = validateOffer(offer.id);
     if (!validation.isValid) {
-      setErrorMessage(validation.error || "This offer is no longer valid or has expired.");
+      setErrorMessage(
+        validation.error || "This offer is no longer valid or has expired.",
+      );
       setPaymentState("error");
       return;
     }
@@ -232,7 +240,10 @@ export function FestiveOfferCheckoutModal({
       setPaymentState("success");
     } catch (err: any) {
       console.error("Payment verification failed:", err);
-      setErrorMessage(err?.message || "Payment verification could not be completed. Please try again.");
+      setErrorMessage(
+        err?.message ||
+          "Payment verification could not be completed. Please try again.",
+      );
       setPaymentState("error");
     }
   };
@@ -274,7 +285,8 @@ export function FestiveOfferCheckoutModal({
                 Membership Activated!
               </h3>
               <p className="text-xs text-gym-muted mt-1 max-w-sm mx-auto">
-                Congratulations! Your {festivalName} festive membership discount has been verified and applied to your account.
+                Congratulations! Your {festivalName} festive membership discount
+                has been verified and applied to your account.
               </p>
             </div>
 
@@ -282,19 +294,27 @@ export function FestiveOfferCheckoutModal({
             <div className="rounded-2xl border border-gym-secondary/25 bg-gym-secondary/5 p-4 text-left space-y-2.5 text-xs sm:text-sm">
               <div className="flex justify-between items-center text-gym-muted">
                 <span>Plan Activated:</span>
-                <span className="font-bold text-white">{successDetails.planName}</span>
+                <span className="font-bold text-white">
+                  {successDetails.planName}
+                </span>
               </div>
               <div className="flex justify-between items-center text-gym-muted">
                 <span>Active Until:</span>
-                <span className="font-bold text-gym-secondary">{successDetails.expiryDate}</span>
+                <span className="font-bold text-gym-secondary">
+                  {successDetails.expiryDate}
+                </span>
               </div>
               <div className="flex justify-between items-center text-gym-muted">
                 <span>Amount Paid:</span>
-                <span className="font-extrabold text-gym-accent text-base">₹{successDetails.amount}</span>
+                <span className="font-extrabold text-gym-accent text-base">
+                  ₹{successDetails.amount}
+                </span>
               </div>
               <div className="flex justify-between items-center text-gym-muted pt-2 border-t border-gym-secondary/20">
                 <span>Transaction Ref:</span>
-                <span className="font-mono text-[11px] text-gym-muted">{successDetails.reference}</span>
+                <span className="font-mono text-[11px] text-gym-muted">
+                  {successDetails.reference}
+                </span>
               </div>
             </div>
 
@@ -337,7 +357,8 @@ export function FestiveOfferCheckoutModal({
                 Verifying Secure Payment…
               </h3>
               <p className="text-xs text-gym-muted mt-1 max-w-xs mx-auto">
-                Connecting to payment gateway, validating offer parameters, and activating your membership.
+                Connecting to payment gateway, validating offer parameters, and
+                activating your membership.
               </p>
             </div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] bg-white/5 border border-white/10 text-gym-muted">
@@ -360,7 +381,9 @@ export function FestiveOfferCheckoutModal({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[10px] font-extrabold uppercase tracking-wider ${theme.badgeBg}`}>
+                  <span
+                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[10px] font-extrabold uppercase tracking-wider ${theme.badgeBg}`}
+                  >
                     {theme.festIcon} {festivalName} Special Deal
                   </span>
                   <span className="px-2 py-0.5 rounded-md bg-gym-secondary/20 border border-gym-secondary/40 text-gym-secondary font-extrabold text-[11px]">
@@ -397,8 +420,12 @@ export function FestiveOfferCheckoutModal({
               </div>
               <div className="pt-2.5 border-t border-white/10 flex justify-between items-baseline">
                 <div>
-                  <span className="font-bold text-white">Final Payable Price:</span>
-                  <p className="text-[10px] text-gym-muted">Includes full gym access & locker</p>
+                  <span className="font-bold text-white">
+                    Final Payable Price:
+                  </span>
+                  <p className="text-[10px] text-gym-muted">
+                    Includes full gym access & locker
+                  </p>
                 </div>
                 <div className="text-right">
                   <span className="text-xl sm:text-3xl font-black text-gym-accent">
@@ -412,7 +439,9 @@ export function FestiveOfferCheckoutModal({
             <div className="mt-4 space-y-2">
               <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-gym-muted">
                 <span>Select Payment Method</span>
-                <span className="text-gym-secondary text-[10px] font-bold">100% SECURE</span>
+                <span className="text-gym-secondary text-[10px] font-bold">
+                  100% SECURE
+                </span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -479,7 +508,9 @@ export function FestiveOfferCheckoutModal({
 
               <div className="flex items-center justify-center gap-2 text-[11px] text-gym-muted pt-1">
                 <ShieldCheck className="h-3.5 w-3.5 text-gym-secondary" />
-                <span>Instant activation after payment verification • No hidden fees</span>
+                <span>
+                  Instant activation after payment verification • No hidden fees
+                </span>
               </div>
             </div>
           </div>
@@ -506,17 +537,19 @@ export function FestiveOfferCard({
 }) {
   const theme = getFestivalThemeClasses(offer.festiveType);
   const savingAmount = offer.originalPrice - offer.discountedPrice;
-  const discountPercent = Math.round((savingAmount / offer.originalPrice) * 100);
+  const discountPercent = Math.round(
+    (savingAmount / offer.originalPrice) * 100,
+  );
   const festivalName = offer.festivalName || "Festive";
 
   return (
     <div
-      className={`group relative rounded-2xl border ${theme.borderAccent} bg-gradient-to-b from-[#20252B] via-[#252B32] to-[#20252B] p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(229,57,70,0.18)] flex flex-col justify-between overflow-hidden`}
+      className={`group relative min-h-[255px] rounded-2xl border ${theme.borderAccent} ${theme.card} p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(229,57,70,0.18)] flex flex-col justify-between overflow-hidden sm:min-h-[285px] lg:min-h-[300px]`}
     >
       {/* Ambient sparkles */}
       <FestiveSparkles festiveType={offer.festiveType} isPaused={isTabHidden} />
 
-      <div className="space-y-2">
+      <div className="flex flex-1 flex-col justify-center gap-2.5 lg:gap-3">
         {/* Top row: Deal tag + Discount badge */}
         <div className="relative z-10 flex items-center justify-between gap-1.5">
           <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gym-accent/20 border border-gym-accent/40 text-[9px] font-black uppercase tracking-wider text-gym-accent">
@@ -542,7 +575,7 @@ export function FestiveOfferCard({
         </div>
 
         {/* Price block */}
-        <div className="relative z-10 pt-2 border-t border-white/10">
+        <div className="relative z-10 pt-1.5 border-t border-white/10">
           <div className="flex items-baseline gap-1.5">
             <span className="text-xl font-black text-gym-accent tracking-tight">
               ₹{offer.discountedPrice}
@@ -563,7 +596,7 @@ export function FestiveOfferCard({
       </div>
 
       {/* Action Button */}
-      <div className="relative z-10 mt-2.5 pt-2 border-t border-white/5">
+      <div className="relative z-10 mt-2 pt-2 border-t border-white/5">
         {isAlreadyClaimed ? (
           <div className="w-full py-2 px-3 rounded-xl bg-gym-secondary/15 border border-gym-secondary/40 text-gym-secondary text-[11px] font-bold flex items-center justify-center gap-1.5">
             <CheckCircle2 className="h-3.5 w-3.5 text-gym-secondary" />
@@ -598,7 +631,8 @@ export function DiwaliOfferBanner({
 }) {
   const [offers, setOffers] = useState<OfferRecord[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [selectedOfferForCheckout, setSelectedOfferForCheckout] = useState<OfferRecord | null>(null);
+  const [selectedOfferForCheckout, setSelectedOfferForCheckout] =
+    useState<OfferRecord | null>(null);
   const [claimedNotice, setClaimedNotice] = useState<string | null>(null);
   const [isTabHidden, setIsTabHidden] = useState(false);
 
@@ -635,7 +669,9 @@ export function DiwaliOfferBanner({
   const displayedOffers =
     activeCategory === "all"
       ? activeValidOffers
-      : activeValidOffers.filter((o) => (o.festiveType || "diwali") === activeCategory);
+      : activeValidOffers.filter(
+          (o) => (o.festiveType || "diwali") === activeCategory,
+        );
 
   // Check if current member has this specific offer active
   const checkAlreadyClaimed = (offerId: string) => {
@@ -653,62 +689,59 @@ export function DiwaliOfferBanner({
 
   // Distinct festival types available in active offers
   const availableFestivals = Array.from(
-    new Set(activeValidOffers.map((o) => o.festiveType || "diwali"))
+    new Set(activeValidOffers.map((o) => o.festiveType || "diwali")),
   );
 
   return (
     <section className="w-full space-y-4 animate-in fade-in duration-300">
-      {/* Header bar with Amazon / Flipkart Mega Sale styling */}
-      <div className="panel relative p-3 sm:p-4 rounded-2xl border border-gym-accent/30 bg-gradient-to-r from-[#20252B] via-[#252B32] to-[#2B3239] overflow-hidden">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-gym-accent/20 via-gym-accent/20 to-gym-accent/20 border border-gym-accent/40 text-[11px] font-black uppercase tracking-wider text-gym-accent">
-              <Sparkles className="h-3.5 w-3.5 text-gym-accent animate-spin" />
-              <span>FESTIVAL MEGA DEALS • LIMITED TIME</span>
+      <div className="overflow-hidden rounded-[26px] border border-white/10 bg-[#0b1117]/75 p-3 shadow-[0_18px_40px_rgba(15,23,42,0.18)] backdrop-blur-sm sm:p-5">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#f34f5c]/10 text-[#f34f5c]">
+              <Sparkles className="h-4 w-4" />
             </div>
-            <h2 className="text-lg sm:text-xl font-black text-white mt-1 flex flex-wrap items-center gap-2">
-              <span>Festival Dhamaka Offers</span>
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-gym-secondary/20 border border-gym-secondary/40 text-gym-secondary font-extrabold">
-                Up to {Math.max(...activeValidOffers.map((o) => Math.round(((o.originalPrice - o.discountedPrice) / o.originalPrice) * 100)))}% OFF
-              </span>
-            </h2>
-            <p className="text-xs text-gym-muted mt-0.5">
-              Exclusive festive discounts on gym memberships. Instant activation.
-            </p>
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#f34f5c]/20 bg-[#f34f5c]/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#f34f5c]">
+                Festival mega deals
+              </div>
+              <h2 className="mt-2 text-xl font-black tracking-[-0.04em] text-white sm:text-2xl">
+                Exclusive Membership Offers
+              </h2>
+            </div>
           </div>
 
-          {/* Quick Festival Filter Tabs */}
           {availableFestivals.length > 1 && (
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs shrink-0 max-w-full touch-pan-x">
+            <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
               <button
                 type="button"
                 onClick={() => setActiveCategory("all")}
-                className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1 ${
+                className={`rounded-full border px-3 py-1.5 font-bold transition ${
                   activeCategory === "all"
-                    ? "bg-gym-accent text-stone-950 shadow-md shadow-gym-accent/20"
-                    : "bg-white/5 text-gym-muted border border-white/10 hover:text-white"
+                    ? "border-[#2d6df6]/50 bg-[#2d6df6]/20 text-white shadow-[0_8px_20px_rgba(45,109,246,0.2)]"
+                    : "border-white/10 bg-[#111827]/70 text-slate-200 hover:border-white/20 hover:bg-[#1f2937]/80"
                 }`}
               >
-                <span>🔥</span>
-                <span>All Deals ({activeValidOffers.length})</span>
+                All Deals ({activeValidOffers.length})
               </button>
 
               {availableFestivals.map((type) => {
                 const conf = getFestivalThemeClasses(type);
-                const count = activeValidOffers.filter((o) => (o.festiveType || "diwali") === type).length;
+                const count = activeValidOffers.filter(
+                  (o) => (o.festiveType || "diwali") === type,
+                ).length;
                 return (
                   <button
                     key={type}
                     type="button"
                     onClick={() => setActiveCategory(type)}
-                    className={`px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1 ${
+                    className={`rounded-full border px-3 py-1.5 font-bold transition ${
                       activeCategory === type
-                        ? "bg-gym-accent text-white shadow-md shadow-gym-accent/25"
-                        : "bg-white/5 text-gym-muted border border-white/10 hover:text-white"
+                        ? "border-[#ec5d4d]/50 bg-[#ec5d4d]/20 text-white shadow-[0_8px_20px_rgba(236,93,77,0.18)]"
+                        : "border-white/10 bg-[#111827]/70 text-slate-200 hover:border-white/20 hover:bg-[#1f2937]/80"
                     }`}
                   >
-                    <span>{conf.festIcon}</span>
-                    <span className="capitalize">{type.replace("_", " ")} ({count})</span>
+                    <span className="mr-1">{conf.festIcon}</span>
+                    {type.replace("_", " ")} ({count})
                   </button>
                 );
               })}
@@ -749,7 +782,7 @@ export function DiwaliOfferBanner({
             const currentOffer = selectedOfferForCheckout;
             setSelectedOfferForCheckout(null);
             setClaimedNotice(
-              `"${offerName}" successfully activated! Your ${currentOffer?.planName} membership is active until ${expiryDate}.`
+              `"${offerName}" successfully activated! Your ${currentOffer?.planName} membership is active until ${expiryDate}.`,
             );
             if (onOfferClaimed) {
               onOfferClaimed();

@@ -17,6 +17,7 @@ import {
   Routes,
   useLocation,
   useNavigate,
+  useParams,
 } from "react-router-dom";
 import {
   AlertCircle,
@@ -155,6 +156,15 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+type ThemeMode = "dark" | "light";
+
+type ThemeContextType = {
+  theme: ThemeMode;
+  setTheme: React.Dispatch<React.SetStateAction<ThemeMode>>;
+};
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
 const gymGallery = [gymPhoto1, gymPhoto2, gymPhoto3, gymPhoto4];
 const GYM_DATA_UPDATED_EVENT = "petergym-data-updated";
 let sharedMembers = [...seedMembers];
@@ -185,10 +195,28 @@ if (typeof window !== "undefined") {
   });
 }
 
+const getMemberManagementBasePath = (role?: Role) =>
+  role === "trainer" ? "/trainer/members" : "/admin/members";
+
+const isTrainerAuthorizedForMember = (
+  user: UserSession | null,
+  member: MemberRecord | null,
+) => {
+  if (!user || !member) return false;
+  if (user.role === "super_admin") return true;
+  if (user.role !== "trainer") return false;
+
+  return (
+    !member.trainer || member.trainer.toLowerCase() === user.name.toLowerCase()
+  );
+};
+
 function useSharedGymData() {
   const [members, setMembers] = useState(() => [...sharedMembers]);
   const [payments, setPayments] = useState(() => [...sharedPayments]);
-  const [attendance, setAttendance] = useState(() => getLocalAttendanceRecords());
+  const [attendance, setAttendance] = useState(() =>
+    getLocalAttendanceRecords(),
+  );
 
   useEffect(() => {
     const syncData = () => {
@@ -209,7 +237,14 @@ function useSharedGymData() {
     }
   }, []);
 
-  return { members, setMembers, payments, setPayments, attendance, setAttendance };
+  return {
+    members,
+    setMembers,
+    payments,
+    setPayments,
+    attendance,
+    setAttendance,
+  };
 }
 
 const sidebarMenus: Record<
@@ -444,7 +479,9 @@ function SplashIntroPage() {
               </span>
               Redirecting to platform
             </span>
-            <span className="font-mono text-xs font-semibold text-white/90">{countdown}s</span>
+            <span className="font-mono text-xs font-semibold text-white/90">
+              {countdown}s
+            </span>
           </div>
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
             <div
@@ -711,11 +748,19 @@ function LandingPage() {
               type="button"
               onClick={() => setMobileMenuOpen((open) => !open)}
               className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-white/20 text-white transition hover:border-white/50 lg:hidden"
-              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-label={
+                mobileMenuOpen
+                  ? "Close navigation menu"
+                  : "Open navigation menu"
+              }
               aria-expanded={mobileMenuOpen}
               aria-controls="home-mobile-navigation"
             >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </button>
           </div>
         </div>
@@ -727,7 +772,7 @@ function LandingPage() {
             <button
               key={item.label}
               type="button"
-            onClick={() => handleHomeNavigation(item.section)}
+              onClick={() => handleHomeNavigation(item.section)}
               className={`rounded-sm px-3 py-2.5 text-left text-sm ${
                 index === 0
                   ? "border-l-2 border-[#F51E2B] text-white"
@@ -1039,6 +1084,39 @@ function useAuth() {
   return context;
 }
 
+function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<ThemeMode>(() => {
+    if (typeof window === "undefined") return "dark";
+    const saved = localStorage.getItem("gymlane-theme");
+    if (saved === "light" || saved === "dark") return saved;
+    return window.matchMedia("(prefers-color-scheme: light)").matches
+      ? "light"
+      : "dark";
+  });
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.classList.toggle("theme-light", theme === "light");
+    document.documentElement.classList.toggle("theme-dark", theme === "dark");
+    document.documentElement.style.colorScheme = theme;
+    localStorage.setItem("gymlane-theme", theme);
+  }, [theme]);
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) throw new Error("Theme context missing");
+  return context;
+}
+
 function ProtectedRoute({ allowedRoles }: { allowedRoles: Role[] }) {
   const { user } = useAuth();
   const location = useLocation();
@@ -1058,17 +1136,9 @@ function AppShell() {
   const { user, logout } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">(() => {
-    if (typeof window === "undefined") return "dark";
-    const saved = localStorage.getItem("gymlane-theme");
-    return saved === "light" ? "light" : "dark";
-  });
-
-  useEffect(() => {
-    localStorage.setItem("gymlane-theme", theme);
-  }, [theme]);
 
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -1094,7 +1164,7 @@ function AppShell() {
               <BrandLogo mode="mark" className="h-9 w-9 rounded-xl" />
               {sidebarOpen && (
                 <div className="text-sm font-semibold text-gym-text">
-                  FZ Gym
+                  FZ Gym Fitness
                 </div>
               )}
             </div>
@@ -1125,14 +1195,12 @@ function AppShell() {
                       : undefined
                   }
                   className={({ isActive }) =>
-                    `group flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
-                      isActive
-                        ? "border border-gym-accent/30 bg-gym-accent/10 text-gym-accent shadow-[0_0_18px_rgba(229,57,70,0.12)]"
-                        : "text-gym-text/70 hover:bg-gym-card hover:text-gym-text"
-                    } ${isLogout ? "mt-2 border border-red-500/20 bg-red-500/5 text-red-200 hover:bg-red-500/10" : ""}`
+                    `sidebar-nav-item group flex items-center gap-3 rounded-2xl border px-3 py-2.5 text-sm font-medium ${
+                      isActive ? "is-active" : ""
+                    } ${isLogout ? "logout-item mt-2" : ""}`
                   }
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-4 w-4 shrink-0" />
                   {sidebarOpen && <span>{label}</span>}
                 </NavLink>
               );
@@ -1152,15 +1220,12 @@ function AppShell() {
                   <Menu className="h-4 w-4" />
                 </button>
                 <div className="flex min-w-0 items-center gap-2 rounded-xl border border-gym-border bg-gym-panel px-2.5 py-2 text-xs text-gym-text/80 sm:text-sm">
-                  <BrandLogo mode="mark" className="h-6 w-6 rounded-lg shrink-0" />
+                  <BrandLogo
+                    mode="mark"
+                    className="h-6 w-6 rounded-lg shrink-0"
+                  />
                   <span className="truncate font-semibold text-gym-text">
                     {gymProfile.name}
-                  </span>
-                  <span className="mx-1 hidden text-gym-muted sm:inline">
-                    •
-                  </span>
-                  <span className="hidden sm:inline text-gym-muted">
-                    {gymProfile.location}
                   </span>
                 </div>
               </div>
@@ -1173,12 +1238,12 @@ function AppShell() {
                     className="w-28 bg-transparent text-sm text-gym-text outline-none placeholder:text-gym-muted xl:w-32"
                   />
                 </div>
-                <button className="rounded-xl border border-gym-border bg-gym-panel p-2.5 text-gym-text/80 hover:text-white transition">
+                <button className="rounded-xl border border-gym-border bg-gym-panel p-2.5 text-gym-text/80 hover:text-gym-text transition">
                   <Bell className="h-4 w-4" />
                 </button>
                 <button
                   type="button"
-                  className="rounded-xl border border-gym-border bg-gym-panel p-2.5 text-gym-text/80 hover:text-white transition"
+                  className="rounded-xl border border-gym-border bg-gym-panel p-2.5 text-gym-text/80 hover:text-gym-text transition"
                   onClick={() =>
                     setTheme((current) =>
                       current === "dark" ? "light" : "dark",
@@ -1227,23 +1292,25 @@ function AppShell() {
       />
 
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-[84%] max-w-[320px] -translate-x-full border-r border-gym-accent/20 bg-[#171B20]/95 shadow-[0_30px_80px_rgba(15,17,24,0.9)] backdrop-blur-2xl transition-transform duration-200 lg:hidden overflow-y-auto ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-50 w-[84%] max-w-[320px] -translate-x-full border-r border-gym-accent/20 bg-gym-sidebar/95 shadow-[0_30px_80px_rgba(15,17,24,0.9)] backdrop-blur-2xl transition-transform duration-200 lg:hidden overflow-y-auto ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 sticky top-0 bg-[#171B20] z-10">
+        <div className="flex items-center justify-between border-b border-gym-border px-4 py-4 sticky top-0 bg-gym-sidebar z-10">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-gym-accent/30 bg-gym-accent/10">
               <BrandLogo mode="mark" className="h-7 w-7 rounded-xl" />
             </div>
             <div>
-              <div className="text-sm font-bold text-white">FZ Gym</div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+              <div className="text-sm font-bold text-gym-text">
+                FZ Gym Fitness
+              </div>
+              <div className="text-[10px] uppercase tracking-[0.2em] text-gym-muted">
                 FZ Gym
               </div>
             </div>
           </div>
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-200 transition hover:border-gym-accent/30 hover:text-white"
+            className="rounded-full border border-gym-border bg-gym-panel p-2 text-gym-text/80 transition hover:border-gym-accent/30 hover:text-gym-text"
             aria-label="Close navigation menu"
           >
             <X className="h-4 w-4" />
@@ -1257,7 +1324,7 @@ function AppShell() {
                 key={to}
                 to={to === "/login" ? "#" : to}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-2xl px-3.5 py-3 text-sm font-semibold transition-all duration-200 ${isActive ? "border border-gym-accent/30 bg-gym-accent/15 text-gym-accent shadow-[0_0_18px_rgba(229,57,70,0.15)]" : "text-slate-200 hover:bg-white/5 hover:text-white"} ${isLogout ? "mt-4 border border-red-500/20 bg-red-500/5 text-red-200 hover:bg-red-500/10" : ""}`
+                  `sidebar-nav-item flex items-center gap-3 rounded-2xl border px-3.5 py-3 text-sm font-semibold ${isActive ? "is-active" : ""} ${isLogout ? "logout-item mt-4" : ""}`
                 }
                 onClick={(event) => {
                   if (isLogout) {
@@ -1287,7 +1354,9 @@ function AppShell() {
               }
             >
               <Icon className="h-5 w-5 shrink-0" />
-              <span className="leading-none truncate max-w-[68px] text-center">{label}</span>
+              <span className="leading-none truncate max-w-[68px] text-center">
+                {label}
+              </span>
             </NavLink>
           ))}
           <button
@@ -1297,7 +1366,9 @@ function AppShell() {
             aria-label="Open full menu"
           >
             <Menu className="h-5 w-5 shrink-0 text-gym-accent" />
-            <span className="leading-none truncate max-w-[68px] text-center">More</span>
+            <span className="leading-none truncate max-w-[68px] text-center">
+              More
+            </span>
           </button>
         </div>
       </nav>
@@ -1326,24 +1397,28 @@ function StatCard({
   };
 
   return (
-    <div className="panel p-3 sm:p-4 min-w-0">
+    <div className="panel min-w-0 p-2.5 sm:p-3.5">
       <div className="flex items-start justify-between gap-1.5 sm:gap-2">
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] text-gym-muted sm:text-sm truncate">{label}</p>
-          <p className="mt-1 sm:mt-2 text-xl font-bold tracking-tight text-gym-text sm:text-2xl md:text-3xl truncate">
+          <p className="truncate text-[10px] text-gym-muted sm:text-xs">
+            {label}
+          </p>
+          <p className="mt-1 truncate text-lg font-bold tracking-tight text-gym-text sm:text-xl md:text-2xl">
             {value}
           </p>
         </div>
         {change && (
           <span
-            className={`shrink-0 rounded-full px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] font-medium sm:text-xs ${styles[accent]}`}
+            className={`shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-medium sm:px-2 sm:py-1 sm:text-[10px] ${styles[accent]}`}
           >
             {change}
           </span>
         )}
       </div>
       {detail && (
-        <p className="mt-2 sm:mt-3 text-[10px] text-gym-muted sm:text-xs truncate">{detail}</p>
+        <p className="mt-2 truncate text-[9px] text-gym-muted sm:text-[10px]">
+          {detail}
+        </p>
       )}
     </div>
   );
@@ -1352,7 +1427,9 @@ function StatCard({
 function DashboardHeroBanner() {
   const { attendance } = useSharedGymData();
   const todayStr = getLocalDateString();
-  const todayAttendance = attendance.filter((entry) => entry.date === todayStr).length;
+  const todayAttendance = attendance.filter(
+    (entry) => entry.date === todayStr,
+  ).length;
   const totalRevenue = paymentRecords
     .filter((payment) => payment.status === "Paid")
     .reduce((sum, payment) => sum + payment.amount, 0);
@@ -1514,7 +1591,9 @@ function DashboardPage() {
     .filter((payment) => payment.status === "Paid")
     .reduce((sum, payment) => sum + payment.amount, 0);
   const today = getLocalDateString();
-  const todayAttendance = attendance.filter((entry) => entry.date === today).length;
+  const todayAttendance = attendance.filter(
+    (entry) => entry.date === today,
+  ).length;
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -1559,7 +1638,8 @@ function DashboardPage() {
                 </span>
               </div>
               <p className="text-xs text-gym-muted mt-0.5">
-                Manage Diwali, Dussehra, Navratri, New Year, and custom festival offers. Synchronizes instantly with the User Dashboard.
+                Manage Diwali, Dussehra, Navratri, New Year, and custom festival
+                offers. Synchronizes instantly with the User Dashboard.
               </p>
             </div>
           </div>
@@ -1931,8 +2011,10 @@ function DashboardPage() {
 function MembersPage() {
   const navigate = useNavigate();
   const { members, setMembers } = useSharedGymData();
+  const { user } = useAuth();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("All");
+  const basePath = getMemberManagementBasePath(user?.role);
 
   const filteredMembers = members.filter((member) => {
     const matchesQuery = [
@@ -1955,15 +2037,19 @@ function MembersPage() {
           <p className="text-sm uppercase tracking-[0.24em] text-gym-muted">
             Members
           </p>
-          <h1 className="mt-2 text-2xl sm:text-3xl font-semibold">Member directory</h1>
+          <h1 className="mt-2 text-2xl sm:text-3xl font-semibold">
+            Member directory
+          </h1>
         </div>
-        <button
-          type="button"
-          onClick={() => navigate("/admin/members/new")}
-          className="btn-primary w-full sm:w-auto text-center"
-        >
-          Add member
-        </button>
+        {user?.role === "super_admin" && (
+          <button
+            type="button"
+            onClick={() => navigate("/admin/members/new")}
+            className="btn-primary w-full sm:w-auto text-center"
+          >
+            Add member
+          </button>
+        )}
       </div>
 
       <div className="panel p-3.5 sm:p-4">
@@ -1983,14 +2069,35 @@ function MembersPage() {
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
             <option value="Suspended">Suspended</option>
+            <option value="Cancelled">Cancelled</option>
           </select>
           <button
             type="button"
             className="btn-secondary w-full text-xs sm:text-sm"
             onClick={() => {
-              const headers = ["ID", "Name", "Email", "Phone", "Plan", "Trainer", "Expiry", "Status"];
-              const rows = filteredMembers.map(m => [m.memberId, m.name, m.email, m.phone, m.plan, m.trainer, m.membershipEnd, m.status]);
-              const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+              const headers = [
+                "ID",
+                "Name",
+                "Email",
+                "Phone",
+                "Plan",
+                "Trainer",
+                "Expiry",
+                "Status",
+              ];
+              const rows = filteredMembers.map((m) => [
+                m.memberId,
+                m.name,
+                m.email,
+                m.phone,
+                m.plan,
+                m.trainer,
+                m.membershipEnd,
+                m.status,
+              ]);
+              const csvContent =
+                "data:text/csv;charset=utf-8," +
+                [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
               const encodedUri = encodeURI(csvContent);
               const link = document.createElement("a");
               link.setAttribute("href", encodedUri);
@@ -2029,34 +2136,42 @@ function MembersPage() {
                       </p>
                     </div>
                   </div>
-                  <span className="chip shrink-0 text-[10px]">{member.status}</span>
+                  <span className="chip shrink-0 text-[10px]">
+                    {member.status}
+                  </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs rounded-xl bg-gym-panel p-2.5 border border-gym-border/60">
                   <div>
                     <span className="text-gym-muted">Plan: </span>
-                    <span className="font-medium text-gym-text truncate block">{member.plan}</span>
+                    <span className="font-medium text-gym-text truncate block">
+                      {member.plan}
+                    </span>
                   </div>
                   <div>
                     <span className="text-gym-muted">Trainer: </span>
-                    <span className="font-medium text-gym-text truncate block">{member.trainer}</span>
+                    <span className="font-medium text-gym-text truncate block">
+                      {member.trainer}
+                    </span>
                   </div>
                   <div className="col-span-2">
                     <span className="text-gym-muted">Expires: </span>
-                    <span className="font-medium text-gym-text">{member.membershipEnd}</span>
+                    <span className="font-medium text-gym-text">
+                      {member.membershipEnd}
+                    </span>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <button
                     type="button"
                     className="btn-secondary py-2 text-xs w-full justify-center"
-                    onClick={() => navigate(`/admin/members/${member.id}`)}
+                    onClick={() => navigate(`${basePath}/${member.id}`)}
                   >
                     View
                   </button>
                   <button
                     type="button"
                     className="btn-primary py-2 text-xs w-full justify-center"
-                    onClick={() => navigate(`/admin/members/${member.id}/edit`)}
+                    onClick={() => navigate(`${basePath}/${member.id}/edit`)}
                   >
                     Edit
                   </button>
@@ -2073,10 +2188,14 @@ function MembersPage() {
               <tr>
                 <th className="px-4 py-3 font-medium text-gym-muted">Member</th>
                 <th className="px-4 py-3 font-medium text-gym-muted">Plan</th>
-                <th className="px-4 py-3 font-medium text-gym-muted">Trainer</th>
+                <th className="px-4 py-3 font-medium text-gym-muted">
+                  Trainer
+                </th>
                 <th className="px-4 py-3 font-medium text-gym-muted">Expiry</th>
                 <th className="px-4 py-3 font-medium text-gym-muted">Status</th>
-                <th className="px-4 py-3 font-medium text-gym-muted">Actions</th>
+                <th className="px-4 py-3 font-medium text-gym-muted">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gym-border bg-gym-card/60">
@@ -2088,14 +2207,22 @@ function MembersPage() {
                         {member.avatar}
                       </div>
                       <div>
-                        <p className="font-medium text-gym-text">{member.name}</p>
-                        <p className="text-xs text-gym-muted">{member.memberId}</p>
+                        <p className="font-medium text-gym-text">
+                          {member.name}
+                        </p>
+                        <p className="text-xs text-gym-muted">
+                          {member.memberId}
+                        </p>
                       </div>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-gym-text/90">{member.plan}</td>
-                  <td className="px-4 py-3 text-gym-text/90">{member.trainer}</td>
-                  <td className="px-4 py-3 text-gym-text/90">{member.membershipEnd}</td>
+                  <td className="px-4 py-3 text-gym-text/90">
+                    {member.trainer}
+                  </td>
+                  <td className="px-4 py-3 text-gym-text/90">
+                    {member.membershipEnd}
+                  </td>
                   <td className="px-4 py-3">
                     <span className="chip">{member.status}</span>
                   </td>
@@ -2103,13 +2230,15 @@ function MembersPage() {
                     <div className="flex gap-2">
                       <button
                         className="btn-secondary px-2.5 py-1.5 text-xs"
-                        onClick={() => navigate(`/admin/members/${member.id}`)}
+                        onClick={() => navigate(`${basePath}/${member.id}`)}
                       >
                         View
                       </button>
                       <button
                         className="btn-primary px-2.5 py-1.5 text-xs"
-                        onClick={() => navigate(`/admin/members/${member.id}/edit`)}
+                        onClick={() =>
+                          navigate(`${basePath}/${member.id}/edit`)
+                        }
                       >
                         Edit
                       </button>
@@ -2121,6 +2250,265 @@ function MembersPage() {
           </table>
         </div>
       </div>
+    </div>
+  );
+}
+
+function MemberManagementEditorPage() {
+  const navigate = useNavigate();
+  const { memberId } = useParams();
+  const { user } = useAuth();
+  const { members, setMembers } = useSharedGymData();
+  const [form, setForm] = useState<MemberRecord | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const member = members.find((entry) => entry.id === memberId) ?? null;
+  const isSuperAdmin = user?.role === "super_admin";
+  const isTrainer = user?.role === "trainer";
+  const hasManagementAccess =
+    isSuperAdmin || isTrainerAuthorizedForMember(user, member);
+
+  useEffect(() => {
+    if (member) {
+      setForm({ ...member });
+    }
+  }, [member]);
+
+  if (!member) {
+    return (
+      <div className="panel p-8 text-center">
+        <h1 className="text-2xl font-semibold">Member not found</h1>
+        <p className="mt-2 text-gym-muted">
+          The requested member record could not be located.
+        </p>
+      </div>
+    );
+  }
+
+  if (!hasManagementAccess) {
+    return (
+      <div className="panel p-8 text-center">
+        <h1 className="text-2xl font-semibold">Access denied</h1>
+        <p className="mt-2 text-gym-muted">
+          You do not have permission to manage this member profile.
+        </p>
+      </div>
+    );
+  }
+
+  const handleSave = (event: FormEvent) => {
+    event.preventDefault();
+    if (!form || !user) return;
+
+    if (user.role === "trainer") {
+      if (form.status === "Cancelled") {
+        setError("Trainers cannot cancel a member subscription.");
+        return;
+      }
+      if (
+        member.trainer &&
+        user.name.toLowerCase() !== member.trainer.toLowerCase()
+      ) {
+        setError("You are not authorized to edit this member.");
+        return;
+      }
+    }
+
+    const sanitizedMember: MemberRecord = {
+      ...member,
+      ...form,
+      plan: user.role === "trainer" ? member.plan : form.plan,
+      trainer: user.role === "trainer" ? member.trainer : form.trainer,
+      membershipStart: member.membershipStart,
+      membershipEnd: member.membershipEnd,
+      status: form.status,
+    };
+
+    const nextMembers = members.map((entry) =>
+      entry.id === member.id ? sanitizedMember : entry,
+    );
+
+    sharedMembers = nextMembers;
+    setMembers(nextMembers);
+    emitGymDataUpdate();
+    setSuccess("Member details updated successfully.");
+    setError("");
+    navigate(getMemberManagementBasePath(user.role));
+  };
+
+  const handleCancelSubscription = () => {
+    if (!isSuperAdmin || !form) return;
+    const confirmed = window.confirm(
+      "Cancel this member's subscription? This will mark the membership as cancelled without deleting the member or payment history.",
+    );
+    if (!confirmed) return;
+
+    const today = new Date().toISOString().slice(0, 10);
+    const nextMembers = members.map((entry) => {
+      if (entry.id !== member.id) return entry;
+      return {
+        ...entry,
+        status: "Cancelled",
+        membershipEnd: today,
+        notes: `${entry.notes || "Subscription cancelled"}. Cancelled on ${today}.`,
+      };
+    });
+
+    sharedMembers = nextMembers;
+    setMembers(nextMembers);
+    sharedPayments = sharedPayments.map((payment) =>
+      payment.memberId === member.memberId
+        ? {
+            ...payment,
+            status: "Cancelled",
+            notes: `${payment.notes} • Subscription cancelled on ${today}`,
+          }
+        : payment,
+    );
+    emitGymDataUpdate();
+    setSuccess("Subscription cancelled successfully.");
+    setError("");
+    setCancelling(true);
+    setTimeout(() => {
+      navigate(getMemberManagementBasePath(user.role));
+    }, 300);
+  };
+
+  if (!form) {
+    return <div className="panel p-8 text-center">Loading member details…</div>;
+  }
+
+  return (
+    <div className="mx-auto max-w-3xl space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.24em] text-gym-muted">
+            Members
+          </p>
+          <h1 className="mt-2 text-2xl font-semibold">Edit member details</h1>
+        </div>
+        {isSuperAdmin && (
+          <button
+            type="button"
+            className="btn-secondary border-red-500/40 text-red-200 hover:bg-red-500/10"
+            onClick={handleCancelSubscription}
+            disabled={cancelling}
+          >
+            {cancelling ? "Cancelling…" : "Cancel subscription"}
+          </button>
+        )}
+      </div>
+
+      {error && (
+        <div className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          {error}
+        </div>
+      )}
+
+      {success && (
+        <div className="rounded-2xl border border-gym-secondary/30 bg-gym-secondary/10 px-4 py-3 text-sm text-gym-secondary">
+          {success}
+        </div>
+      )}
+
+      <form onSubmit={handleSave} className="panel space-y-5 p-5 md:p-6">
+        <div className="grid gap-4 md:grid-cols-2">
+          <label className="space-y-2 text-sm text-gym-muted">
+            <span>Full name</span>
+            <input
+              required
+              className="input"
+              value={form.name}
+              onChange={(event) =>
+                setForm({ ...form, name: event.target.value })
+              }
+            />
+          </label>
+
+          <label className="space-y-2 text-sm text-gym-muted">
+            <span>Email</span>
+            <input
+              required
+              type="email"
+              className="input"
+              value={form.email}
+              onChange={(event) =>
+                setForm({ ...form, email: event.target.value })
+              }
+            />
+          </label>
+
+          <label className="space-y-2 text-sm text-gym-muted">
+            <span>Phone</span>
+            <input
+              required
+              className="input"
+              value={form.phone}
+              onChange={(event) =>
+                setForm({ ...form, phone: event.target.value })
+              }
+            />
+          </label>
+
+          <label className="space-y-2 text-sm text-gym-muted">
+            <span>Status</span>
+            <select
+              className="input"
+              value={form.status}
+              onChange={(event) =>
+                setForm({ ...form, status: event.target.value as MemberStatus })
+              }
+            >
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Suspended">Suspended</option>
+              <option value="Cancelled" disabled={user?.role === "trainer"}>
+                Cancelled
+              </option>
+            </select>
+          </label>
+
+          <label className="space-y-2 text-sm text-gym-muted md:col-span-2">
+            <span>Current plan</span>
+            <input
+              className="input"
+              value={form.plan}
+              disabled={user?.role === "trainer"}
+              onChange={(event) =>
+                setForm({ ...form, plan: event.target.value })
+              }
+            />
+          </label>
+
+          <label className="space-y-2 text-sm text-gym-muted md:col-span-2">
+            <span>Assigned trainer</span>
+            <input
+              className="input"
+              value={form.trainer}
+              disabled={user?.role === "trainer"}
+              onChange={(event) =>
+                setForm({ ...form, trainer: event.target.value })
+              }
+            />
+          </label>
+        </div>
+
+        <div className="flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={() => navigate(getMemberManagementBasePath(user?.role))}
+          >
+            Cancel
+          </button>
+          <button type="submit" className="btn-primary" disabled={saving}>
+            {saving ? "Saving…" : "Save changes"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
@@ -2275,7 +2663,9 @@ function MembershipsPage() {
     amount: number;
   } | null>(() => {
     if (typeof window === "undefined") return null;
-    const saved = localStorage.getItem(`petergym-membership-${user?.id ?? "guest"}`);
+    const saved = localStorage.getItem(
+      `petergym-membership-${user?.id ?? "guest"}`,
+    );
     return saved
       ? (JSON.parse(saved) as {
           planId: string;
@@ -2292,7 +2682,8 @@ function MembershipsPage() {
     "idle" | "processing" | "success" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const [lastNotificationResult, setLastNotificationResult] = useState<NotificationDeliveryResult | null>(null);
+  const [lastNotificationResult, setLastNotificationResult] =
+    useState<NotificationDeliveryResult | null>(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const selectedPlan = plans.find((p) => p.id === selectedPlanId) || plans[0];
@@ -2307,8 +2698,18 @@ function MembershipsPage() {
     setErrorMessage("");
 
     try {
-      const durationDays = selectedPlan.durationDays || (selectedPlan.id === "annual" ? 365 : selectedPlan.id === "half_yearly" ? 180 : selectedPlan.id === "quarterly" ? 90 : 30);
-      const expiryDate = new Date(Date.now() + durationDays * 24 * 60 * 60 * 1000)
+      const durationDays =
+        selectedPlan.durationDays ||
+        (selectedPlan.id === "annual"
+          ? 365
+          : selectedPlan.id === "half_yearly"
+            ? 180
+            : selectedPlan.id === "quarterly"
+              ? 90
+              : 30);
+      const expiryDate = new Date(
+        Date.now() + durationDays * 24 * 60 * 60 * 1000,
+      )
         .toISOString()
         .slice(0, 10);
       const startDate = new Date().toISOString().slice(0, 10);
@@ -2398,7 +2799,10 @@ function MembershipsPage() {
         });
         setLastNotificationResult(notifResult);
       } catch (notifErr) {
-        console.warn("Notice: Member confirmation notification logged:", notifErr);
+        console.warn(
+          "Notice: Member confirmation notification logged:",
+          notifErr,
+        );
       }
 
       setActivePlan(persistedPlan);
@@ -2441,10 +2845,20 @@ function MembershipsPage() {
           <div className="flex items-start gap-3">
             <CheckCircle2 className="h-5 w-5 shrink-0 text-gym-secondary mt-0.5" />
             <div>
-              <p className="font-semibold text-white">Payment Verified & Membership Activated!</p>
+              <p className="font-semibold text-white">
+                Payment Verified & Membership Activated!
+              </p>
               <p className="text-xs text-gym-secondary/90 mt-0.5">
-                Your <span className="font-bold text-white">{activePlan?.planName}</span> is active until{" "}
-                <span className="font-bold text-white">{activePlan?.expiryDate}</span>. An official confirmation email & SMS notification have been dispatched.
+                Your{" "}
+                <span className="font-bold text-white">
+                  {activePlan?.planName}
+                </span>{" "}
+                is active until{" "}
+                <span className="font-bold text-white">
+                  {activePlan?.expiryDate}
+                </span>
+                . An official confirmation email & SMS notification have been
+                dispatched.
               </p>
             </div>
           </div>
@@ -2474,7 +2888,9 @@ function MembershipsPage() {
           email: user?.email || "",
         }}
         onOfferClaimed={() => {
-          const saved = localStorage.getItem(`petergym-membership-${user?.id ?? "guest"}`);
+          const saved = localStorage.getItem(
+            `petergym-membership-${user?.id ?? "guest"}`,
+          );
           if (saved) {
             setActivePlan(JSON.parse(saved));
           }
@@ -2527,7 +2943,9 @@ function MembershipsPage() {
                   <p className="text-3xl font-bold text-gym-text">
                     ₹{plan.price.toLocaleString("en-IN")}
                   </p>
-                  <p className="mb-1 text-xs text-gym-muted">/{plan.duration.toLowerCase()}</p>
+                  <p className="mb-1 text-xs text-gym-muted">
+                    /{plan.duration.toLowerCase()}
+                  </p>
                 </div>
                 <p className="mt-1 text-xs text-gym-muted leading-relaxed min-h-[36px]">
                   {plan.description}
@@ -2599,7 +3017,8 @@ function MembershipsPage() {
               {selectedPlan.name} Plan
             </h2>
             <p className="mt-0.5 text-sm text-gym-muted">
-              {selectedPlan.duration} · Full gym access · Instant SMS & Email Confirmation
+              {selectedPlan.duration} · Full gym access · Instant SMS & Email
+              Confirmation
             </p>
           </div>
           <div className="rounded-2xl border border-gym-accent/25 bg-gym-accent/10 px-4 sm:px-5 py-3 text-left sm:text-right w-full sm:w-auto">
@@ -2620,7 +3039,9 @@ function MembershipsPage() {
             type="button"
             className="btn-primary w-full sm:w-auto justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
             onClick={handlePurchase}
-            disabled={paymentState === "processing" || paymentState === "success"}
+            disabled={
+              paymentState === "processing" || paymentState === "success"
+            }
           >
             {paymentState === "processing" ? (
               <>
@@ -2629,7 +3050,8 @@ function MembershipsPage() {
               </>
             ) : paymentState === "success" ? (
               <>
-                <CheckCircle2 className="h-4 w-4" /> Membership Active & Confirmed
+                <CheckCircle2 className="h-4 w-4" /> Membership Active &
+                Confirmed
               </>
             ) : (
               `Pay ${formatCurrency(selectedPrice)} via UPI`
@@ -2648,7 +3070,8 @@ function MembershipsPage() {
           )}
 
           <span className="text-xs text-gym-muted">
-            Includes automated confirmation email & SMS to registered contact upon payment verification.
+            Includes automated confirmation email & SMS to registered contact
+            upon payment verification.
           </span>
         </div>
       </div>
@@ -3024,12 +3447,18 @@ function PaymentsPage() {
               payments.map((payment) => (
                 <div key={payment.id} className="p-3.5 space-y-2">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="font-semibold text-gym-text text-sm truncate">{payment.member}</p>
+                    <p className="font-semibold text-gym-text text-sm truncate">
+                      {payment.member}
+                    </p>
                     <span className="chip text-[10px]">{payment.status}</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-gym-accent text-sm">{formatCurrency(payment.amount)}</span>
-                    <span className="text-gym-muted">{payment.method} • {payment.date}</span>
+                    <span className="font-bold text-gym-accent text-sm">
+                      {formatCurrency(payment.amount)}
+                    </span>
+                    <span className="text-gym-muted">
+                      {payment.method} • {payment.date}
+                    </span>
                   </div>
                 </div>
               ))
@@ -3373,8 +3802,8 @@ function AttendancePage() {
                   {activeSession
                     ? "Checked In"
                     : todayLatestSession?.status === "Checked Out"
-                    ? "Checked Out"
-                    : "Not Checked In"}
+                      ? "Checked Out"
+                      : "Not Checked In"}
                 </p>
               </div>
               <span
@@ -3387,13 +3816,15 @@ function AttendancePage() {
                 {activeSession
                   ? "Active"
                   : todayLatestSession
-                  ? "Completed"
-                  : "Inactive"}
+                    ? "Completed"
+                    : "Inactive"}
               </span>
             </div>
             <div className="mt-3 border-t border-gym-border/60 pt-2 text-xs">
               <p className="truncate font-medium text-gym-text">{user.name}</p>
-              <p className="truncate text-[11px] text-gym-muted">{user.email}</p>
+              <p className="truncate text-[11px] text-gym-muted">
+                {user.email}
+              </p>
               <p className="truncate text-[10px] text-gym-muted">
                 Gym ID: {user.gymId || "gym_1"}
               </p>
@@ -3435,8 +3866,8 @@ function AttendancePage() {
               {activeSession
                 ? "Session currently ongoing"
                 : todayLatestSession?.checkOut
-                ? "Completed today"
-                : "Not checked out"}
+                  ? "Completed today"
+                  : "Not checked out"}
             </p>
           </div>
 
@@ -3455,16 +3886,14 @@ function AttendancePage() {
               />
             </div>
             <p className="mt-2 font-mono text-xl font-bold text-gym-text">
-              {activeSession
-                ? liveTimer
-                : todayLatestSession?.duration || "0m"}
+              {activeSession ? liveTimer : todayLatestSession?.duration || "0m"}
             </p>
             <p className="mt-2 text-xs text-gym-muted truncate">
               {activeSession
                 ? "Live duration ticking"
                 : todayLatestSession?.duration
-                ? "Total workout time today"
-                : "No active session"}
+                  ? "Total workout time today"
+                  : "No active session"}
             </p>
           </div>
         </div>
@@ -3536,9 +3965,7 @@ function AttendancePage() {
                       </td>
                       <td className="whitespace-nowrap px-3 py-2.5 font-mono text-gym-text/80 sm:px-4 sm:py-3">
                         {entry.checkOut ||
-                          (entry.status === "Checked In"
-                            ? "In Progress"
-                            : "—")}
+                          (entry.status === "Checked In" ? "In Progress" : "—")}
                       </td>
                       <td className="whitespace-nowrap px-3 py-2.5 font-medium text-gym-accent sm:px-4 sm:py-3">
                         {entry.duration ||
@@ -3639,9 +4066,7 @@ function AttendancePage() {
           <p className="mt-1.5 text-xl font-bold text-gym-text sm:text-2xl">
             {records.length}
           </p>
-          <p className="mt-1 text-[11px] text-gym-muted sm:text-xs">
-            All logs
-          </p>
+          <p className="mt-1 text-[11px] text-gym-muted sm:text-xs">All logs</p>
         </div>
       </div>
 
@@ -3674,9 +4099,7 @@ function AttendancePage() {
             </select>
             <select
               value={dateFilter}
-              onChange={(e) =>
-                setDateFilter(e.target.value as "All" | "Today")
-              }
+              onChange={(e) => setDateFilter(e.target.value as "All" | "Today")}
               className="input w-full bg-gym-panel px-2.5 py-2 text-xs sm:w-auto sm:px-3 sm:text-sm"
             >
               <option value="All">All Dates</option>
@@ -3758,15 +4181,15 @@ function AttendancePage() {
                         </div>
                       </div>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-2.5 text-gym-text/80 sm:px-4 sm:py-3">{entry.date}</td>
+                    <td className="whitespace-nowrap px-3 py-2.5 text-gym-text/80 sm:px-4 sm:py-3">
+                      {entry.date}
+                    </td>
                     <td className="whitespace-nowrap px-3 py-2.5 font-mono text-gym-text/80 sm:px-4 sm:py-3">
                       {entry.checkIn || "—"}
                     </td>
                     <td className="whitespace-nowrap px-3 py-2.5 font-mono text-gym-text/80 sm:px-4 sm:py-3">
                       {entry.checkOut ||
-                        (entry.status === "Checked In"
-                          ? "In Progress"
-                          : "—")}
+                        (entry.status === "Checked In" ? "In Progress" : "—")}
                     </td>
                     <td className="whitespace-nowrap px-3 py-2.5 font-medium text-gym-accent sm:px-4 sm:py-3">
                       {entry.duration ||
@@ -4718,6 +5141,89 @@ function SettingsPage() {
 }
 
 function AdminUsersPage() {
+  const { user } = useAuth();
+  const [users, setUsers] = useState<
+    Array<{
+      uid: string;
+      name: string;
+      email: string;
+      role: Role;
+      gymId: string;
+    }>
+  >([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const loadUsers = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const response = await fetch(
+        `/api/admin/users?role=${user?.role ?? "member"}`,
+      );
+      const payload = await response.json();
+      if (payload.success && Array.isArray(payload.users)) {
+        setUsers(payload.users);
+        return;
+      }
+      setUsers(
+        demoUsers.map((entry) => ({
+          uid: entry.id,
+          name: entry.name,
+          email: entry.email,
+          role: entry.role,
+          gymId: entry.gymId,
+        })),
+      );
+    } catch {
+      setUsers(
+        demoUsers.map((entry) => ({
+          uid: entry.id,
+          name: entry.name,
+          email: entry.email,
+          role: entry.role,
+          gymId: entry.gymId,
+        })),
+      );
+      setError(
+        "Using local demo users until the Firebase admin backend is configured.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [user?.role]);
+
+  useEffect(() => {
+    void loadUsers();
+  }, [loadUsers]);
+
+  const updateRole = async (uid: string, nextRole: Role) => {
+    if (!user) return;
+
+    const response = await fetch(`/api/admin/users/${uid}/role`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        role: nextRole,
+        actorRole: user.role,
+      }),
+    });
+
+    if (!response.ok) {
+      setError("You do not have permission to change that role.");
+      return;
+    }
+
+    setUsers((current) =>
+      current.map((entry) =>
+        entry.uid === uid ? { ...entry, role: nextRole } : entry,
+      ),
+    );
+    setError("");
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -4726,6 +5232,13 @@ function AdminUsersPage() {
         </p>
         <h1 className="mt-2 text-3xl font-semibold">Role access</h1>
       </div>
+
+      {error ? (
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-100">
+          {error}
+        </div>
+      ) : null}
+
       <div className="panel overflow-hidden">
         <table className="min-w-full divide-y divide-gym-border text-sm">
           <thead className="bg-gym-panel">
@@ -4737,16 +5250,40 @@ function AdminUsersPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gym-border">
-            {demoUsers.map((entry) => (
-              <tr key={entry.id}>
-                <td className="px-4 py-3 text-gym-text">{entry.name}</td>
-                <td className="px-4 py-3 text-gym-text/80">{entry.email}</td>
-                <td className="px-4 py-3 text-gym-text/80">{entry.role}</td>
-                <td className="px-4 py-3 text-gym-text/80">
-                  {gymProfile.name}
+            {!loading && users.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={4}
+                  className="px-4 py-6 text-center text-gym-muted"
+                >
+                  No users found.
                 </td>
               </tr>
-            ))}
+            ) : (
+              users.map((entry) => (
+                <tr key={entry.uid}>
+                  <td className="px-4 py-3 text-gym-text">{entry.name}</td>
+                  <td className="px-4 py-3 text-gym-text/80">{entry.email}</td>
+                  <td className="px-4 py-3 text-gym-text/80">
+                    <select
+                      value={entry.role}
+                      onChange={(event) =>
+                        updateRole(entry.uid, event.target.value as Role)
+                      }
+                      className="rounded-lg border border-gym-border bg-gym-panel px-2 py-1 text-sm text-gym-text outline-none"
+                      disabled={user?.role !== "super_admin"}
+                    >
+                      <option value="super_admin">super_admin</option>
+                      <option value="trainer">trainer</option>
+                      <option value="member">member</option>
+                    </select>
+                  </td>
+                  <td className="px-4 py-3 text-gym-text/80">
+                    {entry.gymId || gymProfile.name}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -4793,48 +5330,46 @@ function MemberDashboardPage() {
       : null;
   })();
 
-  const profile =
-    (user &&
-      members.find(
-        (m) =>
-          m.email.toLowerCase() === user.email.toLowerCase() ||
-          m.name === user.name,
-      )) || {
-      id: user?.id || "m-me",
-      memberId: user?.id || "GF-USER",
-      name: user?.name || "Gym Member",
-      email: user?.email || "",
-      phone: "+91 9988776655",
-      avatar: user?.avatar || "GM",
-      dob: "1995-01-01",
-      emergencyContact: "Emergency Contact",
-      address: "Lalru, Punjab",
-      joinDate: "2025-01-01",
-      plan: persistedMembership?.planName ?? "Monthly",
-      membershipStart: "2025-01-01",
-      membershipEnd: persistedMembership?.expiryDate ?? "2026-12-31",
-      trainer: "Daniel Lee",
-      status: "Active" as const,
-      notes: "Dedicated gym member",
-    };
+  const profile = (user &&
+    members.find(
+      (m) =>
+        m.email.toLowerCase() === user.email.toLowerCase() ||
+        m.name === user.name,
+    )) || {
+    id: user?.id || "m-me",
+    memberId: user?.id || "GF-USER",
+    name: user?.name || "Gym Member",
+    email: user?.email || "",
+    phone: "+91 9988776655",
+    avatar: user?.avatar || "GM",
+    dob: "1995-01-01",
+    emergencyContact: "Emergency Contact",
+    address: "Lalru, Punjab",
+    joinDate: "2025-01-01",
+    plan: persistedMembership?.planName ?? "Monthly",
+    membershipStart: "2025-01-01",
+    membershipEnd: persistedMembership?.expiryDate ?? "2026-12-31",
+    trainer: "Daniel Lee",
+    status: "Active" as const,
+    notes: "Dedicated gym member",
+  };
 
   // Use persisted plan data if available, otherwise fall back to profile
   const displayPlan = persistedMembership?.planName ?? profile.plan;
-  const displayExpiry = persistedMembership?.expiryDate ?? profile.membershipEnd;
+  const displayExpiry =
+    persistedMembership?.expiryDate ?? profile.membershipEnd;
   const displayAmount = persistedMembership?.amount;
 
   const currentPayment = payments.find(
     (payment) =>
-      payment.member === profile.name ||
-      (user && payment.memberId === user.id),
+      payment.member === profile.name || (user && payment.memberId === user.id),
   ) ?? {
-    amount: displayAmount ?? 600,
+    amount: displayAmount ?? 1500,
     status: "Paid",
   };
   const memberAttendance = attendance.filter(
     (entry) =>
-      (user &&
-        (entry.userId === user.id || entry.memberId === user.id)) ||
+      (user && (entry.userId === user.id || entry.memberId === user.id)) ||
       entry.memberName === profile.name,
   );
   const today = getLocalDateString();
@@ -4845,23 +5380,44 @@ function MemberDashboardPage() {
 
   return (
     <div key={refreshKey} className="space-y-6">
-      <div className="panel p-4 sm:p-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-xs sm:text-sm uppercase tracking-[0.24em] text-gym-muted">
+      <div className="dashboard-welcome-hero relative overflow-hidden rounded-[24px] border border-slate-700/80 bg-[#111827] shadow-[0_18px_42px_rgba(15,23,42,0.16)]">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-90"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80')",
+          }}
+        />
+        <div className="absolute inset-y-0 right-0 w-full max-w-[62%] bg-[linear-gradient(90deg,rgba(15,23,42,0.04)_0%,rgba(15,23,42,0.18)_14%,rgba(15,23,42,0.62)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.9)_0%,rgba(15,23,42,0.8)_28%,rgba(15,23,42,0.46)_58%,rgba(15,23,42,0.12)_100%)]" />
+
+        <div className="relative flex min-h-[118px] flex-col justify-end gap-2 p-3 sm:min-h-[128px] sm:p-4 lg:min-h-[146px] lg:flex-row lg:items-start lg:justify-between lg:p-4.5">
+          <div className="relative z-10 max-w-[500px] rounded-[14px] border border-white/8 bg-[#0b1424]/12 p-2.5 backdrop-blur-[1px] sm:p-3">
+            <p className="text-[7px] font-black uppercase tracking-[0.2em] text-[#f34f5c] sm:text-[8px]">
               Welcome back
             </p>
-            <h1 className="mt-1 sm:mt-2 text-2xl sm:text-3xl font-semibold">{profile.name}</h1>
+            <h1 className="mt-1 text-[1.45rem] font-black uppercase tracking-[-0.06em] text-white sm:text-[1.7rem] lg:text-[1.9rem] lg:leading-[0.97]">
+              {profile.name}
+            </h1>
+            <p className="mt-1 max-w-md text-[10px] text-slate-200/90 sm:text-[11px]">
+              Stronger than yesterday, healthier for tomorrow.
+            </p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-gym-accent/15 text-lg sm:text-xl font-semibold text-gym-accent shrink-0">
+
+          <div className="relative z-10 flex items-center gap-2.5 self-start pt-1 lg:pt-0 lg:self-auto lg:-translate-y-1">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#101827]/90 text-sm font-black text-white shadow-[0_10px_22px_rgba(0,0,0,0.32)] sm:h-12 sm:w-12 sm:text-base">
               {profile.avatar}
             </div>
-            <div className="min-w-0">
-              <p className="font-medium text-gym-text text-sm sm:text-base truncate">{displayPlan}</p>
-              <p className="text-xs sm:text-sm text-gym-muted truncate">
+            <div className="rounded-xl border border-white/10 bg-[#111827]/72 px-2.5 py-2 shadow-[0_12px_20px_rgba(0,0,0,0.18)] backdrop-blur-sm sm:px-3">
+              <div className="text-[8px] uppercase tracking-[0.16em] text-slate-300 sm:text-[9px]">
+                Plan
+              </div>
+              <div className="mt-1 text-sm font-black text-white sm:text-base">
+                {displayPlan}
+              </div>
+              <div className="mt-1 text-[9px] text-slate-300 sm:text-[10px]">
                 Expires on {displayExpiry}
-              </p>
+              </div>
             </div>
           </div>
         </div>
@@ -4877,7 +5433,7 @@ function MemberDashboardPage() {
         onOfferClaimed={() => setRefreshKey((k) => k + 1)}
       />
 
-      <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         <StatCard
           label="Current plan"
           value={displayPlan}
@@ -4891,8 +5447,8 @@ function MemberDashboardPage() {
             activeSession
               ? "Active Now"
               : todaySession
-              ? "Attended"
-              : "+1 recent"
+                ? "Attended"
+                : "+1 recent"
           }
           accent="cyan"
         />
@@ -4912,7 +5468,6 @@ function MemberDashboardPage() {
     </div>
   );
 }
-
 
 function TrainerDashboardPage() {
   const { user } = useAuth();
@@ -5304,8 +5859,12 @@ function AppEntry() {
 }
 
 function App() {
+  const { theme } = useTheme();
+
   return (
-    <AuthProvider>
+    <div
+      className={`${theme === "dark" ? "theme-dark" : "theme-light"} min-h-screen bg-gym-bg text-gym-text`}
+    >
       <Routes>
         <Route path="/" element={<AppEntry />} />
         <Route path="/intro" element={<SplashIntroPage />} />
@@ -5322,6 +5881,14 @@ function App() {
             <Route path="offers" element={<AdminOffersPage />} />
             <Route path="features" element={<GymFeaturesPage />} />
             <Route path="members" element={<MembersPage />} />
+            <Route
+              path="members/:memberId"
+              element={<MemberManagementEditorPage />}
+            />
+            <Route
+              path="members/:memberId/edit"
+              element={<MemberManagementEditorPage />}
+            />
             <Route path="members/new" element={<MemberFormPage />} />
             <Route path="memberships" element={<MembershipsPage />} />
             <Route path="calendar" element={<CalendarPage />} />
@@ -5346,6 +5913,14 @@ function App() {
             <Route path="dashboard" element={<TrainerDashboardPage />} />
             <Route path="features" element={<GymFeaturesPage />} />
             <Route path="members" element={<MembersPage />} />
+            <Route
+              path="members/:memberId"
+              element={<MemberManagementEditorPage />}
+            />
+            <Route
+              path="members/:memberId/edit"
+              element={<MemberManagementEditorPage />}
+            />
             <Route path="membership" element={<MembershipsPage />} />
             <Route path="calendar" element={<CalendarPage />} />
             <Route path="attendance" element={<AttendancePage />} />
@@ -5383,8 +5958,18 @@ function App() {
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+    </div>
+  );
+}
+
+function RootApp() {
+  return (
+    <AuthProvider>
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </AuthProvider>
   );
 }
 
-export default App;
+export default RootApp;

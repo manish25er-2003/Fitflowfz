@@ -9,9 +9,10 @@ import type {
   UserProfile,
   WorkoutRecord,
 } from "../types";
+import { subscriptionPlans } from "./subscriptionPlans";
 
 export const gymProfile = {
-  name: "Gym Peters",
+  name: "FZ Gym Fitness",
   location: "Lalru, Punjab",
   timezone: "Asia/Kolkata",
   currency: "INR",
@@ -140,104 +141,7 @@ export const seedMembers: MemberRecord[] = [
   },
 ];
 
-export const membershipPlans: PlanRecord[] = [
-  {
-    id: "monthly",
-    name: "Monthly",
-    description: "Full gym access, month-to-month flexibility.",
-    duration: "1 Month",
-    price: 600,
-    currency: "INR",
-    durationDays: 30,
-    benefits: [
-      "Unlimited gym floor access",
-      "Locker room & shower access",
-      "All equipment & weights included",
-      "Personal posture & check-in session",
-      "Cancel or renew anytime",
-    ],
-    sessionLimit: 30,
-    status: "Active",
-    pricing: {
-      monthly: 600,
-      quarterly: 1700,
-      semiAnnual: 3200,
-      annual: 6000,
-    },
-  },
-  {
-    id: "quarterly",
-    name: "Quarterly",
-    description: "3 Months commitment — steady fitness routine & habit building.",
-    duration: "3 Months",
-    price: 1700,
-    currency: "INR",
-    durationDays: 90,
-    benefits: [
-      "Unlimited gym floor access",
-      "Locker room & shower access",
-      "Quarterly fitness assessment",
-      "Personalized diet & workout guide",
-      "Save ₹100 vs monthly renewal",
-    ],
-    sessionLimit: 90,
-    status: "Active",
-    pricing: {
-      monthly: 600,
-      quarterly: 1700,
-      semiAnnual: 3200,
-      annual: 6000,
-    },
-  },
-  {
-    id: "half_yearly",
-    name: "6-Month",
-    description: "6 Months of transformation — major strength & body recomposition.",
-    duration: "6 Months",
-    price: 3200,
-    currency: "INR",
-    durationDays: 180,
-    benefits: [
-      "Unlimited gym floor access",
-      "Locker room & dedicated locker slot",
-      "Bi-monthly body composition scans",
-      "Priority group class reservations",
-      "Save ₹400 vs monthly renewal",
-    ],
-    sessionLimit: 180,
-    status: "Active",
-    pricing: {
-      monthly: 600,
-      quarterly: 1700,
-      semiAnnual: 3200,
-      annual: 6000,
-    },
-  },
-  {
-    id: "annual",
-    name: "Annual",
-    description: "Full access all year — best value, biggest savings.",
-    duration: "12 Months",
-    price: 6000,
-    currency: "INR",
-    durationDays: 365,
-    benefits: [
-      "Unlimited gym floor access (365 days)",
-      "Locker room & shower access",
-      "Full coaching & assessment pack",
-      "Priority class booking & guest passes",
-      "Save ₹1,200 vs monthly renewal",
-    ],
-    sessionLimit: 365,
-    status: "Active",
-    pricing: {
-      monthly: 600,
-      quarterly: 1700,
-      semiAnnual: 3200,
-      annual: 6000,
-    },
-  },
-];
+export const membershipPlans: PlanRecord[] = subscriptionPlans;
 
 export const paymentRecords: PaymentRecord[] = [
   {

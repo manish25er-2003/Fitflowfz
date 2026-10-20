@@ -1,12 +1,13 @@
 export type Role = "super_admin" | "trainer" | "member";
 
-export type MemberStatus = "Active" | "Inactive" | "Suspended";
+export type MemberStatus = "Active" | "Inactive" | "Suspended" | "Cancelled";
 export type PaymentStatus =
   | "Paid"
   | "Pending"
   | "Failed"
   | "Refunded"
-  | "Overdue";
+  | "Overdue"
+  | "Cancelled";
 export type PlanStatus = "Active" | "Archived";
 
 export interface UserProfile {
@@ -128,7 +129,12 @@ export interface ActivityItem {
 }
 
 export type OfferStatus = "Active" | "Inactive";
-export type FestiveType = "diwali" | "dussehra" | "navratri" | "new_year" | "custom";
+export type FestiveType =
+  | "diwali"
+  | "dussehra"
+  | "navratri"
+  | "new_year"
+  | "custom";
 
 export interface OfferRecord {
   id: string;
