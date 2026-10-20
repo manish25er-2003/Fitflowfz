@@ -20,6 +20,7 @@ import {
 } from "react-router-dom";
 import {
   AlertCircle,
+  ArrowRight,
   Bell,
   CalendarDays,
   CheckCircle2,
@@ -91,9 +92,6 @@ import gymPhoto1 from "./assets/WhatsApp Image 2026-10-13 at 2.45.43 PM (1).jpeg
 import gymPhoto2 from "./assets/WhatsApp Image 2026-10-13 at 2.45.43 PM.jpeg";
 import gymPhoto3 from "./assets/WhatsApp Image 2026-10-13 at 1.51.41 PM (1).jpeg";
 import gymPhoto4 from "./assets/WhatsApp Image 2026-10-13 at 1.51.41 PM.jpeg";
-import dumbbellImage from "/public/gym/dumbbell-1.jpg";
-import machineImage from "/public/gym/machine-1.jpg";
-import strengthImage from "/public/gym/strength-1.jpg";
 import { auth, db, firebaseEnabled } from "./lib/firebase";
 import {
   ATTENDANCE_UPDATED_EVENT,
@@ -113,6 +111,10 @@ import {
 import { DiwaliOfferBanner } from "./components/DiwaliOfferBanner";
 import { AdminOffersManager } from "./components/AdminOffersManager";
 import { MembershipConfirmationModal } from "./components/MembershipConfirmationModal";
+import {
+  FZFitnessFooter,
+  FZFitnessHomepage,
+} from "./components/FZFitnessHomepage";
 import {
   sendMembershipConfirmation,
   type NotificationDeliveryResult,
@@ -154,7 +156,6 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const gymGallery = [gymPhoto1, gymPhoto2, gymPhoto3, gymPhoto4];
-const equipmentGallery = [dumbbellImage, machineImage, strengthImage];
 const GYM_DATA_UPDATED_EVENT = "petergym-data-updated";
 let sharedMembers = [...seedMembers];
 let sharedPayments = [...paymentRecords];
@@ -482,6 +483,15 @@ function LandingPage() {
   const [installPromptEvent, setInstallPromptEvent] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const updateScrollState = () => setIsScrolled(window.scrollY > 12);
+    updateScrollState();
+    window.addEventListener("scroll", updateScrollState, { passive: true });
+    return () => window.removeEventListener("scroll", updateScrollState);
+  }, []);
 
   useEffect(() => {
     if (location.pathname !== "/home") {
@@ -587,103 +597,170 @@ function LandingPage() {
     navigate("/login");
   };
 
+  const scrollToSection = (sectionId: string) => {
+    document.getElementById(sectionId)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    setMobileMenuOpen(false);
+  };
+
+  const handleHomeNavigation = (sectionId: string) => {
+    if (sectionId === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setMobileMenuOpen(false);
+      return;
+    }
+
+    scrollToSection(sectionId);
+  };
+
+  const handleMembershipPlans = () => {
+    if (!user) {
+      navigate("/register");
+      return;
+    }
+
+    const membershipRoute =
+      user.role === "member"
+        ? "/member/membership"
+        : user.role === "trainer"
+          ? "/trainer/membership"
+          : "/admin/memberships";
+    navigate(membershipRoute);
+  };
+
   const handleLogout = async () => {
     await logout();
     navigate("/home");
   };
 
   const navItems = [
-    { label: "Home", href: "/home" },
-    { label: "Features", href: "#features" },
-    { label: "About Developer", href: "#about" },
-    { label: "Contact", href: "#contact" },
+    { label: "Home", section: "home" },
+    { label: "About", section: "about" },
+    { label: "Facilities", section: "facilities" },
+    { label: "Membership", section: "membership" },
+    { label: "Contact", section: "contact" },
   ];
 
   return (
-    <div className="min-h-screen bg-[#20252B] text-white">
-      <header className="sticky top-0 z-50 border-b border-gym-accent/10 bg-[#20252B]/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+    <div className="min-h-screen overflow-x-hidden bg-white text-[#0B0B0D]">
+      <header
+        className={`sticky top-0 z-50 border-b border-white/10 transition-colors duration-200 ${
+          isScrolled
+            ? "bg-[#0B0B0D]/95 shadow-[0_8px_30px_rgba(0,0,0,0.28)] backdrop-blur-xl"
+            : "bg-[#0B0B0D]"
+        }`}
+      >
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <button
             type="button"
-            onClick={() => navigate("/home")}
-            className="flex items-center gap-3"
+            onClick={() => {
+              navigate("/home");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              setMobileMenuOpen(false);
+            }}
+            className="flex shrink-0 items-center gap-2.5"
+            aria-label="FZ Fitness home"
           >
-            <BrandLogo mode="mark" className="h-10 w-10 rounded-2xl" />
-            <div className="text-left">
-              <div className="text-sm font-bold tracking-wide text-white">
-                FZ Gym
-              </div>
-              <div className="text-[10px] uppercase tracking-[0.22em] text-slate-400">
-                Performance Club
+            <BrandLogo mode="mark" className="h-9 w-9 sm:h-10 sm:w-10" />
+            <div className="text-left leading-none">
+              <div className="text-base font-black tracking-tight text-white sm:text-lg">
+                FZ <span className="font-semibold">FITNESS</span>
               </div>
             </div>
           </button>
 
-          <nav className="hidden items-center gap-8 text-sm text-slate-300 md:flex">
-            {navItems.map((item) =>
-              item.href.startsWith("#") ? (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="transition hover:text-white"
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <button
-                  key={item.label}
-                  type="button"
-                  onClick={() => navigate(item.href)}
-                  className="transition hover:text-white"
-                >
-                  {item.label}
-                </button>
-              ),
-            )}
+          <nav className="hidden items-center gap-7 text-[13px] font-medium text-white/80 lg:flex">
+            {navItems.map((item, index) => (
+              <button
+                key={item.label}
+                type="button"
+                onClick={() => handleHomeNavigation(item.section)}
+                className={`relative py-2 transition hover:text-white ${
+                  index === 0
+                    ? "text-white after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 after:bg-[#F51E2B]"
+                    : ""
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            {!user ? (
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => navigate("/login")}
-                  className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full border border-gym-accent/35 bg-[#252B32]/80 px-2.5 py-2 text-[11px] font-semibold text-gym-accent shadow-[0_0_0_1px_rgba(229,57,70,0.20)] transition hover:-translate-y-0.5 hover:border-gym-accent/70 hover:bg-gym-accent/10 sm:gap-2 sm:px-4 sm:text-sm"
-                >
-                  <span className="absolute inset-0 bg-gradient-to-r from-gym-accent/8 to-transparent opacity-0 transition group-hover:opacity-100" />
-                  <LockKeyhole className="relative h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  <span className="relative">Login</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate("/register")}
-                  className="group relative inline-flex items-center gap-1.5 overflow-hidden rounded-full bg-gradient-to-r from-gym-accent via-gym-accent to-gym-secondary px-2.5 py-2 text-[11px] font-bold text-white shadow-[0_8px_22px_rgba(229,57,70,0.45)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(19,166,160,0.35)] sm:gap-2 sm:px-4 sm:text-sm"
-                >
-                  <span className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.4),transparent_55%)]" />
-                  <Sparkles className="relative h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  <span className="relative">Register</span>
-                </button>
-              </div>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  onClick={handleDashboard}
-                  className="hidden rounded-full border border-gym-secondary/30 bg-gym-secondary/10 px-4 py-2 text-sm font-medium text-gym-secondary sm:inline-flex"
-                >
-                  Dashboard
-                </button>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 transition hover:border-gym-accent/30 hover:text-white"
-                >
-                  Logout
-                </button>
-              </>
+          <div className="flex shrink-0 items-center gap-2">
+            {user && (
+              <button
+                type="button"
+                onClick={handleDashboard}
+                className="hidden rounded-sm px-3 py-2 text-sm font-semibold text-white/80 transition hover:text-white sm:inline-flex"
+              >
+                Dashboard
+              </button>
             )}
+            <button
+              type="button"
+              onClick={() =>
+                navigate(user ? getRoleRoute(user.role) : "/register")
+              }
+              className="inline-flex items-center gap-2 rounded-sm bg-[#F51E2B] px-3.5 py-2.5 text-xs font-bold text-white transition hover:bg-[#D91421] sm:px-5 sm:text-sm"
+            >
+              Join Now <ArrowRight className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-white/20 text-white transition hover:border-white/50 lg:hidden"
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="home-mobile-navigation"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
         </div>
+        <nav
+          id="home-mobile-navigation"
+          className={`${mobileMenuOpen ? "grid" : "hidden"} gap-1 border-t border-white/10 bg-[#0B0B0D] px-4 py-3 lg:hidden`}
+        >
+          {navItems.map((item, index) => (
+            <button
+              key={item.label}
+              type="button"
+            onClick={() => handleHomeNavigation(item.section)}
+              className={`rounded-sm px-3 py-2.5 text-left text-sm ${
+                index === 0
+                  ? "border-l-2 border-[#F51E2B] text-white"
+                  : "text-white/75 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+          {!user ? (
+            <button
+              type="button"
+              onClick={() => {
+                navigate("/login");
+                setMobileMenuOpen(false);
+              }}
+              className="rounded-sm px-3 py-2.5 text-left text-sm text-white/75 hover:bg-white/5 hover:text-white"
+            >
+              Login
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                void handleLogout();
+                setMobileMenuOpen(false);
+              }}
+              className="rounded-sm px-3 py-2.5 text-left text-sm text-white/75 hover:bg-white/5 hover:text-white"
+            >
+              Logout
+            </button>
+          )}
+        </nav>
       </header>
 
       <main>
@@ -746,413 +823,17 @@ function LandingPage() {
           </div>
         )}
 
-        <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(229,57,70,0.22),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(19,166,160,0.18),transparent_25%)]" />
-          <div className="relative mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:gap-10 lg:px-8 lg:py-20">
-            <div className="flex flex-col items-center justify-center text-center lg:items-start lg:text-left">
-              <span className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-gym-accent/20 bg-gym-accent/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-gym-accent">
-                <span className="h-2 w-2 rounded-full bg-gym-secondary" />
-                Modern Gym Management
-              </span>
-
-              <h1 className="max-w-xl text-[2.1rem] font-black leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Sculpt the body. Lead the gym.
-              </h1>
-
-              <p className="mt-5 max-w-xl text-sm text-slate-300 sm:text-base lg:text-lg">
-                FZ Gym brings high-performance training culture and smart gym
-                operations together so athletes push harder, teams stay
-                organized, and every member can track visible progress with
-                premium, real-world systems.
-              </p>
-
-              <div className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">
-                <button
-                  type="button"
-                  onClick={() => navigate("/register")}
-                  className="inline-flex rounded-full bg-gradient-to-r from-gym-accent to-gym-secondary px-5 py-3 text-sm font-semibold text-white shadow-[0_0_26px_rgba(229,57,70,0.45)] transition hover:brightness-110 sm:px-6"
-                >
-                  Get Started
-                </button>
-                <a
-                  href="#features"
-                  className="inline-flex rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:border-gym-accent/30 hover:bg-gym-accent/5 sm:px-6"
-                >
-                  Explore Features
-                </a>
-              </div>
-
-              <div className="mt-10 grid w-full max-w-lg grid-cols-3 gap-3">
-                {[
-                  { label: "Members", value: "5.6K" },
-                  { label: "Retention", value: "99.2%" },
-                  { label: "Growth", value: "45%" },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="rounded-2xl border border-gym-accent/10 bg-white/5 p-3 text-center backdrop-blur-sm"
-                  >
-                    <div className="text-lg font-bold text-white sm:text-xl">
-                      {item.value}
-                    </div>
-                    <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">
-                      {item.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative flex items-center justify-center">
-              <div className="relative w-full max-w-xl overflow-hidden rounded-[28px] border border-gym-accent/20 bg-[#252B32] p-3 shadow-[0_30px_80px_rgba(15,17,24,0.7)] sm:rounded-[32px] sm:p-4">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(229,57,70,0.25),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(19,166,160,0.2),transparent_28%)]" />
-                <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-[#252B32] p-3 sm:rounded-[24px] sm:p-4">
-                  <div className="relative overflow-hidden rounded-[18px] sm:rounded-[20px] ring-1 ring-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]">
-                    <img
-                      src="/gym/hero.jpeg"
-                      alt="FZ Gym training"
-                      className="h-[300px] w-full rounded-[18px] object-cover object-center sm:h-[500px] lg:h-[560px] [object-position:center_8%] scale-[1.12] contrast-[1.08] saturate-[0.9] -translate-y-4 sm:-translate-y-8"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#20252B] via-[#20252B]/25 to-[#20252B]/10" />
-                  </div>
-
-                  <div className="absolute left-3 top-2 rounded-xl border border-gym-accent/20 bg-[#20252B]/70 p-2 shadow-lg backdrop-blur-md sm:left-6 sm:top-5 sm:p-2.5">
-                    <div className="text-[8px] uppercase tracking-[0.22em] text-slate-400 sm:text-[9px]">
-                      Body score
-                    </div>
-                    <div className="mt-1.5 text-lg font-bold text-white sm:text-xl">
-                      88%
-                    </div>
-                    <div className="mt-1.5 h-1.5 w-16 overflow-hidden rounded-full bg-white/5 sm:w-20">
-                      <div className="h-full w-[88%] rounded-full bg-gradient-to-r from-gym-accent to-gym-secondary" />
-                    </div>
-                  </div>
-
-                  <div className="absolute right-3 bottom-2 rounded-xl border border-gym-secondary/20 bg-[#20252B]/70 p-2 shadow-lg backdrop-blur-md sm:right-6 sm:bottom-3 sm:p-2.5">
-                    <div className="text-[8px] uppercase tracking-[0.18em] text-slate-400 sm:text-[9px]">
-                      Weekly gain
-                    </div>
-                    <div className="mt-1 text-base font-bold text-white sm:text-xl">
-                      +18.2%
-                    </div>
-                    <div className="mt-0.5 text-[8px] text-gym-secondary sm:text-[9px]">
-                      strength & definition
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mb-8 text-center">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-gym-accent/80">
-              Body transformation
-            </p>
-            <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">
-              Precision training for a sharper, stronger physique
-            </h2>
-          </div>
-
-          <div className="grid gap-5 lg:grid-cols-3">
-            {[
-              {
-                badge: "Cut & define",
-                title: "Lean strength",
-                description:
-                  "Build a tighter physique with disciplined programming and measurable progress.",
-                image: equipmentGallery[2],
-              },
-              {
-                badge: "Mass drive",
-                title: "Power build",
-                description:
-                  "Train for explosive strength, size, and confidence with guided performance blocks.",
-                image: equipmentGallery[1],
-              },
-              {
-                badge: "Elite routine",
-                title: "Performance mode",
-                description:
-                  "Turn repetition into results with premium coaching and a stronger training rhythm.",
-                image: equipmentGallery[0],
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="group overflow-hidden rounded-[30px] border border-gym-accent/10 bg-[#252B32] shadow-[0_20px_60px_rgba(15,17,24,0.5)] transition duration-300 hover:-translate-y-1 hover:border-gym-accent/30"
-              >
-                <div className="relative h-[440px] overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-105 grayscale-[0.08] [object-position:center_20%]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#20252B] via-[#20252B]/20 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-5">
-                    <span className="inline-flex rounded-full border border-white/10 bg-[#20252B]/55 px-2.5 py-1 text-[9px] uppercase tracking-[0.22em] text-gym-accent backdrop-blur-sm">
-                      {item.badge}
-                    </span>
-                    <h3 className="mt-3 text-2xl font-bold text-white">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-6 text-slate-300">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section
-          id="features"
-          className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8"
-        >
-          <div className="mb-10 text-center">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-gym-accent/80">
-              Features
-            </p>
-            <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">
-              Everything your gym needs to grow
-            </h2>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {[
-              {
-                title: "Member Management",
-                icon: Users,
-                desc: "Track members, onboarding, renewals, and engagement at a glance.",
-              },
-              {
-                title: "Membership Plans",
-                icon: CreditCard,
-                desc: "Build premium membership tiers and keep billing simple.",
-              },
-              {
-                title: "Attendance Tracking",
-                icon: CalendarDays,
-                desc: "Monitor check-ins and studio activity in real time.",
-              },
-              {
-                title: "Workout Management",
-                icon: Dumbbell,
-                desc: "Create plans, assign routines, and track performance.",
-              },
-              {
-                title: "Performance Insights",
-                icon: ShieldCheck,
-                desc: "Monitor progress, retention, and performance without extra role complexity.",
-              },
-              {
-                title: "Classes and Scheduling",
-                icon: Bell,
-                desc: "Plan sessions, capacity, and events with zero complexity.",
-              },
-              {
-                title: "Payments and Reports",
-                icon: TrendingUp,
-                desc: "See revenue, collect payments, and analyze growth trends.",
-              },
-              {
-                title: "Unified Dashboards",
-                icon: LayoutDashboard,
-                desc: "Deliver optimized experiences for a single admin workflow and member access.",
-              },
-            ].map(({ title, icon: Icon, desc }) => (
-              <div
-                key={title}
-                className="group rounded-[24px] border border-gym-accent/10 bg-[#252B32] p-5 transition duration-300 hover:-translate-y-1 hover:border-gym-accent/30 hover:shadow-[0_18px_40px_rgba(229,57,70,0.12)]"
-              >
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-gym-accent/20 to-gym-secondary/20 text-gym-accent ring-1 ring-gym-accent/20">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">{title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-300">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="border-y border-gym-accent/10 bg-[#171B20]">
-          <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mb-10 text-center">
-              <p className="text-[10px] uppercase tracking-[0.3em] text-gym-accent/80">
-                How it works
-              </p>
-              <h2 className="mt-3 text-3xl font-bold text-white">
-                Start building your fitness system in minutes
-              </h2>
-            </div>
-
-            <div className="grid gap-5 md:grid-cols-3">
-              {[
-                {
-                  step: "01",
-                  title: "Register your account",
-                  desc: "Create your gym profile and get your personalized workspace ready in a few clicks.",
-                },
-                {
-                  step: "02",
-                  title: "Find or join a gym",
-                  desc: "Connect with your gym, manage memberships, and organize your routine around real needs.",
-                },
-                {
-                  step: "03",
-                  title: "Manage your fitness journey",
-                  desc: "Track workouts, attendance, schedules, and progress all from one dashboard.",
-                },
-              ].map((item) => (
-                <div
-                  key={item.step}
-                  className="rounded-[26px] border border-gym-accent/10 bg-[#252B32] p-6 text-center"
-                >
-                  <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-gym-accent to-gym-secondary text-sm font-black text-white">
-                    {item.step}
-                  </div>
-                  <h3 className="text-xl font-semibold text-white">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-300">
-                    {item.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="rounded-[30px] border border-gym-accent/10 bg-[linear-gradient(135deg,rgba(229,57,70,0.12),rgba(19,166,160,0.08),rgba(17,20,27,1))] p-8 text-center shadow-[0_0_0_1px_rgba(229,57,70,0.06)]">
-            <p className="text-[10px] uppercase tracking-[0.28em] text-gym-accent/80">
-              Get started
-            </p>
-            <h2 className="mt-4 text-3xl font-bold text-white sm:text-4xl">
-              Build a stronger, smarter gym experience.
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-slate-300">
-              Whether you're running a gym or joining one, FZ Gym gives every
-              stakeholder the tools to perform better, plan smarter, and stay
-              motivated.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <button
-                type="button"
-                onClick={() => navigate("/register")}
-                className="inline-flex rounded-full bg-gradient-to-r from-gym-accent to-gym-secondary px-6 py-3 text-sm font-semibold text-white"
-              >
-                Get Started
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate("/login")}
-                className="inline-flex rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-gym-accent/30"
-              >
-                Login
-              </button>
-            </div>
-          </div>
-        </section>
+        <FZFitnessHomepage
+          location={gymProfile.location}
+          onJoin={() => navigate(user ? getRoleRoute(user.role) : "/register")}
+          onMembershipPlans={handleMembershipPlans}
+        />
       </main>
 
-      <footer
-        id="contact"
-        className="border-t border-gym-accent/10 bg-[#20252B]"
-      >
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 text-sm text-slate-300 sm:px-6 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.9fr] lg:px-8">
-          <div>
-            <div className="mb-3 flex items-center gap-3">
-              <BrandLogo mode="mark" className="h-9 w-9 rounded-xl" />
-              <div>
-                <div className="font-semibold text-white">FZ Gym</div>
-                <div className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
-                  Smarter fitness
-                </div>
-              </div>
-            </div>
-            <p className="max-w-xs text-sm leading-6 text-slate-400">
-              Built to streamline operations, improve member experience, and
-              help your gym grow sustainably.
-            </p>
-          </div>
-
-          <div>
-            <div className="mb-3 text-sm font-semibold text-white">
-              Quick links
-            </div>
-            <div className="space-y-2 text-slate-400">
-              <button
-                type="button"
-                onClick={() => navigate("/home")}
-                className="block text-left hover:text-white"
-              >
-                Home
-              </button>
-              <a href="#features" className="block hover:text-white">
-                Features
-              </a>
-              <button
-                type="button"
-                onClick={() => navigate("/login")}
-                className="block text-left hover:text-white"
-              >
-                Login
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate("/register")}
-                className="block text-left hover:text-white"
-              >
-                Register
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <div className="mb-3 text-sm font-semibold text-white">
-              Developer
-            </div>
-            <div className="space-y-2 text-slate-400">
-              <a
-                href="https://roomspot.manish25er.workers.dev/portfolio"
-                target="_blank"
-                rel="noreferrer"
-                className="block hover:text-white"
-              >
-                Portfolio
-              </a>
-              <a
-                href="mailto:manish25er@gmail.com"
-                className="block hover:text-white"
-              >
-                manish25er@gmail.com
-              </a>
-            </div>
-          </div>
-
-          <div>
-            <div className="mb-3 text-sm font-semibold text-white">Contact</div>
-            <div className="space-y-2 text-slate-400">
-              <a
-                href="mailto:manish25er@gmail.com"
-                className="block hover:text-white"
-              >
-                manish25er@gmail.com
-              </a>
-              <a href="tel:+916283092662" className="block hover:text-white">
-                +91 6283092662
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className="border-t border-gym-accent/10 py-4 text-center text-xs text-slate-400">
-          © 2026 FZ Gym. All rights reserved.
-        </div>
-      </footer>
+      <FZFitnessFooter
+        location={gymProfile.location}
+        onJoin={() => navigate(user ? getRoleRoute(user.role) : "/register")}
+      />
     </div>
   );
 }
