@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /home
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /admin/
+Disallow: /trainer/
+Disallow: /member/
+Disallow: /unauthorized
+Disallow: /intro
+Sitemap: https://www.fzgymfitness.com/sitemap.xml

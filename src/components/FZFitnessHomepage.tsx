@@ -168,7 +168,7 @@ export function FZFitnessHomepage({
       <section
         id="home"
         aria-labelledby="home-heading"
-        className="relative isolate overflow-hidden bg-[#0B0B0D]"
+        className="home-hero-section relative isolate overflow-hidden bg-[#0B0B0D]"
       >
         <div className="absolute inset-0 -z-20">
           <img
@@ -186,13 +186,13 @@ export function FZFitnessHomepage({
           id="about"
           className="mx-auto flex min-h-[520px] w-full max-w-7xl items-center px-5 py-14 sm:px-8 lg:min-h-[620px] lg:px-10"
         >
-          <div className="max-w-[620px] rounded-[28px] border border-white/10 bg-black/10 p-3 shadow-[0_0_20px_rgba(0,0,0,0.22)] backdrop-blur-[1.5px] sm:p-5 lg:p-6">
+          <div className="max-w-[620px] rounded-[28px] border border-white/30 bg-white/8 p-3 shadow-[0_0_22px_rgba(0,0,0,0.18)] backdrop-blur-[2px] sm:p-5 lg:p-6">
             <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[#F51E2B] sm:text-xs">
               Your fitness. Your future.
             </p>
             <h1
               id="home-heading"
-              className="max-w-[560px] text-[2.5rem] font-extrabold uppercase leading-[0.88] tracking-[-0.06em] text-white sm:text-[3.3rem] md:text-[4.3rem] lg:text-[6.3rem] lg:font-black"
+              className="max-w-[560px] text-[2rem] font-extrabold uppercase leading-[0.9] tracking-[-0.06em] text-white sm:text-[2.7rem] md:text-[3.4rem] lg:text-[4.8rem] lg:font-black"
             >
               <span className="block">Train</span>
               <span className="block text-white">
@@ -254,7 +254,7 @@ export function FZFitnessHomepage({
       <section
         id="pricing"
         aria-labelledby="pricing-heading"
-        className="bg-[#090A0D] py-12 text-white sm:py-16"
+        className="home-pricing-section bg-[#090A0D] py-12 text-white sm:py-16"
       >
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <div className="mb-8 text-center sm:mb-10">
@@ -274,9 +274,9 @@ export function FZFitnessHomepage({
             {pricingCards.map((plan) => (
               <div
                 key={plan.name}
-                className={`relative overflow-hidden rounded-[20px] border p-5 shadow-[0_20px_40px_rgba(0,0,0,0.2)] sm:p-6 ${
+                className={`pricing-card relative overflow-hidden rounded-[20px] border p-5 shadow-[0_20px_40px_rgba(0,0,0,0.2)] sm:p-6 ${
                   plan.featured
-                    ? "border-[#F51E2B]/50 bg-[#1A1D22] ring-1 ring-[#F51E2B]/40"
+                    ? "is-featured border-[#F51E2B]/50 bg-[#1A1D22] ring-1 ring-[#F51E2B]/40"
                     : "border-white/10 bg-white/5"
                 }`}
               >
@@ -376,7 +376,7 @@ export function FZFitnessHomepage({
 
       <section
         aria-labelledby="trainers-heading"
-        className="bg-[#0B0B0D] py-12 text-white sm:py-16"
+        className="home-trainers-section bg-[#0B0B0D] py-12 text-white sm:py-16"
       >
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <div className="mb-8 max-w-xl sm:mb-10">
@@ -400,7 +400,7 @@ export function FZFitnessHomepage({
             {trainers.map((trainer) => (
               <article
                 key={trainer.name}
-                className="group overflow-hidden rounded-[26px] border border-white/10 bg-[#14161A] shadow-[0_25px_55px_rgba(0,0,0,0.35)] transition duration-300 hover:-translate-y-1 hover:border-[#F51E2B]/40"
+                className="trainer-card group overflow-hidden rounded-[26px] border border-white/10 bg-[#14161A] shadow-[0_25px_55px_rgba(0,0,0,0.35)] transition duration-300 hover:-translate-y-1 hover:border-[#F51E2B]/40"
               >
                 <div className="relative h-80 overflow-hidden">
                   <img
@@ -553,7 +553,7 @@ export function FZFitnessHomepage({
       <section
         id="membership"
         aria-labelledby="membership-heading"
-        className="scroll-mt-20 bg-[#0B0B0D] text-white"
+        className="home-membership-section scroll-mt-20 bg-[#0B0B0D] text-white"
       >
         <div className="mx-auto grid max-w-7xl lg:min-h-[320px] lg:grid-cols-2">
           <div className="relative min-h-[230px] overflow-hidden sm:min-h-[300px]">
@@ -616,7 +616,7 @@ export function FZFitnessFooter({ location, onJoin }: FZFitnessFooterProps) {
   ];
 
   return (
-    <footer id="contact" className="scroll-mt-20 bg-[#0B0B0D] text-white">
+    <footer id="contact" className="home-footer scroll-mt-20 bg-[#0B0B0D] text-white">
       <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:px-10">
         <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[#14161A] shadow-[0_20px_40px_rgba(0,0,0,0.25)]">
           <div className="grid gap-8 p-5 sm:p-7 lg:grid-cols-[minmax(0,1.1fr)_minmax(260px,0.9fr)] lg:p-8">
@@ -677,7 +677,7 @@ export function FZFitnessFooter({ location, onJoin }: FZFitnessFooterProps) {
               />
               <span className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-black/25 to-black/10" />
               <div className="absolute inset-x-3 top-3 z-10 sm:inset-x-4 sm:top-4">
-                <div className="w-full rounded-md border border-[#F51E2B]/35 bg-[#0B0B0D]/75 px-2 py-2 shadow-[0_12px_28px_rgba(245,30,43,0.14)] backdrop-blur-[2px] sm:px-3">
+                <div className="footer-brand-badge w-full rounded-md border border-[#F51E2B]/35 bg-[#0B0B0D]/75 px-2 py-2 shadow-[0_12px_28px_rgba(245,30,43,0.14)] backdrop-blur-[2px] sm:px-3">
                   <div className="flex items-center justify-center gap-2 text-center sm:gap-3">
                     <span className="text-2xl font-black leading-none tracking-[-0.08em] text-white sm:text-4xl">
                       FZ
@@ -703,7 +703,7 @@ export function FZFitnessFooter({ location, onJoin }: FZFitnessFooterProps) {
                 <button
                   type="button"
                   onClick={onJoin}
-                  className="mt-4 inline-flex w-fit items-center gap-2 rounded-sm bg-[#F51E2B] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-[#D91421]"
+                  className="footer-cta mt-4 inline-flex w-fit items-center gap-2 rounded-sm bg-[#F51E2B] px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-[#D91421]"
                 >
                   Join the Gym <ArrowRight className="h-3.5 w-3.5" />
                 </button>

@@ -947,7 +947,9 @@ function AuthProvider({ children }: { children: ReactNode }) {
       (item) => item.email.toLowerCase() === normalizedEmail,
     );
     const storedUsersRaw = localStorage.getItem("gymflow-registered-users");
-    const storedUsers = storedUsersRaw ? (JSON.parse(storedUsersRaw) as UserSession[]) : [];
+    const storedUsers = storedUsersRaw
+      ? (JSON.parse(storedUsersRaw) as UserSession[])
+      : [];
     const customDemoMatch = storedUsers.find(
       (item) => item.email.toLowerCase() === normalizedEmail,
     );
@@ -1069,7 +1071,12 @@ function AuthProvider({ children }: { children: ReactNode }) {
     const registeredUsers = registeredUsersRaw
       ? (JSON.parse(registeredUsersRaw) as UserSession[])
       : [];
-    const nextUsers = [...registeredUsers.filter((item) => item.email.toLowerCase() !== session.email.toLowerCase()), session];
+    const nextUsers = [
+      ...registeredUsers.filter(
+        (item) => item.email.toLowerCase() !== session.email.toLowerCase(),
+      ),
+      session,
+    ];
     localStorage.setItem("gymflow-registered-users", JSON.stringify(nextUsers));
     localStorage.removeItem("gymflow-user");
     setUser(null);
@@ -5904,7 +5911,9 @@ function ForgotPasswordPage() {
           <p className="text-[10px] uppercase tracking-[0.28em] text-gym-accent/80">
             Password recovery
           </p>
-          <h1 className="mt-2 text-3xl font-bold text-gym-text">Forgot password</h1>
+          <h1 className="mt-2 text-3xl font-bold text-gym-text">
+            Forgot password
+          </h1>
         </div>
         <p className="mt-2 text-center text-sm text-gym-muted">
           We will email you a secure reset link if the account exists.
@@ -5933,7 +5942,9 @@ function ResetPasswordPage() {
           <p className="text-[10px] uppercase tracking-[0.28em] text-gym-accent/80">
             Secure reset
           </p>
-          <h1 className="mt-2 text-3xl font-bold text-gym-text">Reset password</h1>
+          <h1 className="mt-2 text-3xl font-bold text-gym-text">
+            Reset password
+          </h1>
         </div>
         <form className="mt-6 space-y-4">
           <input className="input" type="password" placeholder="New password" />
@@ -5994,8 +6005,223 @@ function AppEntry() {
   return <Navigate to={introSeen ? "/home" : "/intro"} replace />;
 }
 
+const SITE_URL = (import.meta.env.VITE_SITE_URL ?? "https://www.fzgymfitness.com").replace(/\/$/, "");
+const DEFAULT_OG_IMAGE = `${SITE_URL}/brand/fz-gym-logo.png`;
+
+type PageSeoConfig = {
+  title: string;
+  description: string;
+  robots: string;
+  canonicalPath: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+};
+
+const PUBLIC_PAGE_SEO: Record<string, PageSeoConfig> = {
+  "/": {
+    title: "FZ Gym Fitness | Gym Membership & Fitness Plans",
+    description:
+      "Join FZ Gym Fitness for premium gym memberships, strength training, expert coaching, and fitness plans designed for real results.",
+    robots: "index, follow",
+    canonicalPath: "/",
+    ogTitle: "FZ Gym Fitness | Gym Membership & Fitness Plans",
+    ogDescription:
+      "Explore gym memberships, workout plans, coaching, and fitness programs at FZ Gym Fitness.",
+    ogImage: DEFAULT_OG_IMAGE,
+  },
+  "/home": {
+    title: "FZ Gym Fitness | Gym Membership & Fitness Plans",
+    description:
+      "Discover FZ Gym Fitness membership plans, fitness programs, personal training, and premium workout support for every goal.",
+    robots: "index, follow",
+    canonicalPath: "/home",
+    ogTitle: "FZ Gym Fitness | Gym Membership & Fitness Plans",
+    ogDescription:
+      "Your gym for strength training, cardio, coaching, and flexible membership plans.",
+    ogImage: DEFAULT_OG_IMAGE,
+  },
+  "/intro": {
+    title: "Welcome to FZ Gym Fitness",
+    description:
+      "Learn more about the FZ Gym Fitness experience, coaching style, and premium training environment before joining.",
+    robots: "noindex, nofollow",
+    canonicalPath: "/intro",
+    ogTitle: "Welcome to FZ Gym Fitness",
+    ogDescription: "Get introduced to FZ Gym Fitness and experience our premium training environment.",
+    ogImage: DEFAULT_OG_IMAGE,
+  },
+  "/login": {
+    title: "Login to FZ Gym Fitness",
+    description:
+      "Access the FZ Gym Fitness member portal to manage memberships, attendance, payments, and training progress.",
+    robots: "noindex, nofollow",
+    canonicalPath: "/login",
+    ogTitle: "Login to FZ Gym Fitness",
+    ogDescription: "Member login for FZ Gym Fitness dashboard, schedules, payments, and workouts.",
+    ogImage: DEFAULT_OG_IMAGE,
+  },
+  "/register": {
+    title: "Join FZ Gym Fitness",
+    description:
+      "Create your account with FZ Gym Fitness and start your membership journey with flexible training options and coaching support.",
+    robots: "noindex, nofollow",
+    canonicalPath: "/register",
+    ogTitle: "Join FZ Gym Fitness",
+    ogDescription: "Create your FZ Gym Fitness account and get started with flexible membership plans.",
+    ogImage: DEFAULT_OG_IMAGE,
+  },
+  "/forgot-password": {
+    title: "Reset Your FZ Gym Fitness Password",
+    description:
+      "Recover your FZ Gym Fitness account password securely and continue managing your gym membership and training details.",
+    robots: "noindex, nofollow",
+    canonicalPath: "/forgot-password",
+    ogTitle: "Reset Your FZ Gym Fitness Password",
+    ogDescription: "Reset your FZ Gym Fitness password and secure your member portal access.",
+    ogImage: DEFAULT_OG_IMAGE,
+  },
+  "/reset-password": {
+    title: "Set a New FZ Gym Fitness Password",
+    description:
+      "Set a new password for your FZ Gym account to continue accessing your memberships, attendance, and training plans.",
+    robots: "noindex, nofollow",
+    canonicalPath: "/reset-password",
+    ogTitle: "Set a New FZ Gym Fitness Password",
+    ogDescription: "Secure your FZ Gym Fitness account and continue your member experience.",
+    ogImage: DEFAULT_OG_IMAGE,
+  },
+  "/unauthorized": {
+    title: "Access Restricted | FZ Gym Fitness",
+    description:
+      "This page is restricted to authorized FZ Gym Fitness members, trainers, and administrators.",
+    robots: "noindex, nofollow",
+    canonicalPath: "/unauthorized",
+    ogTitle: "Access Restricted | FZ Gym Fitness",
+    ogDescription: "You do not have access to this restricted area of the FZ Gym Fitness platform.",
+    ogImage: DEFAULT_OG_IMAGE,
+  },
+};
+
+function getRouteSeo(pathname: string): PageSeoConfig {
+  if (pathname in PUBLIC_PAGE_SEO) {
+    return PUBLIC_PAGE_SEO[pathname];
+  }
+
+  if (pathname.startsWith("/admin") || pathname.startsWith("/trainer") || pathname.startsWith("/member")) {
+    return {
+      title: "Private Dashboard | FZ Gym Fitness",
+      description: "Private member or admin dashboard. This area is only for authenticated users.",
+      robots: "noindex, nofollow",
+      canonicalPath: pathname,
+      ogTitle: "Private Dashboard | FZ Gym Fitness",
+      ogDescription: "Restricted FZ Gym Fitness dashboard area for authenticated users only.",
+      ogImage: DEFAULT_OG_IMAGE,
+    };
+  }
+
+  return {
+    title: "Page Not Found | FZ Gym Fitness",
+    description: "The requested FZ Gym Fitness page could not be found.",
+    robots: "noindex, follow",
+    canonicalPath: pathname,
+    ogTitle: "Page Not Found | FZ Gym Fitness",
+    ogDescription: "Page not found on the FZ Gym Fitness website.",
+    ogImage: DEFAULT_OG_IMAGE,
+  };
+}
+
+function applySeoConfig(pathname: string) {
+  const seo = getRouteSeo(pathname);
+  const canonicalUrl = `${SITE_URL}${seo.canonicalPath === "/" ? "" : seo.canonicalPath}`;
+
+  document.title = seo.title;
+  document.documentElement.lang = "en";
+
+  const metaMap = {
+    description: seo.description,
+    robots: seo.robots,
+    "og:site_name": "FZ Gym Fitness",
+    "og:type": "website",
+    "og:title": seo.ogTitle ?? seo.title,
+    "og:description": seo.ogDescription ?? seo.description,
+    "og:url": canonicalUrl,
+    "og:image": seo.ogImage ?? DEFAULT_OG_IMAGE,
+    "twitter:card": "summary_large_image",
+    "twitter:title": seo.ogTitle ?? seo.title,
+    "twitter:description": seo.ogDescription ?? seo.description,
+    "twitter:image": seo.ogImage ?? DEFAULT_OG_IMAGE,
+  };
+
+  Object.entries(metaMap).forEach(([key, value]) => {
+    const selector = key.startsWith("og:") || key.startsWith("twitter:") ? `meta[property="${key}"]` : `meta[name="${key}"]`;
+    let tag = document.head.querySelector(selector) as HTMLMetaElement | null;
+
+    if (!tag) {
+      tag = document.createElement("meta");
+      document.head.appendChild(tag);
+    }
+
+    if (key.startsWith("og:") || key.startsWith("twitter:")) {
+      tag.setAttribute("property", key);
+    } else {
+      tag.setAttribute("name", key);
+    }
+    tag.setAttribute("content", value);
+  });
+
+  let canonicalTag = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+  if (!canonicalTag) {
+    canonicalTag = document.createElement("link");
+    canonicalTag.setAttribute("rel", "canonical");
+    document.head.appendChild(canonicalTag);
+  }
+  canonicalTag.setAttribute("href", canonicalUrl);
+
+  const isPublicPage =
+    !pathname.startsWith("/admin") &&
+    !pathname.startsWith("/trainer") &&
+    !pathname.startsWith("/member") &&
+    !pathname.startsWith("/login") &&
+    !pathname.startsWith("/register") &&
+    !pathname.startsWith("/forgot-password") &&
+    !pathname.startsWith("/reset-password") &&
+    pathname !== "/unauthorized";
+
+  if (isPublicPage) {
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "FZ Gym Fitness",
+      url: SITE_URL,
+      logo: `${SITE_URL}/brand/fz-gym-logo.png`,
+      description: "Premium gym memberships, fitness plans, coaching, and strength training for every fitness goal.",
+      sameAs: [],
+    };
+
+    let schemaTag = document.head.querySelector('script[data-seo="organization"]') as HTMLScriptElement | null;
+    if (!schemaTag) {
+      schemaTag = document.createElement("script");
+      schemaTag.setAttribute("type", "application/ld+json");
+      schemaTag.setAttribute("data-seo", "organization");
+      document.head.appendChild(schemaTag);
+    }
+    schemaTag.textContent = JSON.stringify(schema);
+  } else {
+    const schemaTag = document.head.querySelector('script[data-seo="organization"]');
+    if (schemaTag) {
+      schemaTag.remove();
+    }
+  }
+}
+
 function App() {
   const { theme } = useTheme();
+  const location = useLocation();
+
+  useEffect(() => {
+    applySeoConfig(location.pathname);
+  }, [location.pathname]);
 
   return (
     <div

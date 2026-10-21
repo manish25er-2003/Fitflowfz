@@ -416,15 +416,7 @@ img {
 .theme-light .bg-white,
 .theme-light .bg-white\/5,
 .theme-light .bg-white\/10,
-.theme-light .bg-white\/20,
-.theme-light [class*="bg-[#0B0B0D]"],
-.theme-light [class*="bg-[#0b1424]"],
-.theme-light [class*="bg-[#111827]"],
-.theme-light [class*="bg-[#101827]"],
-.theme-light [class*="bg-[#20252B]"],
-.theme-light [class*="bg-[#252B32]"],
-.theme-light [class*="bg-[#090A0D]"],
-.theme-light [class*="bg-[#05070b]"] {
+.theme-light .bg-white\/20 {
   background-color: #ffffff !important;
 }
 
@@ -528,7 +520,11 @@ img {
   background-color: rgba(19, 166, 160, 0.12) !important;
 }
 .theme-light .auth-shell {
-  background: linear-gradient(180deg, rgba(244, 246, 247, 0.98), rgba(255, 255, 255, 0.98));
+  background: linear-gradient(
+    180deg,
+    rgba(244, 246, 247, 0.98),
+    rgba(255, 255, 255, 0.98)
+  );
 }
 .theme-light .auth-card {
   background: rgba(255, 255, 255, 0.96) !important;
@@ -561,7 +557,11 @@ img {
   color: #64748b !important;
 }
 .theme-light .auth-intro {
-  background: linear-gradient(180deg, rgba(248, 250, 252, 0.98), rgba(255, 255, 255, 0.98));
+  background: linear-gradient(
+    180deg,
+    rgba(248, 250, 252, 0.98),
+    rgba(255, 255, 255, 0.98)
+  );
   color: #111827;
 }
 .theme-light .auth-intro-card {
@@ -581,6 +581,136 @@ img {
 .theme-light .auth-intro-card .bg-white\/10,
 .theme-light .auth-intro-card .bg-gym-accent\/10 {
   background-color: rgba(229, 57, 70, 0.09) !important;
+}
+
+.theme-light .home-hero-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #f4f6f7 42%, #ffffff 100%);
+  color: #111827;
+}
+.theme-light .home-hero-section .text-white,
+.theme-light .home-hero-section .text-white\/80,
+.theme-light .home-hero-section .text-white\/70,
+.theme-light .home-hero-section .text-white\/75,
+.theme-light .home-hero-section .text-white\/90,
+.theme-light .home-hero-section p,
+.theme-light .home-hero-section h1,
+.theme-light .home-hero-section span {
+  color: #111827 !important;
+}
+.theme-light .home-hero-section .border-white\/10,
+.theme-light .home-hero-section .border-white\/75 {
+  border-color: rgba(148, 163, 184, 0.3) !important;
+}
+.theme-light .home-hero-section .bg-white\/8 {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.12) !important;
+}
+.theme-light .home-pricing-section {
+  background: linear-gradient(180deg, #f8fafc 0%, #f4f6f7 100%);
+  color: #111827;
+}
+.theme-light .home-pricing-section .text-white,
+.theme-light .home-pricing-section .text-white\/70,
+.theme-light .home-pricing-section .text-white\/75,
+.theme-light .home-pricing-section .text-white\/80,
+.theme-light .home-pricing-section h2,
+.theme-light .home-pricing-section p,
+.theme-light .home-pricing-section span,
+.theme-light .home-pricing-section li {
+  color: #111827 !important;
+}
+.theme-light .pricing-card {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08) !important;
+}
+.theme-light .pricing-card.is-featured {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 244, 246, 0.9) 100%) !important;
+  border-color: rgba(229, 57, 70, 0.28) !important;
+}
+.theme-light .pricing-card .border-white\/10,
+.theme-light .pricing-card .border-white\/20,
+.theme-light .pricing-card .border-white\/15 {
+  border-color: rgba(148, 163, 184, 0.25) !important;
+}
+.theme-light .pricing-card .bg-white\/5,
+.theme-light .pricing-card .bg-white\/10,
+.theme-light .pricing-card .bg-white\/20 {
+  background-color: rgba(248, 250, 252, 0.85) !important;
+}
+.theme-light .home-membership-section {
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  color: #111827;
+}
+.theme-light .home-membership-section .text-white,
+.theme-light .home-membership-section .text-white\/70,
+.theme-light .home-membership-section span,
+.theme-light .home-membership-section p,
+.theme-light .home-membership-section h2 {
+  color: #111827 !important;
+}
+.theme-light .home-trainers-section {
+  background: linear-gradient(180deg, #0b0b0d 0%, #111827 100%) !important;
+  color: #ffffff !important;
+}
+.theme-light .home-trainers-section .text-white,
+.theme-light .home-trainers-section .text-white\/50,
+.theme-light .home-trainers-section .text-white\/70,
+.theme-light .home-trainers-section .text-white\/75,
+.theme-light .home-trainers-section .text-white\/80,
+.theme-light .home-trainers-section h2,
+.theme-light .home-trainers-section h3,
+.theme-light .home-trainers-section p,
+.theme-light .home-trainers-section span,
+.theme-light .home-trainers-section li,
+.theme-light .home-trainers-section article,
+.theme-light .home-trainers-section .trainer-card {
+  color: #ffffff !important;
+}
+.theme-light .home-trainers-section .trainer-card {
+  background: rgba(20, 22, 26, 0.98) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.35) !important;
+}
+.theme-light .home-footer {
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+  color: #111827;
+}
+.theme-light .home-footer .text-white,
+.theme-light .home-footer .text-white\/65,
+.theme-light .home-footer .text-white\/75,
+.theme-light .home-footer .text-white\/80,
+.theme-light .home-footer .text-white\/50,
+.theme-light .home-footer h2,
+.theme-light .home-footer p,
+.theme-light .home-footer a,
+.theme-light .home-footer li,
+.theme-light .home-footer span {
+  color: #111827 !important;
+}
+.theme-light .home-footer .footer-brand-badge,
+.theme-light .home-footer .footer-brand-badge span,
+.theme-light .home-footer .footer-brand-badge .text-white,
+.theme-light .home-footer .footer-cta,
+.theme-light .home-footer .footer-cta span,
+.theme-light .home-footer .footer-cta svg {
+  color: #ffffff !important;
+}
+.theme-light .home-footer .footer-brand-badge {
+  background: rgba(11, 11, 13, 0.78) !important;
+  border-color: rgba(245, 30, 43, 0.45) !important;
+}
+.theme-light .home-footer .footer-cta {
+  background: #f51e2b !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 22px rgba(245, 30, 43, 0.2) !important;
+}
+.theme-light .home-footer .border-white\/10,
+.theme-light .home-footer .overflow-hidden,
+.theme-light .home-footer .rounded-\[28px\] {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
 }
 .theme-light .shadow-soft {
   box-shadow: 0 18px 40px rgba(148, 163, 184, 0.18) !important;
