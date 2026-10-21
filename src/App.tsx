@@ -120,6 +120,7 @@ import {
   sendMembershipConfirmation,
   type NotificationDeliveryResult,
 } from "./lib/notificationService";
+import { buildUpiPaymentLink } from "./lib/upi";
 import type {
   AttendanceRecord,
   MemberRecord,
@@ -1277,7 +1278,7 @@ function AppShell() {
             </div>
           </header>
 
-          <main className="min-w-0 max-w-full flex-1 overflow-y-auto overflow-x-hidden px-4 py-4 pb-28 sm:px-6 sm:py-6 md:px-8">
+          <main className="min-w-0 max-w-full flex-1 overflow-y-auto overflow-x-hidden px-3 py-3 pb-24 sm:px-6 sm:py-6 sm:pb-8 md:px-8">
             {pathname === "/" ? (
               <Navigate to={getRoleRoute(user.role)} replace />
             ) : null}
@@ -2697,7 +2698,14 @@ function MembershipsPage() {
     setPaymentState("processing");
     setErrorMessage("");
 
-    try {
+    const hasRazorpayKey = Boolean(
+      (import.meta as any).env?.VITE_RAZORPAY_KEY_ID,
+    );
+
+    const finishMembership = async (
+      referenceId: string,
+      paymentMethod: string,
+    ) => {
       const durationDays =
         selectedPlan.durationDays ||
         (selectedPlan.id === "annual"
@@ -2713,9 +2721,7 @@ function MembershipsPage() {
         .toISOString()
         .slice(0, 10);
       const startDate = new Date().toISOString().slice(0, 10);
-      const referenceId = `PLAN-${Date.now()}`;
 
-      // Save to Firebase Firestore if enabled
       if (firebaseEnabled && db) {
         await setDoc(
           doc(db, "users", user.id),
@@ -2731,7 +2737,6 @@ function MembershipsPage() {
         );
       }
 
-      // Persist locally so the UI reflects the new plan immediately
       const persistedPlan = {
         planId: selectedPlan.id,
         planName: `${selectedPlan.name} Plan`,
@@ -2743,7 +2748,6 @@ function MembershipsPage() {
         JSON.stringify(persistedPlan),
       );
 
-      // Update shared member profile
       const memberIndex = sharedMembers.findIndex(
         (m) =>
           m.email.toLowerCase() === user.email.toLowerCase() ||
@@ -2765,14 +2769,13 @@ function MembershipsPage() {
         sharedMembers = [updatedMember, ...sharedMembers.slice(1)];
       }
 
-      // Record payment
       const newPayment: PaymentRecord = {
         id: `pay${Date.now()}`,
         member: user.name,
         memberId: user.id,
         amount: selectedPrice,
         currency: "INR",
-        method: "UPI",
+        method: paymentMethod === "razorpay" ? "UPI" : "UPI",
         date: startDate,
         status: "Paid",
         reference: referenceId,
@@ -2781,7 +2784,6 @@ function MembershipsPage() {
       sharedPayments = [newPayment, ...sharedPayments];
       emitGymDataUpdate();
 
-      // Dispatch membership confirmation notification (Email + SMS) only after verification
       try {
         const notifResult = await sendMembershipConfirmation({
           memberName: user.name,
@@ -2795,7 +2797,7 @@ function MembershipsPage() {
           expiryDate,
           paymentStatus: "Paid",
           referenceId,
-          paymentMethod: "UPI",
+          paymentMethod,
         });
         setLastNotificationResult(notifResult);
       } catch (notifErr) {
@@ -2807,9 +2809,110 @@ function MembershipsPage() {
 
       setActivePlan(persistedPlan);
       setPaymentState("success");
+    };
+
+    try {
+      if (hasRazorpayKey) {
+        const orderResponse = await fetch("/api/payments/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: selectedPrice,
+            currency: "INR",
+            receipt: `fz-${user.id}-${Date.now()}`,
+          }),
+        });
+
+        const orderBody = await orderResponse.json();
+        if (!orderResponse.ok || !orderBody?.success) {
+          throw new Error(
+            orderBody?.error || "Unable to create Razorpay order.",
+          );
+        }
+
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+
+        const loadScript = () =>
+          new Promise((resolve, reject) => {
+            script.onload = () => resolve(true);
+            script.onerror = () =>
+              reject(new Error("Razorpay checkout failed to load."));
+            document.body.appendChild(script);
+          });
+
+        await loadScript();
+
+        const options = {
+          key: (import.meta as any).env.VITE_RAZORPAY_KEY_ID,
+          amount: orderBody.order.amount,
+          currency: orderBody.order.currency,
+          name: "FZ Gym",
+          description: `${selectedPlan.name} Plan`,
+          order_id: orderBody.order.id,
+          handler: async function (response: any) {
+            const verifyRes = await fetch("/api/payments/verify-signature", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                order_id: response.razorpay_order_id,
+                payment_id: response.razorpay_payment_id,
+                signature: response.razorpay_signature,
+                amount: selectedPrice,
+                currency: "INR",
+              }),
+            });
+
+            const verifyBody = await verifyRes.json();
+            if (!verifyRes.ok || !verifyBody?.success) {
+              throw new Error(
+                verifyBody?.error || "Payment verification failed.",
+              );
+            }
+
+            await finishMembership(`PLAN-${Date.now()}`, "Razorpay");
+          },
+          prefill: {
+            name: user.name,
+            email: user.email,
+            contact: user.phone || "+919988776655",
+          },
+          theme: {
+            color: "#e5393f",
+          },
+        };
+
+        const razorpayInstance = new (window as any).Razorpay(options);
+        razorpayInstance.open();
+        return;
+      }
+
+      const upiLink = buildUpiPaymentLink({
+        upiId: "7087338600@ybl",
+        amount: selectedPrice,
+        name: "FZ Gym",
+        purpose: "FZ Gym Membership Payment",
+      });
+
+      window.location.href = upiLink;
+      const confirmed = window.confirm(
+        "UPI payment opened. Complete the payment in your UPI app and click OK to confirm and activate the membership.",
+      );
+
+      if (!confirmed) {
+        setPaymentState("idle");
+        return;
+      }
+
+      await finishMembership(`PLAN-${Date.now()}`, "UPI");
     } catch (err) {
       console.error("Membership purchase error:", err);
-      setErrorMessage("Payment could not be processed. Please try again.");
+      setErrorMessage(
+        err instanceof Error
+          ? err.message
+          : "Payment could not be processed. Please try again.",
+      );
       setPaymentState("error");
     }
   };
@@ -3134,6 +3237,14 @@ function PaymentsPage() {
   const [showToast, setShowToast] = useState(false);
   const upiId = "7087338600@ybl";
 
+  const getUpiLink = (amount: number) =>
+    buildUpiPaymentLink({
+      upiId,
+      amount,
+      name: "FZ Gym",
+      purpose: "FZ Gym Membership Payment",
+    });
+
   const paymentOptions = [
     {
       id: "UPI",
@@ -3157,45 +3268,53 @@ function PaymentsPage() {
 
   const handlePayNow = () => {
     const amount = Number(form.amount || 0);
-    const upiLink = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent("FZ Gym")}&am=${amount}&cu=INR&tn=${encodeURIComponent("FZ Gym Membership Payment")}`;
+    const upiLink = getUpiLink(amount);
 
     setPaymentState("processing");
     setShowToast(false);
     setForm((current) => ({ ...current, status: "Pending" }));
-
-    window.setTimeout(() => {
-      setPaymentState("success");
-      setShowToast(true);
-      setForm((current) => ({ ...current, status: "Paid" }));
-      const successEntry = {
-        id: `pay${Date.now()}`,
-        member: form.member,
-        memberId: "GF-9999",
-        amount: Number(form.amount),
-        currency: "INR",
-        method: selectedPaymentMethod as PaymentRecord["method"],
-        date: new Date().toISOString().slice(0, 10),
-        status: "Paid" as PaymentStatus,
-        reference: `AUTO-${Date.now()}`,
-        notes: "UPI payment confirmation",
-      };
-      setPayments((current) => {
-        const updated = [successEntry, ...current];
-        sharedPayments = updated;
-        emitGymDataUpdate();
-        return updated;
-      });
-
-      window.setTimeout(() => {
-        setShowToast(false);
-      }, 2200);
-    }, 900);
 
     try {
       window.location.href = upiLink;
     } catch {
       // fallback if the app cannot open the UPI scheme
     }
+
+    const confirmPayment = window.confirm(
+      "UPI payment opened in your app. After you complete payment, click OK to confirm and activate the membership.",
+    );
+
+    if (!confirmPayment) {
+      setPaymentState("idle");
+      setForm((current) => ({ ...current, status: "Pending" }));
+      return;
+    }
+
+    setPaymentState("success");
+    setShowToast(true);
+    setForm((current) => ({ ...current, status: "Paid" }));
+    const successEntry = {
+      id: `pay${Date.now()}`,
+      member: form.member,
+      memberId: "GF-9999",
+      amount: Number(form.amount),
+      currency: "INR",
+      method: selectedPaymentMethod as PaymentRecord["method"],
+      date: new Date().toISOString().slice(0, 10),
+      status: "Paid" as PaymentStatus,
+      reference: `AUTO-${Date.now()}`,
+      notes: "UPI payment confirmation",
+    };
+    setPayments((current) => {
+      const updated = [successEntry, ...current];
+      sharedPayments = updated;
+      emitGymDataUpdate();
+      return updated;
+    });
+
+    window.setTimeout(() => {
+      setShowToast(false);
+    }, 2200);
   };
 
   const handleSubmit = (event: FormEvent) => {
@@ -5380,42 +5499,42 @@ function MemberDashboardPage() {
 
   return (
     <div key={refreshKey} className="space-y-6">
-      <div className="dashboard-welcome-hero relative overflow-hidden rounded-[24px] border border-slate-700/80 bg-[#111827] shadow-[0_18px_42px_rgba(15,23,42,0.16)]">
+      <div className="dashboard-welcome-hero relative overflow-hidden rounded-[22px] border border-slate-700/80 bg-[#111827] shadow-[0_18px_42px_rgba(15,23,42,0.16)] sm:rounded-[24px]">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-90"
+          className="welcome-hero-backdrop absolute inset-0 bg-cover bg-center opacity-90"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80')",
           }}
         />
-        <div className="absolute inset-y-0 right-0 w-full max-w-[62%] bg-[linear-gradient(90deg,rgba(15,23,42,0.04)_0%,rgba(15,23,42,0.18)_14%,rgba(15,23,42,0.62)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.9)_0%,rgba(15,23,42,0.8)_28%,rgba(15,23,42,0.46)_58%,rgba(15,23,42,0.12)_100%)]" />
+        <div className="welcome-hero-glow absolute inset-y-0 right-0 w-full max-w-[62%] bg-[linear-gradient(90deg,rgba(15,23,42,0.04)_0%,rgba(15,23,42,0.18)_14%,rgba(15,23,42,0.62)_100%)]" />
+        <div className="welcome-hero-overlay absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.9)_0%,rgba(15,23,42,0.8)_28%,rgba(15,23,42,0.46)_58%,rgba(15,23,42,0.12)_100%)]" />
 
-        <div className="relative flex min-h-[118px] flex-col justify-end gap-2 p-3 sm:min-h-[128px] sm:p-4 lg:min-h-[146px] lg:flex-row lg:items-start lg:justify-between lg:p-4.5">
-          <div className="relative z-10 max-w-[500px] rounded-[14px] border border-white/8 bg-[#0b1424]/12 p-2.5 backdrop-blur-[1px] sm:p-3">
+        <div className="relative flex min-h-[112px] flex-col justify-end gap-2 p-2.5 sm:min-h-[128px] sm:p-4 lg:min-h-[146px] lg:flex-row lg:items-start lg:justify-between lg:p-4.5">
+          <div className="welcome-hero-copy relative z-10 max-w-[470px] rounded-[12px] border border-white/8 bg-[#0b1424]/12 p-2 backdrop-blur-[1px] sm:rounded-[14px] sm:p-3">
             <p className="text-[7px] font-black uppercase tracking-[0.2em] text-[#f34f5c] sm:text-[8px]">
               Welcome back
             </p>
-            <h1 className="mt-1 text-[1.45rem] font-black uppercase tracking-[-0.06em] text-white sm:text-[1.7rem] lg:text-[1.9rem] lg:leading-[0.97]">
+            <h1 className="mt-1 text-[1.2rem] font-black uppercase tracking-[-0.06em] text-white sm:text-[1.55rem] lg:text-[1.9rem] lg:leading-[0.97]">
               {profile.name}
             </h1>
-            <p className="mt-1 max-w-md text-[10px] text-slate-200/90 sm:text-[11px]">
+            <p className="mt-1 max-w-md text-[9.5px] text-slate-200/90 sm:text-[11px]">
               Stronger than yesterday, healthier for tomorrow.
             </p>
           </div>
 
-          <div className="relative z-10 flex items-center gap-2.5 self-start pt-1 lg:pt-0 lg:self-auto lg:-translate-y-1">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#101827]/90 text-sm font-black text-white shadow-[0_10px_22px_rgba(0,0,0,0.32)] sm:h-12 sm:w-12 sm:text-base">
+          <div className="relative z-10 flex items-center gap-2 self-start pt-1 lg:pt-0 lg:self-auto lg:-translate-y-1">
+            <div className="welcome-hero-avatar flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-[#101827]/90 text-xs font-black text-white shadow-[0_10px_22px_rgba(0,0,0,0.32)] sm:h-12 sm:w-12 sm:text-base">
               {profile.avatar}
             </div>
-            <div className="rounded-xl border border-white/10 bg-[#111827]/72 px-2.5 py-2 shadow-[0_12px_20px_rgba(0,0,0,0.18)] backdrop-blur-sm sm:px-3">
-              <div className="text-[8px] uppercase tracking-[0.16em] text-slate-300 sm:text-[9px]">
+            <div className="welcome-hero-card rounded-xl border border-white/10 bg-[#111827]/72 px-2 py-1.5 shadow-[0_12px_20px_rgba(0,0,0,0.18)] backdrop-blur-sm sm:px-3 sm:py-2">
+              <div className="text-[7px] uppercase tracking-[0.16em] text-slate-300 sm:text-[9px]">
                 Plan
               </div>
-              <div className="mt-1 text-sm font-black text-white sm:text-base">
+              <div className="mt-1 text-xs font-black text-white sm:text-base">
                 {displayPlan}
               </div>
-              <div className="mt-1 text-[9px] text-slate-300 sm:text-[10px]">
+              <div className="mt-1 text-[8px] text-slate-300 sm:text-[10px]">
                 Expires on {displayExpiry}
               </div>
             </div>
@@ -5561,8 +5680,8 @@ function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#20252B] px-4 py-8 sm:px-6">
-      <div className="w-full max-w-md rounded-[28px] border border-gym-accent/20 bg-gym-panel/80 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
+    <div className="flex min-h-screen items-center justify-center bg-gym-bg px-4 py-8 sm:px-6">
+      <div className="w-full max-w-md rounded-[28px] border border-gym-border bg-gym-panel/90 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
         <div className="mb-6 flex justify-center">
           <BrandLogo mode="full" className="h-14 w-14" />
         </div>
@@ -5571,7 +5690,7 @@ function RegisterPage() {
           <p className="text-[10px] uppercase tracking-[0.28em] text-gym-accent/80">
             Create account
           </p>
-          <h2 className="mt-2 text-3xl font-bold text-white">Join FZ Gym</h2>
+          <h2 className="mt-2 text-3xl font-bold text-gym-text">Join FZ Gym</h2>
         </div>
 
         <form onSubmit={submit} className="space-y-4">
@@ -5622,7 +5741,7 @@ function RegisterPage() {
           </button>
         </form>
 
-        <p className="mt-5 text-center text-sm text-slate-300">
+        <p className="mt-5 text-center text-sm text-gym-muted">
           Already have an account?{" "}
           <button
             type="button"
@@ -5668,8 +5787,8 @@ function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#20252B] px-4 py-8 sm:px-6">
-      <div className="w-full max-w-md rounded-[28px] border border-gym-accent/20 bg-gym-panel/80 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
+    <div className="flex min-h-screen items-center justify-center bg-gym-bg px-4 py-8 sm:px-6">
+      <div className="w-full max-w-md rounded-[28px] border border-gym-border bg-gym-panel/90 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
         <div className="mb-6 flex justify-center">
           <BrandLogo mode="full" className="h-14 w-14" />
         </div>
@@ -5678,7 +5797,7 @@ function LoginPage() {
           <p className="text-[10px] uppercase tracking-[0.28em] text-gym-accent/80">
             Welcome back
           </p>
-          <h2 className="mt-2 text-3xl font-bold text-white">Sign in</h2>
+          <h2 className="mt-2 text-3xl font-bold text-gym-text">Sign in</h2>
         </div>
 
         <form onSubmit={submit} className="space-y-4">
@@ -5746,7 +5865,7 @@ function LoginPage() {
           </button>
         </form>
 
-        <p className="mt-5 text-center text-sm text-slate-300">
+        <p className="mt-5 text-center text-sm text-gym-muted">
           Don’t have an account?{" "}
           <button
             type="button"

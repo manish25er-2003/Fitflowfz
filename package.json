@@ -21,6 +21,7 @@
     "firebase-admin": "^13.3.0",
     "lucide-react": "^1.55.0",
     "postcss": "^8.5.30",
+    "razorpay": "^2.9.8",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.90.0",
