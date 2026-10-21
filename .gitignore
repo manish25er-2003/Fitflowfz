@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Environment files
+.env
+.env.*
+.dev.vars
+src/.dev.vars
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -23,4 +29,3 @@ dist-ssr
 *.sln
 *.sw?
 tsconfig.node.json
-.dev.vars
