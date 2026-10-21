@@ -423,12 +423,12 @@ function SplashIntroPage() {
   }, [advance, destination, navigate]);
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center p-4 sm:p-6 bg-[#20252B] overflow-hidden text-white select-none">
+    <div className="auth-intro relative min-h-screen w-full flex items-center justify-center p-4 sm:p-6 overflow-hidden select-none">
       {/* Background ambient lighting */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,_rgba(229,57,70,0.18),transparent_55%),radial-gradient(circle_at_50%_85%,_rgba(229,57,70,0.12),transparent_50%)]" />
 
       {/* Portrait card */}
-      <div className="animate-splash-card relative z-10 w-full max-w-[340px] sm:max-w-[380px] rounded-[28px] sm:rounded-[32px] border border-gym-accent/25 bg-[#252B32]/95 p-5 sm:p-7 shadow-[0_20px_60px_-15px_rgba(229,57,70,0.35),0_0_0_1px_rgba(229,57,70,0.12)] backdrop-blur-xl flex flex-col items-center text-center">
+      <div className="auth-intro-card animate-splash-card relative z-10 w-full max-w-[340px] sm:max-w-[380px] rounded-[28px] sm:rounded-[32px] border border-gym-accent/25 p-5 sm:p-7 shadow-[0_20px_60px_-15px_rgba(229,57,70,0.35),0_0_0_1px_rgba(229,57,70,0.12)] backdrop-blur-xl flex flex-col items-center text-center">
         {/* Subtle top inner gradient sheen */}
         <div className="pointer-events-none absolute inset-0 rounded-[28px] sm:rounded-[32px] bg-[radial-gradient(ellipse_at_top,_rgba(229,57,70,0.16),transparent_65%)]" />
 
@@ -684,10 +684,8 @@ function LandingPage() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-white text-[#0B0B0D]">
       <header
-        className={`sticky top-0 z-50 border-b border-white/10 transition-colors duration-200 ${
-          isScrolled
-            ? "bg-[#0B0B0D]/95 shadow-[0_8px_30px_rgba(0,0,0,0.28)] backdrop-blur-xl"
-            : "bg-[#0B0B0D]"
+        className={`landing-header sticky top-0 z-50 border-b transition-colors duration-200 ${
+          isScrolled ? "shadow-[0_8px_30px_rgba(0,0,0,0.12)]" : ""
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
@@ -709,15 +707,15 @@ function LandingPage() {
             </div>
           </button>
 
-          <nav className="hidden items-center gap-7 text-[13px] font-medium text-white/80 lg:flex">
+          <nav className="hidden items-center gap-7 text-[13px] font-medium lg:flex">
             {navItems.map((item, index) => (
               <button
                 key={item.label}
                 type="button"
                 onClick={() => handleHomeNavigation(item.section)}
-                className={`relative py-2 transition hover:text-white ${
+                className={`landing-header-nav-button relative py-2 transition ${
                   index === 0
-                    ? "text-white after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 after:bg-[#F51E2B]"
+                    ? "after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 after:bg-[#F51E2B]"
                     : ""
                 }`}
               >
@@ -767,7 +765,7 @@ function LandingPage() {
         </div>
         <nav
           id="home-mobile-navigation"
-          className={`${mobileMenuOpen ? "grid" : "hidden"} gap-1 border-t border-white/10 bg-[#0B0B0D] px-4 py-3 lg:hidden`}
+          className={`${mobileMenuOpen ? "grid" : "hidden"} gap-1 border-t border-[var(--border-color)] bg-[var(--header-bg)] px-4 py-3 lg:hidden`}
         >
           {navItems.map((item, index) => (
             <button
@@ -776,8 +774,8 @@ function LandingPage() {
               onClick={() => handleHomeNavigation(item.section)}
               className={`rounded-sm px-3 py-2.5 text-left text-sm ${
                 index === 0
-                  ? "border-l-2 border-[#F51E2B] text-white"
-                  : "text-white/75 hover:bg-white/5 hover:text-white"
+                  ? "border-l-2 border-[#F51E2B] text-[var(--text-primary)]"
+                  : "text-[var(--text-secondary)] hover:bg-[var(--nav-hover-bg)] hover:text-[var(--nav-hover-text)]"
               }`}
             >
               {item.label}
@@ -790,7 +788,7 @@ function LandingPage() {
                 navigate("/login");
                 setMobileMenuOpen(false);
               }}
-              className="rounded-sm px-3 py-2.5 text-left text-sm text-white/75 hover:bg-white/5 hover:text-white"
+              className="rounded-sm px-3 py-2.5 text-left text-sm text-[var(--text-secondary)] hover:bg-[var(--nav-hover-bg)] hover:text-[var(--nav-hover-text)]"
             >
               Login
             </button>
@@ -801,7 +799,7 @@ function LandingPage() {
                 void handleLogout();
                 setMobileMenuOpen(false);
               }}
-              className="rounded-sm px-3 py-2.5 text-left text-sm text-white/75 hover:bg-white/5 hover:text-white"
+              className="rounded-sm px-3 py-2.5 text-left text-sm text-[var(--text-secondary)] hover:bg-[var(--nav-hover-bg)] hover:text-[var(--nav-hover-text)]"
             >
               Logout
             </button>
@@ -944,9 +942,16 @@ function AuthProvider({ children }: { children: ReactNode }) {
     email: string,
     password: string,
   ): Promise<UserSession | null> => {
+    const normalizedEmail = email.trim().toLowerCase();
     const demoMatch = demoUsers.find(
-      (item) => item.email.toLowerCase() === email.toLowerCase(),
+      (item) => item.email.toLowerCase() === normalizedEmail,
     );
+    const storedUsersRaw = localStorage.getItem("gymflow-registered-users");
+    const storedUsers = storedUsersRaw ? (JSON.parse(storedUsersRaw) as UserSession[]) : [];
+    const customDemoMatch = storedUsers.find(
+      (item) => item.email.toLowerCase() === normalizedEmail,
+    );
+    const allowedDemoUser = customDemoMatch ?? demoMatch;
 
     if (firebaseEnabled && auth) {
       try {
@@ -981,22 +986,22 @@ function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session);
         return session;
       } catch {
-        if (!demoMatch || password !== "demo1234") {
+        if (!allowedDemoUser || password !== "demo1234") {
           return null;
         }
       }
     }
 
-    if (!demoMatch || password !== "demo1234") return null;
+    if (!allowedDemoUser || password !== "demo1234") return null;
 
     const session: UserSession = {
-      id: demoMatch.id,
-      name: demoMatch.name,
-      email: demoMatch.email,
-      role: demoMatch.role,
-      avatar: demoMatch.avatar,
-      gymId: demoMatch.gymId,
-      phone: demoMatch.phone,
+      id: allowedDemoUser.id,
+      name: allowedDemoUser.name,
+      email: allowedDemoUser.email,
+      role: allowedDemoUser.role,
+      avatar: allowedDemoUser.avatar,
+      gymId: allowedDemoUser.gymId,
+      phone: allowedDemoUser.phone,
     };
 
     localStorage.setItem("gymflow-user", JSON.stringify(session));
@@ -1041,8 +1046,9 @@ function AuthProvider({ children }: { children: ReactNode }) {
           createdAt: new Date().toISOString(),
         });
 
-        localStorage.setItem("gymflow-user", JSON.stringify(session));
-        setUser(session);
+        await signOut(auth).catch(() => undefined);
+        localStorage.removeItem("gymflow-user");
+        setUser(null);
         return session;
       } catch {
         return null;
@@ -1052,14 +1058,21 @@ function AuthProvider({ children }: { children: ReactNode }) {
     const session: UserSession = {
       id: `demo-${Date.now()}`,
       name: sanitizedName,
-      email,
+      email: email.trim().toLowerCase(),
       role: normalizedRole,
       avatar: initials,
       gymId: "gym_1",
+      phone: "+91 9988776655",
     };
 
-    localStorage.setItem("gymflow-user", JSON.stringify(session));
-    setUser(session);
+    const registeredUsersRaw = localStorage.getItem("gymflow-registered-users");
+    const registeredUsers = registeredUsersRaw
+      ? (JSON.parse(registeredUsersRaw) as UserSession[])
+      : [];
+    const nextUsers = [...registeredUsers.filter((item) => item.email.toLowerCase() !== session.email.toLowerCase()), session];
+    localStorage.setItem("gymflow-registered-users", JSON.stringify(nextUsers));
+    localStorage.removeItem("gymflow-user");
+    setUser(null);
     return session;
   };
 
@@ -1288,30 +1301,30 @@ function AppShell() {
       </div>
 
       <div
-        className={`fixed inset-0 z-50 bg-gym-panel/70 backdrop-blur-sm transition-opacity duration-200 lg:hidden ${mobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`fixed inset-0 z-50 bg-[var(--page-bg)]/70 backdrop-blur-sm transition-opacity duration-200 lg:hidden ${mobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
         onClick={() => setMobileMenuOpen(false)}
       />
 
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-[84%] max-w-[320px] -translate-x-full border-r border-gym-accent/20 bg-gym-sidebar/95 shadow-[0_30px_80px_rgba(15,17,24,0.9)] backdrop-blur-2xl transition-transform duration-200 lg:hidden overflow-y-auto ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+        className={`mobile-sidebar-panel fixed inset-y-0 left-0 z-50 w-[84%] max-w-[320px] -translate-x-full border-r backdrop-blur-2xl transition-transform duration-200 lg:hidden overflow-y-auto ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="flex items-center justify-between border-b border-gym-border px-4 py-4 sticky top-0 bg-gym-sidebar z-10">
+        <div className="mobile-sidebar-header flex items-center justify-between border-b px-4 py-4 sticky top-0 z-10">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-gym-accent/30 bg-gym-accent/10">
               <BrandLogo mode="mark" className="h-7 w-7 rounded-xl" />
             </div>
             <div>
-              <div className="text-sm font-bold text-gym-text">
+              <div className="text-sm font-bold text-[var(--text-primary)]">
                 FZ Gym Fitness
               </div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-gym-muted">
+              <div className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-secondary)]">
                 FZ Gym
               </div>
             </div>
           </div>
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="rounded-full border border-gym-border bg-gym-panel p-2 text-gym-text/80 transition hover:border-gym-accent/30 hover:text-gym-text"
+            className="rounded-full border border-[var(--border-color)] bg-[var(--surface-bg)] p-2 text-[var(--text-secondary)] transition hover:border-gym-accent/30 hover:text-[var(--text-primary)]"
             aria-label="Close navigation menu"
           >
             <X className="h-4 w-4" />
@@ -1325,7 +1338,7 @@ function AppShell() {
                 key={to}
                 to={to === "/login" ? "#" : to}
                 className={({ isActive }) =>
-                  `sidebar-nav-item flex items-center gap-3 rounded-2xl border px-3.5 py-3 text-sm font-semibold ${isActive ? "is-active" : ""} ${isLogout ? "logout-item mt-4" : ""}`
+                  `mobile-sidebar-item flex items-center gap-3 rounded-2xl border px-3.5 py-3 text-sm font-semibold ${isActive ? "active" : ""} ${isLogout ? "logout-item mt-4" : ""}`
                 }
                 onClick={(event) => {
                   if (isLogout) {
@@ -1344,14 +1357,14 @@ function AppShell() {
       </div>
 
       {/* Fixed bottom navigation bar for mobile with safe area */}
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-gym-border bg-gym-sidebar/95 px-2 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 backdrop-blur-md lg:hidden shadow-lg">
+      <nav className="mobile-bottom-nav fixed inset-x-0 bottom-0 z-40 border-t px-2 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2 backdrop-blur-md lg:hidden">
         <div className="grid grid-cols-4 gap-1.5">
           {menu.slice(0, 3).map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-[10px] font-medium transition ${isActive ? "bg-gym-accent/15 text-gym-accent font-bold" : "text-gym-text/65 hover:text-gym-text"}`
+                `mobile-bottom-nav-item flex flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-[10px] font-medium transition ${isActive ? "active" : ""}`
               }
             >
               <Icon className="h-5 w-5 shrink-0" />
@@ -1363,10 +1376,10 @@ function AppShell() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(true)}
-            className="flex flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-[10px] font-medium text-gym-text/65 hover:text-gym-text transition"
+            className="mobile-bottom-nav-item flex flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-[10px] font-medium transition"
             aria-label="Open full menu"
           >
-            <Menu className="h-5 w-5 shrink-0 text-gym-accent" />
+            <Menu className="h-5 w-5 shrink-0" />
             <span className="leading-none truncate max-w-[68px] text-center">
               More
             </span>
@@ -5676,12 +5689,12 @@ function RegisterPage() {
       return;
     }
 
-    navigate(getRoleRoute(session.role));
+    navigate("/login", { replace: true });
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gym-bg px-4 py-8 sm:px-6">
-      <div className="w-full max-w-md rounded-[28px] border border-gym-border bg-gym-panel/90 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
+    <div className="auth-shell flex min-h-screen items-center justify-center bg-gym-bg px-4 py-8 sm:px-6">
+      <div className="auth-card w-full max-w-md rounded-[28px] border border-gym-border bg-gym-panel/90 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
         <div className="mb-6 flex justify-center">
           <BrandLogo mode="full" className="h-14 w-14" />
         </div>
@@ -5787,8 +5800,8 @@ function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gym-bg px-4 py-8 sm:px-6">
-      <div className="w-full max-w-md rounded-[28px] border border-gym-border bg-gym-panel/90 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
+    <div className="auth-shell flex min-h-screen items-center justify-center bg-gym-bg px-4 py-8 sm:px-6">
+      <div className="auth-card w-full max-w-md rounded-[28px] border border-gym-border bg-gym-panel/90 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
         <div className="mb-6 flex justify-center">
           <BrandLogo mode="full" className="h-14 w-14" />
         </div>
@@ -5882,16 +5895,18 @@ function LoginPage() {
 
 function ForgotPasswordPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center p-6">
-      <div className="panel w-full max-w-lg p-8">
+    <div className="auth-shell flex min-h-screen items-center justify-center px-4 py-8 sm:px-6">
+      <div className="auth-card w-full max-w-md rounded-[28px] border border-gym-border bg-gym-panel/90 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
         <div className="mb-6 flex justify-center">
-          <BrandLogo mode="full" className="h-9 w-auto" />
+          <BrandLogo mode="full" className="h-14 w-14" />
         </div>
-        <p className="text-sm uppercase tracking-[0.2em] text-gym-muted">
-          Password recovery
-        </p>
-        <h1 className="mt-3 text-3xl font-semibold">Forgot password</h1>
-        <p className="mt-2 text-gym-muted">
+        <div className="mb-6 text-center">
+          <p className="text-[10px] uppercase tracking-[0.28em] text-gym-accent/80">
+            Password recovery
+          </p>
+          <h1 className="mt-2 text-3xl font-bold text-gym-text">Forgot password</h1>
+        </div>
+        <p className="mt-2 text-center text-sm text-gym-muted">
           We will email you a secure reset link if the account exists.
         </p>
         <form className="mt-6 space-y-4">
@@ -5909,15 +5924,17 @@ function ForgotPasswordPage() {
 
 function ResetPasswordPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center p-6">
-      <div className="panel w-full max-w-lg p-8">
+    <div className="auth-shell flex min-h-screen items-center justify-center px-4 py-8 sm:px-6">
+      <div className="auth-card w-full max-w-md rounded-[28px] border border-gym-border bg-gym-panel/90 p-5 shadow-[0_0_0_1px_rgba(229,57,70,0.12),0_20px_60px_rgba(15,17,24,0.8)] backdrop-blur-md sm:p-7">
         <div className="mb-6 flex justify-center">
-          <BrandLogo mode="full" className="h-9 w-auto" />
+          <BrandLogo mode="full" className="h-14 w-14" />
         </div>
-        <p className="text-sm uppercase tracking-[0.2em] text-gym-muted">
-          Secure reset
-        </p>
-        <h1 className="mt-3 text-3xl font-semibold">Reset password</h1>
+        <div className="mb-6 text-center">
+          <p className="text-[10px] uppercase tracking-[0.28em] text-gym-accent/80">
+            Secure reset
+          </p>
+          <h1 className="mt-2 text-3xl font-bold text-gym-text">Reset password</h1>
+        </div>
         <form className="mt-6 space-y-4">
           <input className="input" type="password" placeholder="New password" />
           <input
